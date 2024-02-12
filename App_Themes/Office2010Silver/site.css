@@ -1,0 +1,39 @@
+﻿.HeadPane,
+.PrintHeadPane
+{
+	background: #a9acb4!important;
+    border-bottom: 1px solid #868B91;
+}
+.LeftPanel .HeadPane
+{
+    border-right: 1px solid white;
+}
+.ContentPane
+{
+    border-left-color: White;
+}
+
+.DateNavigatorContainer
+{
+	background: #f6f7f9;
+}
+
+.HeadPane .ActionToolbar .Spacer b
+{
+    background: White;
+}
+
+.HeadPane .NavigationToolbar .NavigationMenu
+{
+    color: White;
+}
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item.dxm-hovered .dxm-content
+{
+    color: White;
+}
+
+.HeadPane .ActionToolbar .SearchBox
+{
+    margin-top: 1px;
+}

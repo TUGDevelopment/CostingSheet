@@ -1,0 +1,44 @@
+﻿.HeadPane,
+.PrintHeadPane
+{
+    background: #3c4f8f url("HeaderBack.jpg") no-repeat left top!important;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+.SidePane
+{
+    background: #f5f5f5!important;
+}
+
+.mail .ContentPane,
+.contacts .ContentPane,
+.feeds .ContentPane 
+{
+    background-position: -250px 0;
+}
+
+.calendar .ContentPane 
+{
+    background-position: -300px 0;
+}
+
+.DateNavigatorContainer
+{
+    background: #fafafa;
+}
+
+.HeadPane .ActionToolbar .Spacer b
+{
+    background: #cccccc;
+}
+
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item.dxm-hovered .dxm-content
+{
+    color: White;
+}
+
+.HeadPane .ActionToolbar .SearchBox
+{
+    margin-top: 2px;
+}

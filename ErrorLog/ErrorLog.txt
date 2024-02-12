@@ -1,0 +1,75 @@
+
+name: form1[0].#subform[0].DropDownList1[0],Wet
+name: form1[0].#subform[0].TextField7[0],TP17/353
+name: form1[0].#subform[0].CheckBox1[0],1
+name: form1[0].#subform[0].CheckBox2[0],1
+name: form1[0].#subform[0].CheckBox3[0],1
+name: form1[0].#subform[0].CheckBox4[0],Off
+name: form1[0].#subform[0].TextField2[0],21/11/2017
+name: form1[0].#subform[0].TextField3[0],Pantep Titaraksa
+name: form1[0].#subform[0].#subform[1].DropDownList2[0],TUM 1
+name: form1[0].#subform[0].#subform[1].DropDownList2[1],CAT
+name: form1[0].#subform[0].#subform[1].DropDownList2[2],COMPLEMENTARY
+name: form1[0].#subform[0].#subform[1].DropDownList2[3],-
+name: form1[0].#subform[0].#subform[1].DropDownList2[4],NEW PRODUCT
+name: form1[0].#subform[0].#subform[1].DropDownList2[5],ALL LIFE STAGES
+name: form1[0].#subform[0].TextField1[0],Jingcheng
+name: form1[0].#subform[0].TextField1[1],
+name: form1[0].#subform[0].TextField1[2],CHINA
+name: form1[0].#subform[0].TextField1[3],CHINA
+name: form1[0].#subform[0].TextField1[4],
+name: form1[0].#subform[0].TextField1[5],
+name: form1[0].#subform[0].TextField1[6],
+name: form1[0].#subform[0].CheckBox2[1],1
+name: form1[0].#subform[0].TextField1[7],
+name: form1[0].#subform[0].#field[23],Off
+name: form1[0].#subform[0].CheckBox2[2],Off
+name: form1[0].#subform[0].TextField3[1],
+name: form1[0].#subform[0].TextField8[0],
+name: form1[0].#subform[0].CheckBox2[3],Off
+name: form1[0].#subform[0].#field[28],Off
+name: form1[0].#subform[0].#field[29],Off
+name: form1[0].#subform[0].#field[30],Off
+name: form1[0].#subform[0].TextField2[1],
+name: form1[0].#subform[0].DropDownList1[1],Real Meat
+name: form1[0].#subform[0].TextField6[0],Flakes
+name: form1[0].#subform[0].DropDownList1[2],Gravy/Sauce
+name: form1[0].#subform[0].DropDownList1[3],Mixed/Others*
+name: form1[0].#subform[0].TextField3[2],80,156
+name: form1[0].#subform[0].DropDownList1[4],Grams
+name: form1[0].#subform[0].DropDownList1[5],Can
+name: form1[0].#subform[0].DropDownList1[6],-
+name: form1[0].#subform[0].DropDownList1[7],Steel
+name: form1[0].#subform[0].DropDownList1[8],Normal Label
+name: form1[0].#subform[0].DropDownList1[9],Ezo
+name: form1[0].#subform[0].DropDownList1[10],
+name: form1[0].#subform[0].DropDownList1[11],
+name: form1[0].#subform[0].CheckBox1[1],Off
+name: form1[0].#subform[0].CheckBox1[2],Off
+name: form1[0].#subform[0].CheckBox1[3],Off
+name: form1[0].#subform[0].CheckBox1[4],Off
+name: form1[0].#subform[0].CheckBox1[5],Off
+name: form1[0].#subform[0].TextField2[2],
+name: form1[0].#subform[0].CheckBox1[6],Off
+name: form1[0].#subform[0].CheckBox1[7],Off
+name: form1[0].#subform[0].CheckBox1[8],Off
+name: form1[0].#subform[0].TextField2[3],
+name: form1[0].#subform[0].TextField2[4],
+name: form1[0].#subform[0].TextField2[5],211x106 for 80g / 300x200 for 156g
+name: form1[0].#subform[0].DropDownList1[12],
+name: form1[0].#subform[0].TextField2[6],
+name: form1[0].#subform[0].TextField2[7],
+name: form1[0].#subform[0].Table1[0].Row1[0].#subform[0].RadioButtonList[0],Off
+name: form1[0].#subform[0].Table1[0].Row2[0].#subform[0].RadioButtonList[0],Off
+name: form1[0].#subform[0].Table1[0].Row3[0].#subform[0].RadioButtonList[0],Off
+name: form1[0].#subform[0].Table1[0].Row6[0].#subform[0].RadioButtonList[0],Off
+name: form1[0].#subform[0].Table1[0].Row6[1].#subform[0].RadioButtonList[0],Off
+name: form1[0].#subform[0].Table1[0].Row7[0].#subform[0].RadioButtonList[0],Off
+name: form1[0].#subform[0].CheckBox1[9],Off
+name: form1[0].#subform[0].CheckBox1[10],Off
+name: form1[0].#subform[0].CheckBox1[11],Off
+name: form1[0].#subform[0].TextField2[8],
+name: form1[0].#subform[0].TextField5[0],1 Chicken topping shrimp2 Chicken topping seabream (functionality: taurine) 3 Chicken topping Pumpkin(functionality: add fiber to control hairball) 1 Tuna fillet with Chicken topping salmon 2 Tuna fillet with Chicken topping Pinapple (functionality: taurine) 3 Tuna fillet with Chicken topping Aloevera (functionality: add fiber to control hairball)4 Tuna fillet with Chicken topping Kiwi (functionality: add fiber to control hairball) 1 Tuna fillet topping shrimps 2 Tuna fillet topping kanikama (functionality: taurine) 3 Tuna fillet with mackerel (functionality: add fiber to control hairball)  **See excel file for detailed specifications**
+name: form1[0].#subform[0].TextField4[0],
+name: form1[0].#subform[0].TextField2[9],
+name: form1[0].#subform[0].TextField2[10],

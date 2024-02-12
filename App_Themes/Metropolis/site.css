@@ -1,0 +1,35 @@
+﻿.HeadPane,
+.PrintHeadPane
+{
+	background: white!important;
+    border-bottom: 1px solid #c0c0c0;
+}
+.dxheControl_Metropolis
+{
+    border: 1px solid #c0c0c0;
+}
+
+.HeadPane .ActionToolbar .Spacer b
+{
+    background: #c0c0c0;
+}
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content.dxm-hovered
+{
+    color: #434343;
+}
+
+.HeadPane .ActionToolbar .SearchBox
+{
+    margin-top: 1px;
+}
+
+.ContactCard 
+{
+    border: 1px solid #c0c0c0;
+}
+.contacts .dxdvContent_Metropolis
+{
+    padding: 18px;
+}
+

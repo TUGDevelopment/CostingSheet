@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MathInterface>
+  <Panel Text="Tools">
+    <Group Text="Graph">
+      <Item Text="X-Y Plot" name="X-Y Plot" SmallImageUrl="~/Content/Images/MathIcons/XYPlot.png">
+      </Item>
+      <Item Text="Polar Plot" name="Polar Plot" SmallImageUrl="~/Content/Images/MathIcons/PolarPlot.png">
+      </Item>
+      <Item Text="3D Plot" name="3D Plot" SmallImageUrl="~/Content/Images/MathIcons/3DPlot.png">
+      </Item>
+      <Item Text="Grid lines" name="Grid lines">
+      </Item>
+      <Item Text="Numbered" name="Numbered">
+      </Item>
+      <Item Text="Auto scale" name="Auto scale">
+      </Item>
+      <Item Text="View" name="View" ItemType="DropDownButton" Size="Large" LargeImageUrl="~/Content/Images/MathIcons/View.png">
+        <SubItem Text="Zoom" name="Zoom" ItemType="DropDownButton" SmallImageUrl="~/Content/Images/MathIcons/Zoom.png">
+        </SubItem>
+        <SubItem Text="Unzoom" name="Unzoom" ItemType="DropDownButton" SmallImageUrl="~/Content/Images/MathIcons/Unzoom.png">
+        </SubItem>
+        <SubItem Text="FullScreen" name="FullScreen" ItemType="DropDownToggleButton" SmallImageUrl="~/Content/Images/MathIcons/FullScreen.png">
+        </SubItem>
+      </Item>
+    </Group>
+    <Group Text="Code">
+      <Item Text="Analyze Code" name="Analyze Code" Size="Large" LargeImageUrl="~/Content/Images/MathIcons/AnalyzeCode.png">
+      </Item>                   
+      <Item Text="Run" Name="Run" Size="Large" LargeImageUrl="~/Content/Images/MathIcons/Run.png">
+      </Item>                   
+      <Item Text="Clear" name="Clear" Size="Large" LargeImageUrl="~/Content/Images/MathIcons/ClearCommands.png">
+      </Item>
+    </Group>
+  </Panel>
+  <Panel Text="Models">
+    <Group Text="Blocks">
+      <Item Text="Discrete" name="Discrete" ItemType="DropDownButton" SmallImageUrl="~/Content/Images/MathIcons/Discrete.png">
+        <SubItem Text="Difference" name="Difference" ItemType="DropDownButton">
+        </SubItem>
+        <SubItem Text="Discrete Derivative" name="Discrete Derivative" ItemType="DropDownButton">
+        </SubItem>
+        <SubItem Text="Integere Delay" name="Integere Delay" ItemType="DropDownButton">
+        </SubItem>
+        <SubItem Text="Discrete Filter" name="Discrete Filter" ItemType="DropDownButton">
+        </SubItem>
+        <SubItem Text="First-Order Hold" name="First-Order Hold" ItemType="DropDownButton">
+        </SubItem>
+        <SubItem Text="Zero-Order Hold" name="Zero-Order Hold" ItemType="DropDownButton">
+        </SubItem>
+      </Item>
+      <Item Text="Continuous" name="Continuous" ItemType="DropDownButton" SmallImageUrl="~/Content/Images/MathIcons/Continuous.png">
+        <SubItem Text="Integrator" name="Integrator" ItemType="DropDownButton">
+        </SubItem>
+        <SubItem Text="Derivative" name="Derivative" ItemType="DropDownButton">
+        </SubItem>
+        <SubItem Text="State-Space" name="State-Space" ItemType="DropDownButton">
+        </SubItem>
+        <SubItem Text="Transfer Fcn" name="Transfer Fcn" ItemType="DropDownButton">
+        </SubItem>
+      </Item>
+      <Item Text="Search by name: " Name="TextBox" ItemType="TextBox">
+      </Item>
+    </Group>
+    <Group Text="Edit">
+      <Item Text="Cut" name="Cut" SmallImageUrl="~/Content/Images/MathIcons/Cut.png">
+      </Item>
+      <Item Text="Copy" name="Copy" SmallImageUrl="~/Content/Images/MathIcons/Copy.png">
+      </Item>
+      <Item Text="Delete" name="Delete" SmallImageUrl="~/Content/Images/MathIcons/Delete.png">
+      </Item>
+      <Item Text="Undo" name="Undo" SmallImageUrl="~/Content/Images/MathIcons/Undo.png">
+      </Item>
+      <Item Text="Restrore" name="Restrore" SmallImageUrl="~/Content/Images/MathIcons/Restore.png">
+      </Item>
+    </Group>
+    <Group Text="View">
+      <Item Text="Fullscreen" name="Fullscreen" ItemType="CheckBox">
+      </Item>
+      <Item Text="Large items" name="Large items" ItemType="CheckBox">
+      </Item>
+      <SubItem Text="Interface Color" name="Interface Color" ItemType="ColorButton" Size="Large" LargeImageUrl="~/Content/Images/MathIcons/InterfaceColor.png">
+      </SubItem>
+      
+    </Group>
+  </Panel>
+</MathInterface>

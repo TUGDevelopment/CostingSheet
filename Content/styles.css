@@ -1,0 +1,933 @@
+﻿/* Main */
+@font-face {
+    font-family: 'Prompt';
+    src: url('./fonts/Prompt-Thin.woff') format('woff2'), url('./fonts/Prompt-Thin.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+html, body, form
+{
+    margin: 0;
+}
+body {
+    background: white;
+    color: Black;
+    /*font: 10px Century Gothic,Verdana, Geneva, sans-serif;*/
+    font-family: Prompt, sans-serif;
+    overflow-y: hidden;
+    width: 100%;
+}
+.someClass {
+    display: none;
+}
+.SidePane
+{
+    height: 100%;
+    min-height: 400px;
+}
+.calendar .SidePane
+{
+    min-height: 820px;
+}
+.contacts .SidePane
+{
+    min-height: 460px;
+}
+.feeds .SidePane
+{
+    min-height: 440px;
+}
+.feeds .SidePane .dxnb-header,
+.feeds .SidePane .dxnb-headerCollapsed,
+.contacts .SidePane .dxnb-header,
+.contacts .SidePane .dxnb-headerCollapsed
+{
+    border-left: 0!important;
+    border-right: 0!important;
+}
+.feeds .SidePane .dxnb-gr:first-child .dxnb-header,
+.feeds .SidePane .dxnb-gr:first-child .dxnb-headerCollapsed,
+.contacts .SidePane .dxnb-gr:first-child .dxnb-header,
+.contacts .SidePane .dxnb-gr:first-child .dxnb-headerCollapsed
+{
+    border-top: 0!important;
+}
+.feeds .SidePane .dxnb-content,
+.contacts .SidePane .dxnb-content
+{
+    border-left: 0!important;
+    border-right: 0!important;
+}
+.feeds .SidePane .dxnb-content
+{
+    border-bottom: 0!important;
+}
+.Logo
+{
+    height: 68px;
+    margin-top: -180px;
+}
+.Logo img 
+{
+    display: block;
+    margin: 0 auto;
+}
+
+.LeftPanel
+{
+    padding: 0!important;
+}
+.LeftPanel .dxpnl-acc
+{
+    height: 100%;
+}
+/* HeaderPane */
+.HeadPane
+{
+    height: 79px;
+    padding: 0!important;
+}
+.HeadPane .ActionToolbar,
+.HeadPane .NavigationToolbar
+{
+    width: 100%;
+    height: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+.mail .HeadPane .NavigationToolbar,
+.contacts .HeadPane .NavigationToolbar,
+.feeds .HeadPane .NavigationToolbar
+{
+    min-width: 261px;
+}
+.mail .HeadPane .ActionToolbar 
+{
+    min-width: 512px;
+}
+.calendar .HeadPane .NavigationToolbar
+{
+    min-width: 299px;
+}
+.calendar .HeadPane .ActionToolbar 
+{
+    min-width: 238px;
+}
+.contacts .HeadPane .ActionToolbar 
+{
+    min-width: 425px;
+}
+.feeds .HeadPane .ActionToolbar 
+{
+    min-width: 383px;
+}
+.HeadPane .ActionToolbar > tbody > tr > td 
+{
+    padding: 0;
+}
+.HeadPane .ActionToolbar .Strut
+{
+    width: 100%;
+}
+.HeadPane .ActionToolbar .Spacer b
+{
+    display: block;
+    width: 1px;
+    height: 52px;
+}
+
+.HeadPane .dxm-main.NavigationMenu
+{
+    padding-left: 14px;
+}
+.HeadPane .dxm-main.ActionMenu
+{
+    padding-left: 15px;
+}
+.HeadPane .dxm-main.InfoMenu
+{
+    padding-right: 14px;
+}
+
+.HeadPane .NavigationMenu.dxm-main .dxm-item,
+.HeadPane .NavigationMenu.dxm-main .dxm-item.dxm-hovered
+{
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.HeadPane .NavigationMenu,
+.HeadPane .NavigationMenu.dxm-main,
+.HeadPane .NavigationMenu.dxm-main .dxm-item,
+.HeadPane .NavigationMenu.dxm-main .dxm-content,
+.HeadPane .ActionMenu,
+.HeadPane .ActionMenu.dxm-main,
+.HeadPane .InfoMenu,
+.HeadPane .InfoMenu.dxm-main
+{
+    background: transparent;
+}
+
+.PrintHeadPane
+{
+    padding: 4px 0!important;
+}
+.PrintHeadPane .ReportToolbarContainer
+{
+    position: relative;
+    float: left;
+    left: 50%;
+}
+.PrintHeadPane .dxm-ltr
+{
+    margin-left: -50%;
+}
+.PrintHeadPane > div
+{
+    overflow: visible;
+}
+.PrintHeadPane .ReportToolbar
+{
+    border: 0!important;
+    background: none!important;
+}
+
+.ActionToolbar .SearchBox
+{
+    margin-top: 1px;
+    margin: 0 23px;
+    padding-left: 5px;
+    border-collapse: separate!important;
+}
+.ActionToolbar .SearchBoxButton
+{
+    background: White!important;
+    border-color: White!important;
+}
+
+.Landscape .ActionToolbar .SearchBox 
+{
+    width: 220px;
+}
+.Portrait .ActionToolbar .SearchBox
+{
+    width: 145px!important;
+}
+
+/* Mail */
+
+.dxgv 
+{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#ContactForm .dxeTextBoxSys,
+#ContactForm .dxeButtonEditSys
+{
+    height: 30px;
+}
+
+#ContactForm .dxeTextBoxSys.dxeTextBox_Moderno,
+#ContactForm .dxeTextBoxSys.dxeTextBox_Mulberry,
+#ContactForm .dxeButtonEditSys.dxeTextBox_Moderno,
+#ContactForm .dxeButtonEditSys.dxeTextBox_Mulberry
+{
+    height: 34px;
+}
+
+#ContactCardView .dxflCLTSys td,
+#ContactCardView .dxflVATSys 
+{
+    padding: 0;
+}
+
+#ContactCardView .dxflGroupBoxSys
+{
+    margin: 0;
+}
+
+.MailTree 
+{
+    margin-top: 10px;
+}
+#MailTree .unread,
+#MailGrid .unread 
+{
+    font-weight: bold;
+}
+
+.MailPreviewPanel,
+.FeedItemPreviewPanel
+{
+    overflow: auto;
+}
+.MailPreviewPanel .MailPreview,
+.FeedItemPreviewPanel .FeedPreview
+{
+    padding: 22px;
+}
+
+.MailPreviewPanel .MailPreview .Subject,
+.FeedItemPreviewPanel .FeedPreview .Subject
+{
+    font-size: 13px;
+    font-weight: bold;
+    padding-bottom: 15px;
+}
+.MailPreviewPanel .MailPreview .Info,
+.FeedItemPreviewPanel .FeedPreview .Info
+{
+    color: #8C8C8C;
+    padding-bottom: 22px;
+}
+.FeedItemPreviewPanel .FeedPreview .Info a
+{
+    margin-left: 13px;
+}
+.MailPreviewPanel .MailPreview .Separator,
+.FeedItemPreviewPanel .FeedPreview .Separator
+{
+    background: #DEDEDE;
+    height: 1px;
+}
+.MailPreviewPanel .MailPreview .Body,
+.FeedItemPreviewPanel .FeedPreview .Body
+{
+    padding-top: 10px;
+}
+
+#MailForm 
+{
+    padding: 18px;
+}
+#MailForm .LayoutTable
+{
+    width: 100%;
+    border-spacing: 0;
+}
+#MailForm .LayoutTable > tbody > tr > td 
+{
+    padding: 0;
+}
+#MailForm .Editor
+{
+    width: 100%;
+}
+#MailForm .Label 
+{
+    padding-right: 13px !important;
+}
+#MailForm .Separator
+{
+    height: 6px;
+}
+
+#AddressBookButton 
+{
+    white-space: nowrap;
+    margin-left: 8px;
+}
+.AddressBookList
+{
+    padding: 10px 0 30px;
+}
+.AddressBookPopupButton
+{
+    float: right;
+    margin: 9px 9px 9px 0;
+}
+
+/* Calendar */
+.DateNavigatorContainer
+{
+    padding: 25px 0;
+    background: White;
+}
+.DateNavigator 
+{
+    margin: 0 auto;
+}
+/*Employees GridView*/
+.employeesGridView {
+    outline: 0;
+}
+
+    .employeesGridView .dxgvCSD {
+        border-left: 0;
+        border-right: 0;
+    }
+
+    .employeesGridView .dataTable,
+    .employeesGridView .dataTable td.dxgv {
+        border-top: 0 !important;
+        border-bottom: 0 !important;
+    }
+
+    .employeesGridView .dxgvHSDC {
+        border: 0;
+    }
+
+    .employeesGridView .dataTable .header {
+        border-top: 0;
+    }
+
+    .employeesGridView .groupPanel {
+        border-bottom: 1px solid #CBCBCB;
+    }
+
+.employeesDetailsMainContainer {
+    min-width: 800px;
+}
+
+.employeesDetailsContainer {
+    float: left;
+    width: 40%;
+    min-width: 300px;
+    padding: 0 12px 0 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+    .employeesDetailsContainer table {
+        border-collapse: inherit;
+    }
+
+.employeesDetailsHeadline {
+    margin-bottom: 12px;
+}
+
+    .employeesDetailsHeadline .header {
+        margin-bottom: 0 !important;
+    }
+
+    .employeesDetailsHeadline .content {
+        color: gray;
+    }
+
+.employeeEditButtonCell {
+    vertical-align: top;
+}
+
+    .employeeEditButtonCell img {
+        margin: 10px 0 0 10px;
+        cursor: pointer;
+    }
+
+.employeesDetailsInfo td {
+    vertical-align: middle;
+}
+
+.employeesDetailsInfo img {
+    padding: 3px;
+    border: 1px solid #D1D1D1;
+    margin-right: 14px;
+}
+
+.employeesPagesContainer {
+    float: left;
+    width: 60%;
+}
+
+.emplCardViewDetailsPanel {
+    padding: 16px 20px 20px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.emplGridViewDetailsPanel {
+    border-top: 1px solid #eeeeee;
+    padding: 20px;
+    overflow: auto;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+    .emplGridViewDetailsPanel.expanded {
+        border: 1px solid #cbcbcb;
+        border-bottom: 0;
+        margin: 0 -1px;
+    }
+
+.emplCardViewDetailsPages {
+    margin-top: -16px;
+}
+
+    .emplCardViewDetailsPages .dxtc-content,
+    .emplGridViewDetailsPages .dxtc-content {
+        padding: 0;
+    }
+
+.emplEvaluationGridView .dataTable,
+.emplTasksGridView .dataTable {
+    border-left: 0;
+    border-right: 0;
+}
+
+.emplEvaluationGridView .dxgvHSDC,
+.emplTasksGridView .dxgvHSDC,
+.emplEvaluationGridView .dxgvCSD,
+.emplTasksGridView .dxgvCSD {
+    border: 0;
+}
+
+.emplEvaluationGridView .dataTable .header,
+.emplTasksGridView .dataTable .header,
+.tasksGridView .dataTable .header {
+    border-left: 0;
+}
+
+.emplEvaluationGridView .dxgvCSD td.dxgv,
+.emplTasksGridView .dxgvCSD td.dxgv {
+    border-bottom: 0 !important;
+    border-left: 0 !important;
+}
+
+.emplEvaluationGridView .focusRow,
+.emplTasksGridView .focusRow,
+.tasksGridView .focusRow {
+    background-color: #f7f8fa;
+    color: #343434;
+}
+
+.emplEvaluationGridView .commandColumn a,
+.emplTasksGridView .commandColumn a,
+.tasksGridView .commandColumn a {
+    visibility: hidden;
+}
+
+.emplEvaluationGridView .focusRow .commandColumn a,
+.emplTasksGridView .focusRow .commandColumn a,
+.tasksGridView .focusRow .commandColumn a {
+    visibility: visible;
+}
+
+.gridEditButton {
+    background-image: url("Images/Buttons/GridEditButtonSprite.png");
+    margin: 0 auto;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.focusRow .gridEditButton {
+    background-position: 16px;
+}
+
+.dxbButton.blueButton,
+.emplTasksGridView .commandColumnBtn,
+.tasksGridView .commandColumnBtn,
+.emplEvaluationGridView .commandColumnBtn {
+    width: 50px;
+    height: 22px;
+    display: inline-block;
+    color: black;
+    text-decoration: none;
+    background-image: url("Images/Buttons/BlueButton.png");
+}
+
+.emplTasksGridView td.dxgv.commandColumn .commandColumnBtn span,
+.tasksGridView td.dxgv.commandColumn .commandColumnBtn span,
+.emplEvaluationGridView td.dxgv.commandColumn .commandColumnBtn span {
+    color: black;
+}
+
+.emplEditFormPopup .dxpc-content {
+    padding: 0 0 25px 5px;
+}
+
+.emplEditFormPopup .fullWidthEditorContainer {
+    padding-right: 32px;
+}
+
+.emplEditFormPopup .addressGroup .fullWidthTable,
+.emplEditFormPopup .fullWidthCell {
+    width: 100%;
+}
+
+.emplEditFormPopup .buttonsContainer,
+.evalEditFormPopup .buttonsContainer {
+    padding-right: 32px;
+    float: right;
+}
+
+.emplEditFormPopup .group > tbody > tr > td,
+.emplEditFormPopup .group,
+.evalEditFormPopup .group > tbody > tr > td,
+.evalEditFormPopup .group {
+    padding-right: 0;
+}
+
+.emplEditFormPopup .addressGroup .dxeButtonEditSys {
+    margin: 0 3px;
+}
+
+.evalEditFormPopup .dxflMemoItemSys {
+    padding-right: 32px;
+}
+
+.evalEditFormPopup .dxpc-content {
+    padding: 0 0 25px 17px;
+}
+
+/* Contacts */
+
+.ContactsNavArea 
+{
+    height: 100%;
+}
+.ContactsNavArea .field
+{
+    float: left;
+    clear: both;
+    width: 100%;
+    padding: 5px 0;
+}
+.ContactsNavArea .field .label
+{
+    float: left;
+    padding-left: 18px;
+    width: 78px;
+}
+.ContactsNavArea .field .editor
+{
+    float: left;
+    white-space: nowrap;
+    overflow: auto;
+}
+.ContactsNavArea .field .label
+{
+    padding-top: 3px;
+}
+.CommandItems img 
+{
+    margin: 5px 8px 0 8px;
+}
+
+.ContactCard 
+{
+    height: 200px;
+    width: 420px;
+}
+
+.Info .dxflNotFloatedElSys
+{
+    max-width: 190px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+@media (max-width: 1190px)
+{
+    .ContactCard 
+    {
+        height: 340px;
+        width: 320px;
+    }
+}
+
+
+.Landscape #ContactForm > table
+{
+    padding: 40px 0;
+}
+.Portrait #ContactForm > table
+{
+    padding: 10px 0;
+}
+.Landscape #ContactForm .InfoLayoutGroup > div
+{
+    width: 250px;
+}
+.Portrait #ContactForm .InfoLayoutGroup > div
+{
+    width: 250px;
+}
+.Landscape #ContactForm .PhotoLayoutGroup > div
+{
+    width: 400px;
+}
+.Portrait #ContactForm .PhotoLayoutGroup > div
+{
+    width: 300px;
+}
+.Landscape #ContactForm .EmptyLayoutItem > div
+{
+    width: 70px;
+}
+.Portrait #ContactForm .EmptyLayoutItem > div
+{
+    width: 0px;
+}
+
+.print .Report 
+{
+    margin: 0 auto;
+}
+
+.clear 
+{
+	clear: both;
+	height: 0;
+	width: 0;
+	font-size: 0;
+	line-height: 0;
+	overflow: hidden;
+	visibility: hidden;
+}
+
+#CollapsePaneImage 
+{
+    margin-top: 3px;
+}
+#ExpandPaneImage
+{
+    margin-top: 6px;
+}
+
+/* Themes */
+.Sprite_Theme_DevEx,
+.Sprite_Theme_Office2010Black,
+.Sprite_Theme_Office2010Blue,
+.Sprite_Theme_Office2010Silver,
+.Sprite_Theme_Metropolis,
+.Sprite_Theme_MetropolisBlue,
+.Sprite_Theme_Moderno,
+.Sprite_Theme_iOS,
+.Sprite_Theme_Material,
+.Sprite_Theme_Aqua,
+.Sprite_Theme_Mulberry,
+.Sprite_Theme_Glass,
+.Sprite_Theme_BlackGlass,
+.Sprite_Theme_PlasticBlue,
+.Sprite_Theme_RedWine,
+.Sprite_Theme_SoftOrange,
+.Sprite_Theme_Youthful,
+.Sprite_Theme_Office2003Blue,
+.Sprite_Theme_Office2003Olive,
+.Sprite_Theme_Office2003Silver,
+.Sprite_Theme_Default
+{
+    background-image: none;
+    background-repeat: no-repeat;
+    border: 1px solid white!important;
+    width: 14px;
+    height: 14px;
+}
+
+.Sprite_Theme_DevEx
+{
+    background-color: #CDCCF5;
+}
+.Sprite_Theme_Office2010Black
+{
+    background-color: #474747;
+}
+.Sprite_Theme_Office2010Blue
+{
+    background-color: #B5CCE5;
+}
+.Sprite_Theme_Office2010Silver
+{
+    background-color: #E7EAEF;
+}
+.Sprite_Theme_Metropolis
+{
+    background-color: #7F7F7F;
+}
+.Sprite_Theme_MetropolisBlue
+{
+    background-color: #0072C6;
+}
+.Sprite_Theme_Moderno
+{
+    background-color: #1279c0;
+}
+.Sprite_Theme_iOS
+{
+    background-color: #007bf7;
+}
+.Sprite_Theme_Material
+{
+    background-color: #009688;
+}
+.Sprite_Theme_Aqua
+{
+    background-color: #96B9EC;
+}
+.Sprite_Theme_Mulberry
+{
+    background-color: #BF4E6A;
+}
+.Sprite_Theme_Glass
+{
+    background-color: #C8DDE8;
+}
+.Sprite_Theme_BlackGlass
+{
+    background-color: #4D5A63;
+}
+.Sprite_Theme_PlasticBlue
+{
+    background-color: #5066B3;
+}
+.Sprite_Theme_RedWine
+{
+    background-color: #8A0E3C;
+}
+.Sprite_Theme_SoftOrange
+{
+    background-color: #F06F30;
+}
+.Sprite_Theme_Youthful
+{
+    background-color: #9CC524;
+}
+.Sprite_Theme_Office2003Blue
+{
+    background-color: #B5CEF2;
+}
+.Sprite_Theme_Office2003Olive
+{
+    background-color: #D4DEB6;
+}
+.Sprite_Theme_Office2003Silver
+{
+    background-color: #D1D1E0;
+}
+.Sprite_Theme_Default
+{
+    background-color: #DCDCDC;
+}
+.container {
+    text-align: left;
+    padding: 2px 0;
+    font-size: 10pt;
+}
+
+.anchor {
+    padding: 0 5px;
+}
+
+.active {
+    color: red !important;
+}
+
+.hide {
+    display: none;
+}
+
+.myClass td {
+    vertical-align: top;
+}
+
+.nowrap textarea {
+    white-space: nowrap;
+}
+
+.custom-nav-bar {
+    padding: 0;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 450px;
+}
+
+
+.truncated {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.maxWidth {
+    max-width: 450px;
+}
+
+.editor {
+    padding-bottom: 8px;
+    padding-right: 1px;
+    width: 100%;
+}
+/*    .container {
+        display: table;
+        width: 100%;
+    }*/
+@media(min-width:500px) {
+    .container > * {
+        display: table-cell;
+        vertical-align: top;
+    }
+
+    .editor {
+        vertical-align: middle;
+        width: 110px;
+        padding-right: 10px;
+        padding-bottom: 0;
+    }
+}
+
+.lastEditor {
+    padding-right: 0;
+    padding-bottom: 0px;
+}
+
+.dxgvStatusBar tr.dxgv > td {
+    padding: 0;
+}
+
+.myStatusBar {
+    border-top: 0px;
+    border-spacing: 0;
+    height: 25px;
+}
+
+.draggingContainer {
+    height: 25px;
+    position: relative;
+    width: 100%;
+}
+
+.sizeGrip {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    background: url("Default.aspx/DXR.axd?r=1_50-Aws08") no-repeat -18px -42px;
+    cursor: se-resize;
+}
+
+.ResizeRect {
+    position: absolute;
+    border: 1px solid #808080;
+}
+
+.buttonsContainer {
+    max-width: 300px;
+    margin: 0 0 0 auto;
+    text-align: right;
+    padding-top: 12px;
+}
+
+.submitButton,
+.cancelButton {
+    margin-bottom: 12px;
+}
+
+.cancelButton {
+    margin-left: 8px;
+}
+
+.groupCaption {
+    margin-bottom: 4px;
+}
+
+.clearPaddings {
+    padding-top: 0;
+    padding-bottom: 0;
+}

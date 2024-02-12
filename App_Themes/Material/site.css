@@ -1,0 +1,97 @@
+﻿.HeadPane,
+.PrintHeadPane
+{
+	background: white!important;
+    border-bottom: 1px solid #d1d1d1;
+}
+.dxheControl_Material
+{
+    border: 1px solid #dfdfdf;
+}
+
+.HeadPane .ActionToolbar .Spacer b
+{
+    background: #d1d1d1;
+}
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content > span,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content.dxm-hovered,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content.dxm-hovered > span
+{
+    font-size: 24px;
+    color: #0072c6;
+}
+.HeadPane .ActionToolbar .SearchBox
+{
+    margin-top: 1px;
+}
+.HeadPane .ActionToolbar .SearchBoxButton
+{
+    background: Transparent!important;
+    border-color: Transparent   !important;
+    padding: 4px 8px;
+}
+.HeadPane .ActionToolbar .SearchBox input
+{
+    font-size: 14px!important;
+}
+
+.ContactCard 
+{
+    border: 1px solid #d1d1d1;
+}
+
+.dxcvFlowCard_Material.ContactCard {
+    width: 420px;
+    height: 220px;
+}
+
+@media (max-width: 1190px)
+{
+    .dxcvFlowCard_Material.ContactCard 
+    {
+        width: 320px !important;
+        height: 355px !important;
+    }
+}
+
+
+.contacts .dxdvContent_Material
+{
+    padding: 18px;
+}
+
+.dxgvTable_Material,
+.dxgvGroupPanel_Material,
+.dxscControl_Material,
+.feeds .dxgvControl_Material .dxgvHSDC,
+.feeds .dxgvControl_Material .dxgvFSDC
+{
+    border: 0;
+}
+.dxgvControl_Material .dxgvHSDC,
+.dxgvControl_Material .dxgvCSD
+{
+    border-left: 0;
+}
+.feeds .dxnbLite_Material.FeedNavBar .dxnb-gr:first-child .dxnb-header,
+.feeds .dxnbLite_Material.FeedNavBar .dxnb-gr:first-child .dxnb-headerCollapsed
+{
+    border-top: 0;
+}
+
+#AddressBookButton
+{
+    padding: 3px 12px 4px;
+}
+
+.DateNavigatorContainer
+{
+    padding: 0;
+}
+
+.ContactsNavArea .field .label
+{
+    padding-top: 9px;
+}
+

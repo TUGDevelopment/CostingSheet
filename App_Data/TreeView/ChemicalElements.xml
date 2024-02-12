@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ChemicalElements Text="Chemical elements" Name="chemicalElements">
+    <Category Text="Metals" Name="metals">
+        <Category Text="Alkali metals" Name="alkaliMetals">
+        </Category>
+        <Category Text="Alkaline earth metals" Name="alkalineEarthMetals">
+        </Category>
+        <Category Text="Inner transition elements" Name="innerTransitionElements">
+            <Category Text="Lanthanides" Name="lanthanides">
+            </Category>
+            <Category Text="Actinides" Name="actinides">
+            </Category>
+        </Category>
+        <Category Text="Transition elements" Name="transitionElements">
+        </Category>
+        <Category Text="Other metals" Name="otherMetals">
+        </Category>
+    </Category>
+    <Category Text="Metalloids" Name="metalloids">
+    </Category>
+    <Category Text="Nonmetals" Name="nonmetals">
+        <Category Text="Halogens" Name="halogens">
+        </Category>
+        <Category Text="Noble gases" Name="nobleGases">
+        </Category>
+        <Category Text="Other nonmetals" Name="otherNonmetals">
+        </Category>
+    </Category>
+</ChemicalElements>

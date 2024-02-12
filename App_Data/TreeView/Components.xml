@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Groups>
+  <Group Text="Accept"/>
+	<Group Text="Reject">
+		<Product Text="Marketing" Index="0" />
+		<Product Text="RD" Index="1" />
+	</Group>
+</Groups>
+

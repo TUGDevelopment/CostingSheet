@@ -1,0 +1,78 @@
+﻿.buttonsPanel {
+    float: left;
+    width: 100%;
+    margin-bottom: 24px;
+}
+.buttonsPanel > * {
+    float: left;
+}
+.buttonsPanel > div {
+	width: 180px;
+	text-align: center;
+}
+.buttonsPanel > label {
+	display: inline-block;
+	line-height: 150%;
+}
+
+/* BlueBall button */
+.blueBall {
+    background-image: url(../Images/BlueBall.png);
+    width: 44px;
+    height: 44px;
+}
+.blueBallHottracked {
+    background-position: -44px 0px;
+}
+.blueBallPressed {
+    background-position: -88px 0px;
+}
+
+/* Wine button */
+.wine,
+.wineHottracked,
+.winePressed {
+    background: url(../Images/Wine.png)!important;
+    color: White!important;
+    border: 0!important;
+    padding: 0!important;
+    width: 90px;
+    height: 30px;
+}
+.wineHottracked {
+    background-position: -92px 0px!important;
+    color: #FAD9E0!important;
+}
+.winePressed {
+    background-position: -184px 0px!important;
+    color: #DCB7C8!important;
+}
+
+/* ICQ button */
+.icq {
+    border: 1px solid #51CF04;
+    padding: 4px;
+    color: #51CF04;
+    background-color: #E0FFBB;
+    background-image: url('')!important;
+    font-size: 8pt;
+    font-weight: bold;
+    
+    cursor: pointer;
+    white-space: nowrap;
+}
+.icq div.dxb {
+    padding: 1px 5px;
+	border: 0px;
+}
+.icq div.dxbf {
+    padding: 0px 4px;
+	border: dotted 1px black;
+}
+.icqHovered {
+    background-color: #EFFFDC;
+}
+.icqPressed {
+    border-color: #CECF40;
+    padding: 5px 3px 3px 5px;
+}

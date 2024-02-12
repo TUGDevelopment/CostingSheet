@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Items>
+  <Item Text="Form" NavigateUrl="~/Default.aspx?viewMode=CustomerEditForm" SpriteClassName="Sprite_Mail" />
+  <!--<Item Text="Setup" NavigateUrl="~/setup.aspx?viewMode=EditForm" SpriteClassName="Sprite_Calendar" />
+  <Item Text="Admin" NavigateUrl="~/admin.aspx?viewMode=adminform" SpriteClassName="Sprite_Feeds" />-->
+</Items>

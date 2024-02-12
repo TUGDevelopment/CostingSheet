@@ -1,0 +1,36 @@
+﻿.HeadPane,
+.PrintHeadPane
+{
+	background: #d6dcbb!important;
+    border-bottom: 1px solid #758D5E;
+}
+
+.SidePane
+{
+	background: #e2e8c9;
+}
+
+.HeadPane .ActionToolbar .Spacer b
+{
+    background: #758d5e;
+}
+
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item.dxm-hovered .dxm-content
+{
+    color: #707e62;
+}
+
+.HeadPane .ActionToolbar .SearchBox
+{
+    margin-top: 1px;
+}
+
+.ContactCard 
+{
+    border: 1px solid #a4b26d;
+}
+.contacts .dxdvContent_Office2003Olive
+{
+    padding: 5px;
+}

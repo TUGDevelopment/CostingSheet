@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Pages>
+  <form>
+    <Item ToolTip="Back" Name="back" SpriteClassName="Sprite_Back" />
+    <Item ToolTip="New" Name="new" ImageUrl="~/Content/Images/icons8-ice-cream-32.png"/>
+    <Item ToolTip="Send" Name="send" SpriteClassName="Sprite_SendMail" />
+    <Item ToolTip="Save" Name="save" SpriteClassName="Sprite_Save" />
+    <Item ToolTip="Reply" Name="reply" SpriteClassName="Sprite_Reply" />
+    <Item ToolTip="Mark as" Name="markAs" ImageUrl="~/Content/Images/icons8-bulleted-list-32.png">
+      <Item Text="Variety Pack" ToolTip="New" Name="read" ImageUrl="~/Content/Images/icons8-plus-math-filled-16.png" />
+      <Item Text="Update" ToolTip="Update" Name="unread" ImageUrl="~/Content/Images/icons8-upload-16.png" />
+    </Item>
+    <Item ToolTip="Delete" Name="delete" SpriteClassName="Sprite_RemoveLarge" />
+    <Item ToolTip="Filter" Name="Filter" ImageUrl="~/Content/Images/icons8-search-32.png" />
+    <Item ToolTip="Pending Job" Name="Pending" ImageUrl="~/Content/Images/icons8-doughnut-chart-32.png" />
+    <Item ToolTip="All" Name="All" ImageUrl="~/Content/Images/icons8-check-all-32.png" />
+    <Item ToolTip="ExportToXLS" Name="ExportToXLS" ImageUrl="~/Content/Images/icons8-microsoft-excel-32.png" />
+    <Item ToolTip="Approve" Name="Approve" ImageUrl="~/Content/Images/icons8-ok-32.png" />
+    <Item ToolTip="Request Code" Name="Request" ImageUrl="~/Content/Images/icons8-ok-32.png" />
+    <Item ToolTip="Reject" Name="Reject" ImageUrl="~/Content/Images/icons8-delete-32.png" />    
+  </form>
+  <setup>
+    <Item ToolTip="Back" Name="back" SpriteClassName="Sprite_Back" />
+    <Item ToolTip="Compose" Name="new" ImageUrl="~/Content/Images/icons8-plus-32b.png" />
+    <Item ToolTip="Delete" Name="delete" SpriteClassName="Sprite_RemoveLarge" />
+  </setup>
+  <admin>
+    <Item ToolTip="Back" Name="back" SpriteClassName="Sprite_Back" />
+    <Item ToolTip="Save" Name="save" SpriteClassName="Sprite_Save" />
+    <Item ToolTip="Compose" Name="new" ImageUrl="~/Content/Images/icons8-plus-32b.png"/>
+    <Item ToolTip="Delete" Name="delete" SpriteClassName="Sprite_RemoveLarge" />
+  </admin>
+  <upload>
+    <Item ToolTip="Save to drafts" Name="save" SpriteClassName="Sprite_Save" />
+  </upload>
+</Pages>

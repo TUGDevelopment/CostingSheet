@@ -1,0 +1,61 @@
+﻿.HeadPane,
+.PrintHeadPane
+{
+	background: #2a2a2a url("HeaderBack.jpg") no-repeat left top!important;
+    border-bottom: 1px solid #16171B;
+}
+.LeftPanel .HeadPane
+{
+    border-right: 1px solid #D3E3ED;
+}
+
+.mail .ContentPane,
+.contacts .ContentPane,
+.feeds .ContentPane 
+{
+    background-position: -250px 0;
+}
+
+.calendar .ContentPane 
+{
+    background-position: -300px 0;
+}
+
+.SidePane
+{
+	background: #E8EDF1!important;
+}
+.mail .SidePane
+{
+	background: #C9D7DC!important;
+}
+
+.ContentPane
+{
+    border-left-color: #d3e3ed;
+}
+
+.HeadPane .ActionToolbar .Spacer b
+{
+    background: #d3e3ed;
+}
+
+.HeadPane .NavigationToolbar  .NavigationMenu .dxm-item .dxm-content,
+.HeadPane .NavigationToolbar  .NavigationMenu .dxm-item.dxm-hovered .dxm-content
+{
+    color: #d3e3ed;
+}
+
+.HeadPane .ActionToolbar .SearchBox
+{
+    margin-top: 3px;
+}
+
+.ContactCard 
+{
+    border: 1px solid #16171b;
+}
+.contacts .dxdvContent_BlackGlass 
+{
+    padding: 23px;
+}

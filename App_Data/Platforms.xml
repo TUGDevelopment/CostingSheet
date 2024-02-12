@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Pages>
+<products>
+  <product name="Upload" text="Upload" id="0"></product>
+  <product name="Primary" text="Primary Packaging" id="1"></product>
+  <product name="Secondary" text="Secondary Packaging" id="2"></product>
+  <product name="Margin" text="Margin" id="3"></product>
+  <product name="Upcharge" text="Upcharge" id="4"></product>
+  <product name="LOH" text="DL WH &amp; Factor" id="5"/>
+  <product name="Labor" text="Labor" id="6"/>
+  <product name="OH" text="OH" id="7"/>
+  <product name="SGA" text="SG&amp;A" id="8"/>
+  <product name="Product" text="Product Detail" id="9"/>
+  <product name="VarietyPack" text="Header" id="10"/>  
+  <product name="Attached" text="Attached file" id="11"/>
+</products>
+<customs>
+  <custom name="Customer" text="Customer Detail" id="0"/>
+  <custom name="Product" text="Product Detail" id="1"/>
+  <custom name="Packaging" text="Packaging" id="2"/>
+  <custom name="Ingredient" text="Ingredient restrictions &amp; claims" id="3"/>
+  <custom name="Attached" text="Attached file" id="4"/>
+  <custom name="Formula" text="Formula" id="5"/>
+  <!--<custom name="Destination" text="Destination" id="6"/>
+  <custom name="PackingStyle" text="Packing Style" id="7"/>-->
+</customs>
+<editforms>
+  <editform name="Customer" text="Customer Detail" id="0"/>
+  <editform name="Product" text="Product Detail" id="1"/>
+  <editform name="Packaging" text="Packaging" id="2"/>
+  <editform name="Ingredient" text="Ingredient restrictions &amp; claims" id="3"/>
+  <editform name="Attached" text="Attached file" id="4"/>
+  <editform name="Formula" text="Formula" id="5"/>
+  <editform name="Destination" text="Destination" id="6"/>
+  <editform name="PackingStyle" text="Packing Style" id="7"/>
+  </editforms>
+<Quots>
+  <Quot name="Calculate" text="Calculate" id="0"/>
+  <Quot name="Upload file" text="Upload file" id="1"/>
+</Quots>
+<Requests>
+  <Request name="Calculate" text="Calculate" id="0"/>
+  <Request name="Upload file" text="Upload file" id="1"/>
+  </Requests>
+<Items>
+  <Item name="Calculate" text="Calculate" id="0"/>
+  <Item name="Upload file" text="Upload file" id="1"/>
+  <Item name="Utilize" text="Utilize" id="2"/>
+  <Item name="Raw_material" text="Raw Material" id="3"/>
+  <Item name="Media_ing" text="Media" id="4"/>
+  <Item name="Packaging" text="Packaging" id="5"/>
+  <Item name="LOH_Cost" text="LOH Cost" id="6"/>
+  <Item name="Packing_Style" text="Packing Style" id="7"/>
+  <Item name="Upcharge" text="Upcharge" id="8"/>
+  <Item name="Route" text="Route" id="9"/>
+  <Item name="Summary" text="Summary" id="10"/>
+  <Item name="ReCal" text="Converter" id="11"/>
+  <Item name="Attachment" text="Attachment" id="12"/>
+  <Item name="History" text="History" id="13"/>
+</Items>
+</Pages>

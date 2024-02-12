@@ -1,0 +1,43 @@
+﻿<%@ Master Language="C#" MasterPageFile="~/Root.master" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="Site" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="RootHolder" Runat="Server">
+    <dx:ASPxPanel runat="server" ID="LeftPanel" ClientInstanceName="LeftPanel" FixedPosition="WindowLeft"  FixedPositionOverlap="true" CssClass="LeftPanel" Collapsible="true">
+        <SettingsCollapsing ExpandEffect="Slide" ExpandButton-Visible="false" />
+        <SettingsAdaptivity CollapseAtWindowInnerWidth="1023" />
+        <PanelCollection>
+            <dx:PanelContent>
+                <div class="HeadPane">
+                    <dx:NavigationToolbar runat="server" />
+                </div>
+                <div class="SidePane">
+                    <asp:ContentPlaceHolder ID="SideHolder" runat="server" />
+                         <%--<dx:ASPxNavBar ID="navBar" runat="server" AutoCollapse="true" Paddings-Padding="0" ClientVisible="false">
+                        </dx:ASPxNavBar>
+                        <asp:SqlDataSource runat="server" ID="nwd" ConnectionString="<%$ ConnectionStrings:CostingConnectionString %>" 
+                            SelectCommand="spGetMenuBar" SelectCommandType="StoredProcedure">
+                        <SelectParameters>
+                            <asp:SessionParameter Name="username" SessionField="username"/>
+                        </SelectParameters>
+                        </asp:SqlDataSource>--%>
+                </div>
+                <div class="Logo">
+                    <%--<dx:ASPxImage ID="LogoImage" runat="server" SpriteCssClass="Sprite_Logo" />--%>
+                    <dx:ASPxImage ID="LogoImage" runat="server" ImageUrl="~/Content/LogoThaiUnion.png" />
+                    
+                </div>
+            </dx:PanelContent>
+        </PanelCollection>
+    </dx:ASPxPanel>
+   <dx:ASPxPanel runat="server" ID="TopPanel" ClientInstanceName="TopPanel" FixedPosition="WindowTop" CssClass="HeadPane">
+        <PanelCollection>
+            <dx:PanelContent>
+                <dx:ActionToolbar runat="server" />
+            </dx:PanelContent>
+        </PanelCollection>
+    </dx:ASPxPanel>
+    <div class="ContentPane">
+        <asp:ContentPlaceHolder ID="MainHolder" runat="server" />
+    </div>
+    <dx:ASPxGlobalEvents runat="server" ID="GlobalEvents">
+        <ClientSideEvents ControlsInitialized="Demo.ClientLayout_Init" BrowserWindowResized="Demo.ClientLayout_PaneResized" />
+    </dx:ASPxGlobalEvents>
+</asp:Content>

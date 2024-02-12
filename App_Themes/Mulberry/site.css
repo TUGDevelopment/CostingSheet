@@ -1,0 +1,110 @@
+﻿.HeadPane,
+.PrintHeadPane
+{
+	background: white!important;
+    border-bottom: 1px solid #cbcbcb;
+}
+.dxheControl_Mulberry
+{
+    border: 1px solid #cbcbcb;
+    background-color: white;
+}
+
+.HeadPane .ActionToolbar .Spacer b
+{
+    background: #d1d1d1;
+}
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content > span,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content.dxm-hovered,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content.dxm-hovered > span
+{
+    font-size: 24px;
+    color: #96979a;
+}
+.HeadPane .ActionToolbar .SearchBox
+{
+    margin-top: 1px;
+}
+.HeadPane .ActionToolbar .SearchBoxButton
+{
+    background: Transparent!important;
+    border-color: Transparent   !important;
+    padding: 4px 8px;
+}
+.HeadPane .ActionToolbar .SearchBox input
+{
+    font-size: 14px!important;
+}
+
+.DateNavigatorContainer
+{
+    padding: 0;
+}
+.CalendarResourceNavBar
+{
+	background: white;
+    border-top: 1px solid #cbcbcb;
+}
+
+.ContactViewBar 
+{
+    background-color: white;
+}
+.ContactCard 
+{
+    border: 1px solid #d1d1d1;
+}
+.dxcvFlowCard_Mulberry.ContactCard 
+{
+    width: 420px;
+    height: 220px;
+}
+
+@media (max-width: 1190px)
+{
+    .dxcvFlowCard_Mulberry.ContactCard 
+    {
+        width: 320px !important;
+        height: 355px !important;
+    }
+}
+
+.contacts .dxdvContent_Mulberry
+{
+    padding: 18px;
+}
+
+.dxgvTable_Mulberry,
+.dxgvGroupPanel_Mulberry,
+.dxscControl_Mulberry,
+.feeds .dxgvControl_Mulberry .dxgvHSDC,
+.feeds .dxgvControl_Mulberry .dxgvFSDC
+{
+    border: 0;
+}
+.dxgvControl_Mulberry .dxgvHSDC,
+.dxgvControl_Mulberry .dxgvCSD
+{
+    border-left: 0;
+}
+.feeds .dxnbLite_Mulberry.FeedNavBar 
+{
+    background-color: white;
+}
+.feeds .dxnbLite_Mulberry.FeedNavBar .dxnb-gr:first-child .dxnb-header,
+.feeds .dxnbLite_Mulberry.FeedNavBar .dxnb-gr:first-child .dxnb-headerCollapsed
+{
+    border-top: 0;
+}
+
+#AddressBookButton
+{
+    padding: 3px 12px 4px;
+}
+
+.ContactsNavArea .field .label
+{
+    padding-top: 9px;
+}
+

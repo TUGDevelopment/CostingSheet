@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+  <siteMapNode url="~/Default.aspx?home" title="Home"  description="">
+    <siteMapNode url="~/inprocess/template2.aspx" title="SAP Work List"  description="Demonstrates a collection of data controllers in application based on Data Aquarium Framework" />
+    <siteMapNode url="http://dev.codeontime.com/demo/northwind/MasterDetail.aspx" title="Master/Detail Extravaganza"  description="Demonstrates tabbed data controllers linked by master detail relationships with loading on-demand" />
+    <siteMapNode url="~/Forms/Customers.aspx" title="Customer Orders" description="Manage customer orders."/>
+    <siteMapNode url="~/Forms/Inventory.aspx" title="Inventory" description="Manage product inventory."/>
+    <siteMapNode url="http://blog.codeontime.com/2008/09/aquarium-express-primer.html" title="Aquarium Express Primer" description="Learn how to create this sample application with step-by-step instructions."/>
+    <siteMapNode url="http://codeontime.com/contactus.aspx" title="Download Source" description="Request a link to download the source code of this application. Both VB.NET and C# versions are available."/>
+    <siteMapNode url="http://codeontime.com/download.aspx" title="Download Code OnTime Generator" description="Download Code OnTime Generator and generate your own exciting ASP.NET and AJAX 3.5 applications."/>
+  </siteMapNode>
+</siteMap>

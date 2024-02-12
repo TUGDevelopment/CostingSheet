@@ -1,0 +1,27 @@
+﻿.HeadPane,
+.PrintHeadPane
+{
+    background: #ededed!important;
+    border-bottom: 1px solid #8c8c8c;
+}
+
+.DateNavigatorContainer
+{
+	background: #f6f7f9;
+}
+
+.HeadPane .ActionToolbar .Spacer b
+{
+    background: #696969;
+}
+
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item.dxm-hovered .dxm-content
+{
+    color: #696969;
+}
+
+.HeadPane .ActionToolbar .SearchBox
+{
+    margin-top: 1px;
+}

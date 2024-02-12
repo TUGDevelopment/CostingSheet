@@ -1,0 +1,42 @@
+﻿.HeadPane,
+.PrintHeadPane
+{
+    background: #8aa150!important;
+    border-bottom: 1px solid #ffffff;
+}
+
+.SidePane
+{
+    background: #e5eecf;
+}
+
+.DateNavigatorContainer
+{
+    background: #e5eecf;
+}
+
+.HeadPane .ActionToolbar .Spacer b
+{
+    background: White;
+}
+
+.dxheControl_Youthful
+{
+    border: 1px solid White;
+}
+
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item.dxm-hovered .dxm-content
+{
+    color: #e5eecf;
+}
+
+.HeadPane .ActionToolbar .SearchBox
+{
+    margin-top: 1px;
+}
+
+.ContactCard
+{
+    background-color: #E5EECF !important;
+}

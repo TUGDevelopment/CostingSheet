@@ -1,0 +1,43 @@
+﻿.HeadPane,
+.PrintHeadPane
+{
+    background: #e9e9e9!important;
+    border-bottom: 3px solid #d3d3d3;
+}
+
+.HeadPane .ActionToolbar .Spacer b
+{
+    background: #d3d3d3;
+    width: 3px;
+}
+
+.HeadPane .ActionToolbar .ActionMenu .dxm-item,
+.HeadPane .ActionToolbar .InfoMenu .dxm-item
+{
+    background: transparent;
+}
+
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item.dxm-hovered .dxm-content
+{
+    color: #777777;
+}
+
+.HeadPane .ActionToolbar .SearchBox
+{
+    margin-top: 2px;
+}
+
+.ContactCard 
+{
+    border: 3px solid #d3d3d3;
+}
+.contacts .dxdvContent_SoftOrange 
+{
+    padding: 20px;
+}
+
+.contacts .ContactViewBar 
+{
+    border-width: 0;
+}

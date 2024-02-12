@@ -1,0 +1,97 @@
+﻿.HeadPane,
+.PrintHeadPane
+{
+	background: white!important;
+    border-bottom: 1px solid #d1d1d1;
+}
+.dxheControl_iOS
+{
+    border: 1px solid #dcdcdc;
+}
+
+.HeadPane .ActionToolbar .Spacer b
+{
+    background: #d1d1d1;
+}
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content > span,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content.dxm-hovered,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content.dxm-hovered > span
+{
+    font-size: 24px;
+    color: #0072c6;
+}
+.HeadPane .ActionToolbar .SearchBox
+{
+    margin-top: 1px;
+}
+.HeadPane .ActionToolbar .SearchBoxButton
+{
+    background: Transparent!important;
+    border-color: Transparent   !important;
+    padding: 4px 8px;
+}
+.HeadPane .ActionToolbar .SearchBox input
+{
+    font-size: 14px!important;
+}
+
+.ContactCard 
+{
+    border: 1px solid #d1d1d1;
+}
+
+.dxcvFlowCard_iOS.ContactCard {
+    width: 420px;
+    height: 220px;
+}
+
+@media (max-width: 1190px)
+{
+    .dxcvFlowCard_iOS.ContactCard 
+    {
+        width: 320px !important;
+        height: 355px !important;
+    }
+}
+
+
+.contacts .dxdvContent_iOS
+{
+    padding: 18px;
+}
+
+.dxgvTable_iOS,
+.dxgvGroupPanel_iOS,
+.dxscControl_iOS,
+.feeds .dxgvControl_iOS .dxgvHSDC,
+.feeds .dxgvControl_iOS .dxgvFSDC
+{
+    border: 0;
+}
+.dxgvControl_iOS .dxgvHSDC,
+.dxgvControl_iOS .dxgvCSD
+{
+    border-left: 0;
+}
+.feeds .dxnbLite_iOS.FeedNavBar .dxnb-gr:first-child .dxnb-header,
+.feeds .dxnbLite_iOS.FeedNavBar .dxnb-gr:first-child .dxnb-headerCollapsed
+{
+    border-top: 0;
+}
+
+#AddressBookButton
+{
+    padding: 3px 12px 4px;
+}
+
+.DateNavigatorContainer
+{
+    padding: 0;
+}
+
+.ContactsNavArea .field .label
+{
+    padding-top: 9px;
+}
+

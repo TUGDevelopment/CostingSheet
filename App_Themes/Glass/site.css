@@ -1,0 +1,63 @@
+﻿.HeadPane,
+.PrintHeadPane
+{
+	background: #cfe0e7 url("HeaderBack.jpg") no-repeat left top!important;
+    border-bottom: 1px solid #7EACB1;
+}
+
+.mail .ContentPane,
+.contacts .ContentPane,
+.feeds .ContentPane 
+{
+    background-position: -250px 0;
+}
+
+.calendar .ContentPane 
+{
+    background-position: -300px 0;
+}
+
+.SidePane
+{
+	background: #EDF3F4!important;
+}
+.mail .SidePane
+{
+	background: #F8FAFD!important;
+}
+
+.HeadPane .ActionToolbar .Spacer b
+{
+    background: #7eacb1;
+}
+
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item .dxm-content,
+.HeadPane .NavigationToolbar .NavigationMenu .dxm-item.dxm-hovered .dxm-content
+{
+    color: #40758d !important;
+}
+
+.HeadPane .ActionToolbar .ActionMenu .dxm-item,
+.HeadPane .ActionToolbar .InfoMenu .dxm-item
+{
+    background: transparent;
+}
+.HeadPane .ActionToolbar .ActionMenu .dxm-item.dxm-hovered,
+.HeadPane .ActionToolbar .InfoMenu .dxm-item.dxm-hovered
+{
+    background: #7eacb1;
+}
+
+.HeadPane .ActionToolbar .SearchBox
+{
+    margin-top: 3px;
+}
+
+.ContactCard 
+{
+    border: 1px solid #7eacb1;
+}
+.contacts .dxdvContent_Glass
+{
+    padding: 5px;
+}
