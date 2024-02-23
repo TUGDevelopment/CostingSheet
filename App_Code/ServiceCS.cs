@@ -21,8 +21,9 @@ using System.Web;
 using DevExpress.Web.ASPxSpreadsheet;
 using DevExpress.Spreadsheet;
 using DevExpress.Spreadsheet.Export;
+using CsvHelper;
 //using Excel = Microsoft.Office.Interop.Excel;
- 
+
 /// <summary>
 /// Summary description for ServiceCS
 /// </summary>
@@ -812,7 +813,127 @@ public  class ServiceCS : System.Web.Services.WebService
         var Results = new DataTable();//spGetHistory
         SqlParameter[] param = { new SqlParameter("@user", string.Format("{0}", CurUserName)) };
         Results = cs.GetRelatedResources("spGetDataSendToSAP", param);
-        CreateToExport(Results);
+        //CreateToExport(Results);
+        
+        DataTable dt = new DataTable();
+        dt.Columns.AddRange(new DataColumn[] { new DataColumn("IfColumn"), 
+            new DataColumn(@"Condition Type RV13A-KSCHL"),
+            new DataColumn(@"Sales Organization KOMG-VKORG"),
+            new DataColumn(@"Distribution Channel KOMG-VTWEG"),
+            new DataColumn(@"Sales group KOMG-VKGRP"),
+
+            new DataColumn(@"Customer number KOMG-KUNNR"),
+            new DataColumn(@"Ship-To Party KOMG-KUNWE"),
+            new DataColumn(@"Incoterms (Part 1)KOMG-INCO1(01)"),
+            new DataColumn(@"Terms of payment key KOMG-ZTERM(01)"),
+            new DataColumn(@"SD Document Currency KOMG-WAERK(01)"),
+
+            new DataColumn(@"Sales unit KOMG-VRKME(01)"),
+            new DataColumn(@"Material Number KOMG-MATNR(01)"),
+            new DataColumn(@"Condition amount or percentage where no scale exists KONP-KBETR(01)"),
+
+            new DataColumn(@"Condition unit (currency or percentage) KONP-KONWA(01)"),
+            new DataColumn(@"Condition Pricing Unit KONP-KPEIN(01)"),
+            new DataColumn(@"Condition Unit KONP-KMEIN(01)"),
+            new DataColumn(@"Validity start date of the condition record RV13A-DATAB(01)"),
+            new DataColumn(@"Validity end date of the condition record RV13A-DATBI(01)"),
+            new DataColumn(@"Long text line LV70T-LTX01(01)"),
+            new DataColumn(@"AppID"),
+            });
+        foreach (DataRow row in Results.Rows)
+        {
+            string IfColumn = "";
+            if (row["ShipTo"].ToString() != "" && row["Incoterm"].ToString() != "" && row["PaymentTerm"].ToString() != "")
+                IfColumn = "11";
+            else if (row["ShipTo"].ToString() != "" && row["Incoterm"].ToString() != "")
+                IfColumn = "12";
+            else if (row["PaymentTerm"].ToString() != "" && row["Incoterm"].ToString() != "")
+                IfColumn = "14";
+            else if (row["SoldTo"].ToString() != "" && row["Incoterm"].ToString() != "")
+                IfColumn = "15";
+            else if (row["SoldTo"].ToString() != "" && row["PaymentTerm"].ToString() != "")
+                IfColumn = "16";
+            else if (row["Code"].ToString() != "" && row["Incoterm"].ToString() != "")
+                IfColumn = "17";
+
+            dt.Rows.Add(string.Format("{0}", IfColumn),
+            IfColumn == "17" ? @"zpm2" : @"zpm1", 
+            string.Format("{0}", row["CostNo"].ToString().Substring(0, 2) == "PF" ? "103" : "102"),
+            "EX", 
+            "203", 
+            row["SoldTo"].ToString(),
+            row["ShipTo"].ToString(),
+            row["Incoterm"].ToString(),
+            row["PaymentTerm"].ToString(),
+
+            row["Currency"].ToString(),
+            row["SalesUnit"].ToString(),
+            row["Code"].ToString(),
+            row["OfferPrice"].ToString(),
+
+            row["Currency"].ToString(),
+            row["PricingUnit"].ToString(),
+            row["SalesUnit"].ToString(),
+            string.Format("{0}", row["RequestDate"].ToString()),
+            string.Format("{0}", row["RequireDate"].ToString()),
+            row["CostNo"].ToString(),
+            row["ID"].ToString());
+
+        }
+        string[] ColumnsToBeDeleted = { "11", "12", "13", "14", "15","16","17","18" };
+        if (dt.Rows.Count > 0)
+            foreach (string ColName in ColumnsToBeDeleted)
+            {
+                var dtclone = new DataTable();
+
+                //dtclone.Clear();
+                //dtclone = dt.Clone();
+                if (dt.Select("IfColumn='" + ColName + "'").Length > 0)
+                {
+                    if (ColName == "11")
+                    {
+                        dtclone = dt.Select("IfColumn='" + ColName + "'").CopyToDataTable();
+                    }
+                    else if (ColName == "12")
+                    {
+                        dtclone = dt.Select("IfColumn='" + ColName + "'").CopyToDataTable();
+                        dtclone.Columns.Remove(@"Terms of payment key KOMG-ZTERM(01)");
+                    }
+                    else if (ColName == "13")
+                    {
+                        dtclone = dt.Select("IfColumn='" + ColName + "'").CopyToDataTable();
+                        dtclone.Columns.Remove(@"Incoterms (Part 1)KOMG-INCO1(01)");
+                    }
+                    else if (ColName == "14")
+                    {
+                        dtclone = dt.Select("IfColumn='" + ColName + "'").CopyToDataTable();
+                        dtclone.Columns.Remove(@"Ship-To Party KOMG-KUNWE");
+                    }
+                    else if (ColName == "15")
+                    {
+                        dtclone = dt.Select("IfColumn='" + ColName + "'").CopyToDataTable();
+                        dtclone.Columns.Remove(@"Ship-To Party KOMG-KUNWE");
+                        dtclone.Columns.Remove(@"Terms of payment key KOMG-ZTERM(01)");
+                    }
+                    else if (ColName == "16")
+                    {
+                        dtclone = dt.Select("IfColumn='" + ColName + "'").CopyToDataTable();
+                        dtclone.Columns.Remove(@"Ship-To Party KOMG-KUNWE");
+                        dtclone.Columns.Remove(@"Incoterms (Part 1)KOMG-INCO1(01)");
+                    }
+                    else if (ColName == "17")
+                    {
+                        dtclone = dt.Select("IfColumn='" + ColName + "'").CopyToDataTable();
+                        dtclone.Columns.Remove(@"Ship-To Party KOMG-KUNWE");
+                        dtclone.Columns.Remove(@"Incoterms (Part 1)KOMG-INCO1(01)");
+                        dtclone.Columns.Remove(@"Customer number KOMG-KUNNR");
+                        dtclone.Columns.Remove(@"Terms of payment key KOMG-ZTERM(01)");
+                    }
+                    string file = HttpContext.Current.Server.MapPath("~/ExcelFiles/VK11_"  + ColName + "_" + DateTime.Now.ToString("yyyyMMddhhmm") + ".csv");
+                    MyToDataTable.ToCSV(dtclone, file);
+                }
+            }
+        
         //MinPrice(Results);
         //Server.MapPath("~/App_Data/Documents/HelloWorld.xlsx"));
         //Context.Response.Write(JsonConvert.SerializeObject(Results));
@@ -825,41 +946,41 @@ public  class ServiceCS : System.Web.Services.WebService
         var worksheet = workbook.Worksheets.Add("VK11_20180604_095920_");
         foreach (DataRow row in Results.Rows)
         {
-            if (!row["Currency"].ToString().Contains("USD") && row["PriceUpload"].ToString() == "0")
-            {
-                double _ExchangeRate = 0, _OfferPrice = 0, _MinPrice = 0;
-                _OfferPrice = (Convert.ToDouble(row["OfferPrice"]) * Convert.ToDouble(row["Rate"]));
-                _MinPrice = (Convert.ToDouble(row["MinPrice"]) * Convert.ToDouble(row["Rate"]));
-                double.TryParse(string.Format("{0}", row["ExchangeRate"].ToString()), out _ExchangeRate);
-                if (_ExchangeRate != 0)
-                {
-                    row["OfferPriceExch"] = Convert.ToDouble(_OfferPrice / _ExchangeRate).ToString("F2");
-                    row["MinPriceExch"] = Convert.ToDouble(_MinPrice / _ExchangeRate).ToString("F2");
-                }
-                if (row["Currency"].ToString().Contains("JPY"))
-                {
-                    NumberFormatInfo nfi = new CultureInfo("ja-JP", false).NumberFormat;
-                    row["OfferPriceExch"] = Convert.ToInt64(Math.Floor(Convert.ToDouble(row["OfferPriceExch"])));
-                    row["MinPriceExch"] = Convert.ToInt64(Math.Floor(Convert.ToDouble(row["MinPriceExch"])));
-                }
-                //dr["ExchangeRate"] = seExchangeRate.Value;
-            }
-            else
-            {
-                row["OfferPriceExch"] = row["OfferPrice"];
-                row["MinPriceExch"] = row["MinPrice"];
-            }
+            //if (!row["Currency"].ToString().Contains("USD") && row["PriceUpload"].ToString() == "0")
+            //{
+            //    double _ExchangeRate = 0, _OfferPrice = 0, _MinPrice = 0;
+            //    _OfferPrice = (Convert.ToDouble(row["OfferPrice"]) * Convert.ToDouble(row["Rate"]));
+            //    _MinPrice = (Convert.ToDouble(row["MinPrice"]) * Convert.ToDouble(row["Rate"]));
+            //    double.TryParse(string.Format("{0}", row["ExchangeRate"].ToString()), out _ExchangeRate);
+            //    if (_ExchangeRate != 0)
+            //    {
+            //        row["OfferPriceExch"] = Convert.ToDouble(_OfferPrice / _ExchangeRate).ToString("F2");
+            //        row["MinPriceExch"] = Convert.ToDouble(_MinPrice / _ExchangeRate).ToString("F2");
+            //    }
+            //    if (row["Currency"].ToString().Contains("JPY"))
+            //    {
+            //        NumberFormatInfo nfi = new CultureInfo("ja-JP", false).NumberFormat;
+            //        row["OfferPriceExch"] = Convert.ToInt64(Math.Floor(Convert.ToDouble(row["OfferPriceExch"])));
+            //        row["MinPriceExch"] = Convert.ToInt64(Math.Floor(Convert.ToDouble(row["MinPriceExch"])));
+            //    }
+            //    //dr["ExchangeRate"] = seExchangeRate.Value;
+            //}
+            //else
+            //{
+            //    row["OfferPriceExch"] = row["OfferPrice"];
+            //    row["MinPriceExch"] = row["MinPrice"];
+            //}
             //if (row["Incoterm"].ToString() == "FOB" && row["MinPrice"].ToString()== ".00")
             //    row["MinPrice"] = cs.GetMinPrice(row["Formula"].ToString(), row["RequestNo"].ToString());
             if (row["ShipTo"].ToString() != "" && row["Incoterm"].ToString() != "" && row["PaymentTerm"].ToString() != "")
             {
                 i++;
-                worksheet.Cell("A" + i).Value = string.Format("'{0}", 11);
+                worksheet.Cell("A" + i).Value = string.Format("{0}", 11);
                 worksheet.Cell("B" + i).Value = row["subID"].ToString();
                 worksheet.Cell("C" + i).Value = row["ID"].ToString();
                 worksheet.Cell("D" + i).Value = "zpm1";
                 worksheet.Cell("F" + i).Value = "X";
-                worksheet.Cell("G" + i).Value = string.Format("'{0}", row["CostNo"].ToString().Substring(0, 2) == "PF" ? "103" : "102");
+                worksheet.Cell("G" + i).Value = string.Format("{0}", row["CostNo"].ToString().Substring(0, 2) == "PF" ? "103" : "102");
                 worksheet.Cell("H" + i).Value = "EX";
                 worksheet.Cell("I" + i).Value = "203";
                 worksheet.Cell("J" + i).Value = row["SoldTo"].ToString();
@@ -877,19 +998,19 @@ public  class ServiceCS : System.Web.Services.WebService
                 //string s = dt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
                 //worksheet.Cell("U" + i).Value = string.Format("'{0}", s);
                 //worksheet.Cell("V" + i).Value = string.Format("'{0}", Convert.ToDateTime(row["RequireDate"]).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
-                worksheet.Cell("U" + i).Value = string.Format("'{0}", row["RequestDate"].ToString());
-                worksheet.Cell("V" + i).Value = string.Format("'{0}", row["RequireDate"].ToString());
+                worksheet.Cell("U" + i).Value = string.Format("{0}", row["RequestDate"].ToString());
+                worksheet.Cell("V" + i).Value = string.Format("{0}", row["RequireDate"].ToString());
                 worksheet.Cell("W" + i).Value = row["CostNo"].ToString();
             }
             else if (row["ShipTo"].ToString() != "" && row["Incoterm"].ToString() != "")
             {
                 i++;
-                worksheet.Cell("A" + i).Value = string.Format("'{0}", 12);
+                worksheet.Cell("A" + i).Value = string.Format("{0}", 12);
                 worksheet.Cell("B" + i).Value = row["subID"].ToString();
                 worksheet.Cell("C" + i).Value = row["ID"].ToString();
                 worksheet.Cell("D" + i).Value = "zpm1";
                 worksheet.Cell("F" + i).Value = "X";
-                worksheet.Cell("G" + i).Value = string.Format("'{0}", row["CostNo"].ToString().Substring(0, 2) == "PF" ? "103" : "102");
+                worksheet.Cell("G" + i).Value = string.Format("{0}", row["CostNo"].ToString().Substring(0, 2) == "PF" ? "103" : "102");
                 worksheet.Cell("H" + i).Value = "EX";
                 worksheet.Cell("I" + i).Value = "203";
                 worksheet.Cell("J" + i).Value = row["SoldTo"].ToString();
@@ -909,12 +1030,12 @@ public  class ServiceCS : System.Web.Services.WebService
             else if (row["PaymentTerm"].ToString() != "" && row["Incoterm"].ToString() != "")
             {
                 i++;
-                worksheet.Cell("A" + i).Value = string.Format("'{0}", 14);
+                worksheet.Cell("A" + i).Value = string.Format("{0}", 14);
                 worksheet.Cell("B" + i).Value = row["subID"].ToString();
                 worksheet.Cell("C" + i).Value = row["ID"].ToString();
                 worksheet.Cell("D" + i).Value = "zpm1";
                 worksheet.Cell("F" + i).Value = "X";
-                worksheet.Cell("G" + i).Value = string.Format("'{0}", row["CostNo"].ToString().Substring(0, 2) == "PF" ? "103" : "102");
+                worksheet.Cell("G" + i).Value = string.Format("{0}", row["CostNo"].ToString().Substring(0, 2) == "PF" ? "103" : "102");
                 worksheet.Cell("H" + i).Value = "EX";
                 worksheet.Cell("I" + i).Value = "203";
                 worksheet.Cell("J" + i).Value = row["SoldTo"].ToString();
@@ -934,12 +1055,12 @@ public  class ServiceCS : System.Web.Services.WebService
             else if (row["SoldTo"].ToString() != "" && row["Incoterm"].ToString() != "")
             {
                 i++;
-                worksheet.Cell("A" + i).Value = string.Format("'{0}", 15);
+                worksheet.Cell("A" + i).Value = string.Format("{0}", 15);
                 worksheet.Cell("B" + i).Value = row["subID"].ToString();
                 worksheet.Cell("C" + i).Value = row["ID"].ToString();
                 worksheet.Cell("D" + i).Value = "zpm1";
                 worksheet.Cell("F" + i).Value = "X";
-                worksheet.Cell("G" + i).Value = string.Format("'{0}", row["CostNo"].ToString().Substring(0, 2) == "PF" ? "103" : "102");
+                worksheet.Cell("G" + i).Value = string.Format("{0}", row["CostNo"].ToString().Substring(0, 2) == "PF" ? "103" : "102");
                 worksheet.Cell("H" + i).Value = "EX";
                 worksheet.Cell("I" + i).Value = "203";
                 worksheet.Cell("J" + i).Value = row["SoldTo"].ToString();
@@ -958,12 +1079,12 @@ public  class ServiceCS : System.Web.Services.WebService
             else if (row["SoldTo"].ToString() != "" && row["PaymentTerm"].ToString() != "")
             {
                 i++;
-                worksheet.Cell("A" + i).Value = string.Format("'{0}", 16);
+                worksheet.Cell("A" + i).Value = string.Format("{0}", 16);
                 worksheet.Cell("B" + i).Value = row["subID"].ToString();
                 worksheet.Cell("C" + i).Value = row["ID"].ToString();
                 worksheet.Cell("D" + i).Value = "zpm1";
                 worksheet.Cell("F" + i).Value = "X";
-                worksheet.Cell("G" + i).Value = string.Format("'{0}", row["CostNo"].ToString().Substring(0, 2) == "PF" ? "103" : "102");
+                worksheet.Cell("G" + i).Value = string.Format("{0}", row["CostNo"].ToString().Substring(0, 2) == "PF" ? "103" : "102");
                 worksheet.Cell("H" + i).Value = "EX";
                 worksheet.Cell("I" + i).Value = "203";
                 worksheet.Cell("J" + i).Value = row["SoldTo"].ToString();
@@ -975,8 +1096,8 @@ public  class ServiceCS : System.Web.Services.WebService
                 worksheet.Cell("R" + i).Value = row["Currency"].ToString();
                 worksheet.Cell("S" + i).Value = row["PricingUnit"].ToString();
                 worksheet.Cell("T" + i).Value = row["SalesUnit"].ToString();
-                worksheet.Cell("U" + i).Value = string.Format("'{0}", row["RequestDate"].ToString());
-                worksheet.Cell("V" + i).Value = string.Format("'{0}", row["RequireDate"].ToString());
+                worksheet.Cell("U" + i).Value = string.Format("{0}", row["RequestDate"].ToString());
+                worksheet.Cell("V" + i).Value = string.Format("{0}", row["RequireDate"].ToString());
                 worksheet.Cell("W" + i).Value = row["CostNo"].ToString();
             }
             else if (row["Code"].ToString() != "" && row["Incoterm"].ToString() != "")
@@ -985,22 +1106,22 @@ public  class ServiceCS : System.Web.Services.WebService
                 worksheet.Cell("A" + i).Value = string.Format("'{0}", 17);
                 worksheet.Cell("B" + i).Value = row["subID"].ToString();
                 worksheet.Cell("C" + i).Value = row["ID"].ToString();
-                worksheet.Cell("D" + i).Value = "'zpm2";
-                worksheet.Cell("F" + i).Value = "'X";
-                worksheet.Cell("G" + i).Value = string.Format("'{0}", row["CostNo"].ToString().Substring(0, 2) == "PF" ? "103" : "102");
-                worksheet.Cell("H" + i).Value = "'EX";
-                worksheet.Cell("I" + i).Value = "'203";
+                worksheet.Cell("D" + i).Value = "zpm2";
+                worksheet.Cell("F" + i).Value = "X";
+                worksheet.Cell("G" + i).Value = string.Format("{0}", row["CostNo"].ToString().Substring(0, 2) == "PF" ? "103" : "102");
+                worksheet.Cell("H" + i).Value = "EX";
+                worksheet.Cell("I" + i).Value = "203";
                 worksheet.Cell("N" + i).Value = row["Currency"].ToString();
                 worksheet.Cell("O" + i).Value = row["SalesUnit"].ToString();
                 worksheet.Cell("P" + i).Value = row["Code"].ToString();
                 worksheet.Cell("Q" + i).Value = row["subID"].ToString() == "" || row["subID"].ToString() == "0" ? 
                     cs.GetMinPrice(row["Formula"].ToString(), row["RequestNo"].ToString()) : row["MinPriceExch"].ToString();
                 worksheet.Cell("R" + i).Value = row["Currency"].ToString();
-                worksheet.Cell("S" + i).Value = string.Format("'{0}", row["PricingUnit"].ToString());
+                worksheet.Cell("S" + i).Value = string.Format("{0}", row["PricingUnit"].ToString());
                 worksheet.Cell("T" + i).Value = row["SalesUnit"].ToString();
 
-                worksheet.Cell("U" + i).Value = string.Format("'{0}", row["RequestDate"].ToString());
-                worksheet.Cell("V" + i).Value = string.Format("'{0}", row["RequireDate"].ToString());
+                worksheet.Cell("U" + i).Value = string.Format("{0}", row["RequestDate"].ToString());
+                worksheet.Cell("V" + i).Value = string.Format("{0}", row["RequireDate"].ToString());
                 worksheet.Cell("W" + i).Value = row["CostNo"].ToString();
                 //IXLRange range = worksheet.Range("A" + i + ":W" + i);
                 //i++;
@@ -1011,6 +1132,59 @@ public  class ServiceCS : System.Web.Services.WebService
         }
         //workbook.SaveAs(@"C:\temp\VK11_table.xlsx");
         workbook.SaveAs(@"\\192.168.1.212\Data\VK11_table.xlsx");
+    }
+    [WebMethod]
+    public void GetUpdateTOCSV(string data)
+    {
+        var dir = HttpContext.Current.Server.MapPath("~/ExcelFiles");
+        var filePaths = Directory.GetFiles(dir, "*_result*.csv");
+        foreach (string s in filePaths)
+        {
+            using (var reader = new StreamReader(s))
+
+            using (var csv = new CsvReader(reader))
+            {
+                while (csv.Read())
+                {//This will advance the reader to the next record.
+
+                    //You can use an indexer to get by position or name. 
+                    //This will return the field as a string
+
+                    // By position
+                    var field = csv[0];
+                    var AppID = csv["AppID"];
+                    // By header name
+
+                    var Condition = csv["Condition TypeRV13A-KSCHL"];
+                    if (csv["Result"] == "Condition records saved")
+                    {
+                        using (SqlConnection con = new SqlConnection(strConn))
+                        {
+                            SqlCommand cmd = new SqlCommand();
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.CommandText = "spUpdateQuotationfromJob";
+                            cmd.Parameters.AddWithValue("@MinPrice", string.Format("{0}", 0));
+                            cmd.Parameters.AddWithValue("@subID", string.Format("{0}", Condition.ToString() == "zpm1" ? "0" : AppID.ToString()));
+                            cmd.Parameters.AddWithValue("@ID", AppID.ToString());
+                            cmd.Connection = con;
+                            con.Open();
+                            cmd.ExecuteNonQuery();
+                            con.Close();
+                        }
+                    }
+                }
+                //var records = csv.GetRecords<dynamic>();
+                //foreach (var item in records)
+                //{
+                //    var da = item.Result;
+                //    var condition = item[@"Condition Type RV13A-KSCHL"];  
+                //}
+                //foreach (dynamic record in records.ToList())
+                //{
+                //    var data = record["IfColumn"];
+                //}
+            }
+        }
     }
     [WebMethod]
    public void GetReadExcelupdateJob(string Data)
@@ -2404,7 +2578,7 @@ public  class ServiceCS : System.Web.Services.WebService
             }
         }
         Context.Response.Write("success");
-        }
+    }
 }
 
 //public class CreateDocument
@@ -2413,6 +2587,7 @@ public  class ServiceCS : System.Web.Services.WebService
 //public string Condition { get; set; }
 //public string Code { get; set; }
 //}
+
 
 public class Objattachment
 {
