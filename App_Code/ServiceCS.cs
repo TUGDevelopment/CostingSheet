@@ -799,6 +799,21 @@ public  class ServiceCS : System.Web.Services.WebService
         }
     }
     [WebMethod]
+    public void GetUnblockSO()
+    {
+        DataTable dtsale = builditems(@"select VBAP_VBELN from TransSalesDeliveryBlock group by VBAP_VBELN");
+        DataTable dt = new DataTable();
+        dt.Columns.AddRange(new DataColumn[] { new DataColumn(@"Sales Document VBAK-VBELN"),
+            new DataColumn(@"Delivery Block (Document Header)") }
+        );
+        foreach (DataRow rw in dtsale.Rows)
+        {
+            dt.Rows.Add(string.Format("{0}", rw["VBAP_VBELN"]),"Z4");
+        }
+        string file = HttpContext.Current.Server.MapPath("~/ExcelFiles/VA02_UBLKSO_" + DateTime.Now.ToString("yyyyMMddhhmm") + ".csv");
+        MyToDataTable.ToCSV(dt, file);
+    }
+    [WebMethod]
     public void ExportTo(string Data)
     {
         //worksheet.Cell("D2").Value = "zpm1";
@@ -810,6 +825,7 @@ public  class ServiceCS : System.Web.Services.WebService
         //worksheet.Range("C2:I2").CopyTo(worksheet.Range("C2:I2".Replace("2",i.ToString()))); 
         //worksheet.Cell("F"+i).Value = "X";
         //}
+
         var Results = new DataTable();//spGetHistory
         SqlParameter[] param = { new SqlParameter("@user", string.Format("{0}", CurUserName)) };
         Results = cs.GetRelatedResources("spGetDataSendToSAP", param);
@@ -1136,7 +1152,7 @@ public  class ServiceCS : System.Web.Services.WebService
     [WebMethod]
     public void GetUpdateTOCSV(string data)
     {
-        var dir = HttpContext.Current.Server.MapPath("~/ExcelFiles");
+        var dir = HttpContext.Current.Server.MapPath("~/ExcelFiles");//D:\SAPInterfaces\Inbound
         var filePaths = Directory.GetFiles(dir, "*_result*.csv");
         foreach (string s in filePaths)
         {
@@ -1183,6 +1199,14 @@ public  class ServiceCS : System.Web.Services.WebService
                 //{
                 //    var data = record["IfColumn"];
                 //}
+            }
+            try
+            { 
+                File.Move(s, HttpContext.Current.Server.MapPath("~/ExcelFiles/Processed/" + Path.GetFileName(s)));
+            }
+            catch (IOException iox)
+            {
+                Console.WriteLine(iox.Message);
             }
         }
     }

@@ -35,8 +35,10 @@ public partial class popupControls_selmaster : System.Web.UI.Page
         SqlParameter[] param = new SqlParameter[] { };
         switch (string.Format("{0}", o))
         {
-            case "Matformu":case "Matdetail":
-                param = new SqlParameter[] {};
+            case "Matformu":case "Matdetail": case "1MatCode": case "2MatCode":
+                param = new SqlParameter[] {
+                new SqlParameter("@Company", Request.QueryString["Company"].ToString()),
+                new SqlParameter("@Mattype", string.Format("{0}", o))};
                 dt = cs.GetRelatedResources("spGetMatformu", param);
                 //table.Rows.Add(new object[] { @"ID;Material;Name;Yield", 0 });
                 break;
