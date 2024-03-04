@@ -102,13 +102,17 @@
        function OnButtonClick(evt, s) {
            debugger;
            var url = 'popupControls/selmaster.aspx?view=' + evt;
-           if (evt == "Matformu") {
-
-           }
-           else if (evt == "Receiver")
-               url += "&Plant=" + ClientCompany.GetValue() + "&Category=0";
+           if (evt == "Matformu") 
+               url += "&Company=" + ClientCompany.GetValue();
            else if (evt == "RequestNo")
                url += "&Company=" + ClientCompany.GetValue() + "&User=" + username.Get("user_name");
+           else if (evt == "1MatCode" || evt == "2MatCode" || evt == "Matformu" || evt =="Matdetail")
+               url += "&Company=" + ClientCompany.GetValue();
+           else if (evt == "Primary") 
+               url = 'popupControls/popupsel.aspx?view=' + evt + "&usertype=0";
+           else if (evt == "Receiver")
+               url = 'popupControls/popupsel.aspx?view=' + evt + "&Plant=" + ClientCompany.GetValue() + "&Category=0";
+
            pcassign.RefreshContentUrl();
            pcassign.SetContentUrl(url);
            pcassign.SetHeaderText(url);
@@ -125,11 +129,34 @@
                    var g = grid.batchEditApi;
                    g.SetCellValue(curentEditingIndex, "Material", r["Code"]);
                    g.SetCellValue(curentEditingIndex, "Description", r["Name"]);
+                   g.SetCellValue(curentEditingIndex, "Yield", 1);
                    //g.SetCellValue(curentEditingIndex, "Unit", r["Unit"]);
                    //g.SetCellValue(curentEditingIndex, "ExchangeRate", r["ExchangeRate"]);
                    //g.SetCellValue(curentEditingIndex, "BaseUnit", r["BaseUnit"]);
                    //g.SetCellValue(curentEditingIndex, "Description", r["Description"]);
                    //calculator(grid);
+               })
+           }
+           else if (closedBy == "Primary") {
+               //debugger;
+               CmbPackaging.SetValue(returnValue);
+           }
+           else if (closedBy == "1MatCode") {
+               grid.batchEditApi.SetCellValue(curentEditingIndex, "1MatCode", returnValue);
+               grid.GetValuesOnCustomCallback("1MatCode|" + returnValue + "|" + curentEditingIndex, function (r) {
+                   if (!r)
+                       return;
+                   cmb1MatCode.SetValue(r["Code"]);
+                   tb1ptPrimary.SetText(r["Name"]);
+               })
+           }
+           if (closedBy == "2MatCode") {
+               grid.batchEditApi.SetCellValue(curentEditingIndex, "2MatCode", returnValue);
+               grid.GetValuesOnCustomCallback("2MatCode|" + returnValue + "|" + curentEditingIndex, function (r) {
+                   if (!r)
+                       return;
+                   cmb2MatCode.SetValue(r["Code"]);
+                   tb2ptPrimary.SetText(r["Name"]);
                })
            }
            else if (closedBy == "Matdetail") {
@@ -140,7 +167,7 @@
                    var g = detail.batchEditApi;
                    g.SetCellValue(curentEditingIndex, "Material", r["Code"]);
                    g.SetCellValue(curentEditingIndex, "Description", r["Name"]);
-                   //g.SetCellValue(curentEditingIndex, "Unit", r["Unit"]);
+                   g.SetCellValue(curentEditingIndex, "Yield", 1);
                    //g.SetCellValue(curentEditingIndex, "ExchangeRate", r["ExchangeRate"]);
                    //g.SetCellValue(curentEditingIndex, "BaseUnit", r["BaseUnit"]);
                    //g.SetCellValue(curentEditingIndex, "Description", r["Description"]);
@@ -370,8 +397,8 @@
                         </Breakpoints>
                     </GridSettings>
                     <Items>
-                        <dx:LayoutItem Caption="Company Code">
-                                                        <SpanRules>
+                        <dx:LayoutItem Caption="Proposed Factory">
+                             <SpanRules>
                                 <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="S"></dx:SpanRule>
                                 <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="M"></dx:SpanRule>
                             </SpanRules>
@@ -383,7 +410,8 @@
                                             <dx:ListBoxColumn FieldName="Code"/>
                                             <dx:ListBoxColumn FieldName="Title"/>
                                         </Columns>
-                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { OnCountryChanged(s); }"/>
+                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { OnCountryChanged(s); }"/>
+                                        <ValidationSettings Display="Dynamic" RequiredField-IsRequired="true" />
                                     </dx:ASPxComboBox>
                               </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
@@ -533,7 +561,7 @@
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
                         </dx:LayoutItem>
-                        <dx:LayoutItem Caption="NW (g.)">
+                        <dx:LayoutItem Caption="Declared NW (g.)">
                             <SpanRules>
                                 <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="S"></dx:SpanRule>
                                 <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="M"></dx:SpanRule>
@@ -562,7 +590,7 @@
                                    </dx:LayoutItemNestedControlContainer>
                                </LayoutItemNestedControlCollection>
                            </dx:LayoutItem>   
-                           <dx:LayoutItem Caption="FW (g.)">
+                           <dx:LayoutItem Caption="Actual NW (g.)">
                                <SpanRules>
                                 <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="S"></dx:SpanRule>
                                 <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="M"></dx:SpanRule>
@@ -626,6 +654,97 @@
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
                         </dx:LayoutItem>
+                        <dx:EmptyLayoutItem />
+                        <dx:LayoutItem Caption="1st Primary Packaging">
+                            <SpanRules>
+                                <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="S"></dx:SpanRule>
+                                <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="M"></dx:SpanRule>
+                            </SpanRules>
+                            <LayoutItemNestedControlCollection>
+                                <dx:LayoutItemNestedControlContainer>
+                                    <dx:ASPxTextBox runat="server" ID="tb1ptPrimary" ClientInstanceName="tb1ptPrimary" Width="200px" />
+                                </dx:LayoutItemNestedControlContainer>
+                            </LayoutItemNestedControlCollection>
+                        </dx:LayoutItem>
+                        
+                        <dx:LayoutItem Caption="Mat.Code">
+                            <SpanRules>
+                                <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="S"></dx:SpanRule>
+                                <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="M"></dx:SpanRule>
+                            </SpanRules>
+                            <LayoutItemNestedControlCollection>
+                                <dx:LayoutItemNestedControlContainer>
+                                <dx:ASPxButtonEdit ID="cmb1MatCode" runat="server" ReadOnly="true" Width="200px" ClientInstanceName="cmb1MatCode">
+                                           <Buttons>
+                                                <dx:EditButton>
+                                                </dx:EditButton>
+                                           </Buttons>
+                                           <ClientSideEvents ButtonClick="function(s, e) { OnButtonClick('1MatCode',s); }" />
+                                       </dx:ASPxButtonEdit>
+
+                                 
+
+                              </dx:LayoutItemNestedControlContainer>
+                            </LayoutItemNestedControlCollection>
+                        </dx:LayoutItem>
+                        <dx:LayoutItem Caption="Packaging Supplier">
+                            <SpanRules>
+                                <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="S"></dx:SpanRule>
+                                <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="M"></dx:SpanRule>
+                            </SpanRules>
+                            <LayoutItemNestedControlCollection>
+                                <dx:LayoutItemNestedControlContainer>
+                                <dx:ASPxTextBox runat="server" ID="tb1pkgSupplier" Width="200px"
+                                        ClientInstanceName="tb1pkgSupplier" TextFormatString="{0}">
+                                       
+                                    </dx:ASPxTextBox>
+                              </dx:LayoutItemNestedControlContainer>
+                            </LayoutItemNestedControlCollection>
+                        </dx:LayoutItem>
+                        <dx:EmptyLayoutItem />
+                        <dx:LayoutItem Caption="2st Primary Packaging">
+                            <SpanRules>
+                                <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="S"></dx:SpanRule>
+                                <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="M"></dx:SpanRule>
+                            </SpanRules>
+                            <LayoutItemNestedControlCollection>
+                                <dx:LayoutItemNestedControlContainer>
+                                    <dx:ASPxTextBox runat="server" ID="tb2ptPrimary" ClientInstanceName="tb2ptPrimary" Width="200px" />
+                                </dx:LayoutItemNestedControlContainer>
+                            </LayoutItemNestedControlCollection>
+                        </dx:LayoutItem>
+                        <dx:LayoutItem Caption="Mat.Code">
+                            <SpanRules>
+                                <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="S"></dx:SpanRule>
+                                <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="M"></dx:SpanRule>
+                            </SpanRules>
+                            <LayoutItemNestedControlCollection>
+                                <dx:LayoutItemNestedControlContainer>
+                                <dx:ASPxButtonEdit ID="cmb2MatCode" runat="server" ReadOnly="true" Width="200px" ClientInstanceName="cmb2MatCode">
+                                           <Buttons>
+                                                <dx:EditButton>
+                                                </dx:EditButton>
+                                           </Buttons>
+                                           <ClientSideEvents ButtonClick="function(s, e) { OnButtonClick('2MatCode',s); }" />
+                                       </dx:ASPxButtonEdit>
+
+                                 
+                              </dx:LayoutItemNestedControlContainer>
+                            </LayoutItemNestedControlCollection>
+                        </dx:LayoutItem>
+                        <dx:LayoutItem Caption="Packaging Supplier">
+                            <SpanRules>
+                                <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="S"></dx:SpanRule>
+                                <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="M"></dx:SpanRule>
+                            </SpanRules>
+                            <LayoutItemNestedControlCollection>
+                                <dx:LayoutItemNestedControlContainer>
+                                <dx:ASPxTextBox runat="server" ID="tb2pkgSupplier" Width="200px"
+                                        ClientInstanceName="tb2pkgSupplier" TextFormatString="{0}">
+                                </dx:ASPxTextBox>
+                              </dx:LayoutItemNestedControlContainer>
+                            </LayoutItemNestedControlCollection>
+                        </dx:LayoutItem>
                         <dx:LayoutItem Caption="Notes" Width="100%">
                             <SpanRules>
                                 <dx:SpanRule ColumnSpan="1" RowSpan="1" BreakpointName="S"></dx:SpanRule>
@@ -649,7 +768,7 @@
                 <dx:SplitterPane Name="editorsContainer" MinSize="100" ShowCollapseForwardButton="True" AutoHeight="true" PaneStyle-Border-BorderWidth="0px">
                     <ContentCollection>
                     <dx:SplitterContentControl runat="server">
-<dx:ASPxFormLayout runat="server" ID="ASPxFormLayout1" ClientInstanceName="formLayout" CssClass="formLayout" AlignItemCaptionsInAllGroups="true">
+                        <dx:ASPxFormLayout runat="server" ID="ASPxFormLayout1" ClientInstanceName="formLayout" CssClass="formLayout" AlignItemCaptionsInAllGroups="true">
                             <SettingsAdaptivity AdaptivityMode="SingleColumnWindowLimit" SwitchToSingleColumnAtWindowInnerWidth="800" />
                             <Items> 
                         <dx:LayoutItem Caption="">
@@ -729,7 +848,7 @@
                                             </CustomButtons>
                                         </dx:GridViewCommandColumn>
                                     <dx:GridViewDataColumn FieldName="Id" ReadOnly="true" Width="0px"/>
-                                    <dx:GridViewDataComboBoxColumn FieldName="Component" GroupIndex="1">
+                                    <dx:GridViewDataComboBoxColumn FieldName="Component">
                                         <PropertiesComboBox DataSourceID="dsComponent" TextField="Name" ValueField="Name" />
                                     </dx:GridViewDataComboBoxColumn>
                                     <%--<dx:GridViewDataComboBoxColumn FieldName="SubType">
@@ -804,10 +923,13 @@
                                             KeyFieldName="Id" Width="100%" OnBeforePerformDataSelect="detail_BeforePerformDataSelect">
                                             <ClientSideEvents BatchEditEndEditing="OnBatchEditEndEditing" BatchEditStartEditing="OnBatchEditStartEditing"/>
 						                    <Columns>
-                                                <dx:GridViewCommandColumn ShowNewButton="true" ShowEditButton="true" VisibleIndex="0" ButtonRenderMode="Image" Width="45">
+                                                <dx:GridViewCommandColumn ShowNewButton="true" ShowEditButton="true" VisibleIndex="0" ButtonRenderMode="Image" Width="85">
                                                     <CustomButtons>
                                                         <dx:GridViewCommandColumnCustomButton ID="Remove">
                                                             <Image ToolTip="Remove" Url="~/Content/Images/Cancel.gif"/>
+                                                        </dx:GridViewCommandColumnCustomButton>
+                                                        <dx:GridViewCommandColumnCustomButton ID="Component">
+                                                            <Image ToolTip="Add" Url="~/Content/Images/AddRecord.gif"/>
                                                         </dx:GridViewCommandColumnCustomButton>
                                                     </CustomButtons>
                                                 </dx:GridViewCommandColumn>
@@ -847,6 +969,21 @@
                                                 <dx:GridViewDataTextColumn FieldName="Batch" Caption= "Batch(g)"/>
                                                 <dx:GridViewDataTextColumn FieldName="ByPercent" Caption="Quantity"/>
 						                    </Columns>
+                                            <Templates>
+                                                <DetailRow>
+                                                    <dx:ASPxGridView ID="Component" runat="server" AutoGenerateColumns="False" ClientInstanceName="Component" >
+                                                        <Columns>
+                                                            <dx:GridViewCommandColumn ShowNewButton="true" ShowEditButton="true" VisibleIndex="0" ButtonRenderMode="Image" Width="45">
+                                                                <CustomButtons>
+                                                                    <dx:GridViewCommandColumnCustomButton ID="Remove">
+                                                                        <Image ToolTip="Remove" Url="~/Content/Images/Cancel.gif"/>
+                                                                    </dx:GridViewCommandColumnCustomButton>
+                                                                    </CustomButtons>
+                                                                </dx:GridViewCommandColumn>
+                                                         </Columns>
+                                                    </dx:ASPxGridView>
+                                                </DetailRow>
+                                            </Templates>
                                             <SettingsEditing Mode="Batch"/>
                                             <Settings VerticalScrollBarMode="Auto" HorizontalScrollBarMode="Auto" GridLines="Vertical" ShowGroupPanel="True"
                                                 ShowStatusBar="Hidden" ShowFooter="true" 
@@ -854,7 +991,10 @@
 					                    </dx:ASPxGridView>
                                     </DetailRow>
                                 </Templates>
-
+                                <Styles>
+			                        <Row Cursor="pointer" />
+		                        </Styles>
+                                <SettingsContextMenu Enabled="true" />
                                 <SettingsSearchPanel ColumnNames="" Visible="false" />
 		                        <Settings VerticalScrollBarMode="Auto" HorizontalScrollBarMode="Auto" GridLines="Vertical" ShowGroupPanel="True"
                                         ShowStatusBar="Hidden" ShowFooter="true" 

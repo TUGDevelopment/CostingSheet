@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30104.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "costingsheet", ".", "{C353F48F-ADC9-4662-80DC-7F5C4A254975}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CostingSheet", ".", "{C353F48F-ADC9-4662-80DC-7F5C4A254975}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_58333"
@@ -24,13 +24,22 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "costingsheet", ".", "{C353F
 		SlnRelativePath = "..\costingsheet\"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServiceToCSV", "..\WebServiceToCSV\WebServiceToCSV.csproj", "{CEB62989-E8AC-4F0D-9491-23880AE156BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C353F48F-ADC9-4662-80DC-7F5C4A254975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C353F48F-ADC9-4662-80DC-7F5C4A254975}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C353F48F-ADC9-4662-80DC-7F5C4A254975}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{C353F48F-ADC9-4662-80DC-7F5C4A254975}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{CEB62989-E8AC-4F0D-9491-23880AE156BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEB62989-E8AC-4F0D-9491-23880AE156BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEB62989-E8AC-4F0D-9491-23880AE156BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEB62989-E8AC-4F0D-9491-23880AE156BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
