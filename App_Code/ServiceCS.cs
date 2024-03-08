@@ -128,37 +128,6 @@ public class ServiceCS : System.Web.Services.WebService
         return data;
     }
     
-    [WebMethod]
-    public void FTPUpload()
-    {
-        string path = HttpContext.Current.Server.MapPath(@"~/ExcelFiles");
-        IEnumerable<string> files = Directory.EnumerateFiles(path);
-
-        using (WebClient client = new WebClient())
-        {
-            // Securely retrieve credentials
-            string ftpUsername = ConfigurationManager.AppSettings["ftpUsername"];
-            string ftpPassword = ConfigurationManager.AppSettings["ftpPassword"];
-            client.Credentials = new NetworkCredential(ftpUsername, ftpPassword);
-
-            foreach (string file in files)
-            {
-                string fileName = Path.GetFileName(file);
-                string ftpUrl = "ftp://192.168.1.6/Uploads/" + fileName;
-
-                try
-                {
-                    client.UploadFile(ftpUrl, file);
-                    Console.WriteLine("File uploaded successfully: " + fileName);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error uploading file: " + fileName);
-                    Console.WriteLine(ex.Message);
-                }
-            }
-        }
-    }
 
     [WebMethod]
     public void jobalertemail()
