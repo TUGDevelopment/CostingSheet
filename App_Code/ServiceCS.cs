@@ -1,431 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Web.Services;
-//using System.Web.Script.Serialization;
 using Newtonsoft.Json;
-//using System.Web.Script.Services;
 using System.Globalization;
-//using System.Text;
 using System.Net.Mail;
 using System.Linq;
-//using System.Xml;
 using System.Text.RegularExpressions;
 using System.Net;
 using ClosedXML.Excel;
 using System.Web;
-//using SAP.Middleware.Connector;
 using DevExpress.Web.ASPxSpreadsheet;
 using DevExpress.Spreadsheet;
 using DevExpress.Spreadsheet.Export;
 using CsvHelper;
-//using Excel = Microsoft.Office.Interop.Excel;
+using System.Collections.Generic;
 
 /// <summary>
 /// Summary description for ServiceCS
 /// </summary>
 [WebService(Namespace = "http://tempuri.org/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
-// To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
- [System.Web.Script.Services.ScriptService]
-public  class ServiceCS : System.Web.Services.WebService
+[System.Web.Script.Services.ScriptService]
+public class ServiceCS : System.Web.Services.WebService
 {
-    
-    string ConnLab = ConfigurationManager.ConnectionStrings["LabConnectionString"].ConnectionString;
-    string strConn = ConfigurationManager.ConnectionStrings["CostingConnectionString"].ConnectionString;
-    string CurUserName = HttpContext.Current.User.Identity.Name.Replace(@"THAIUNION\", @"");
-    string filepatch = @"C:\Users\wshuttleadm\Documents\Winshuttle\Studio";
-    MyDataModule cs = new MyDataModule();
-    ASPxSpreadsheet Spreadsheet = new ASPxSpreadsheet();
-    Worksheet worksheet;
+    private readonly string ConnLab = ConfigurationManager.ConnectionStrings["LabConnectionString"].ConnectionString;
+    private readonly string strConn = ConfigurationManager.ConnectionStrings["CostingConnectionString"].ConnectionString;
+    private readonly string CurUserName = HttpContext.Current.User.Identity.Name.Replace(@"THAIUNION\", @"");
+    private readonly string filepatch = @"C:\Users\wshuttleadm\Documents\Winshuttle\Studio";
+    private readonly MyDataModule cs = new MyDataModule();
+    private readonly ASPxSpreadsheet Spreadsheet = new ASPxSpreadsheet();
+    private Worksheet worksheet;
+
     public ServiceCS()
     {
         //Uncomment the following line if using designed components 
         //InitializeComponent(); 
     }
-    //static void XXMain(string[] args)
-    //{
-    //    //initialize an instance of Workbook
-    //    Workbook workbook = new Workbook();
-    //    //Load an Excel file with protected worksheet
-    //    workbook.LoadFromFile(@"..\Unlock Excel Worksheet.xlsx");
-    //    //get the first worksheet
-    //    Worksheet sheet = workbook.Worksheets[0];
-    //    //Unprotect worksheet
-    //    sheet.Unprotect("iceblue");
-    //    //Save the file
-    //    workbook.SaveToFile("Sample.xlsx", ExcelVersion.Version2010);
-    //    //Launch the file
-    //    System.Diagnostics.Process.Start("Sample.xlsx");
-    //}
-
-    //[WebMethod]
-    //public void SetInitialRow()
-    //{
-    //    string[] typearray = { "PF", "HF" };
-    //    for (int ii = 0; ii < typearray.Length; ii++)
-    //    {
-    //        DataTable dt = new DataTable();
-    //        var dir = Server.MapPath(string.Format("~/ExcelFiles/{0}", typearray[ii]));
-    //        List<string> listFiles = Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories)
-    //          .Where(file => new string[] { ".xls", ".xlsx" }
-    //          .Contains(Path.GetExtension(file)))
-    //          .ToList();
-    //        //string[] files = Directory.GetFiles(Server.MapPath(@"~/ExcelFiles"));
-    //        string[] array = { "procedure", "principle", "old-new", "control", "priciple" };
-    //        foreach (string file in listFiles)
-    //        {
-    //            Console.WriteLine(file);
-    //            if (file.Contains(@"Digit"))
-    //            {
-    //                ////foreach (string file in files)
-    //                //Spreadsheet.Document.LoadDocument(file);
-    //                ////worksheet = Spreadsheet.Document.Worksheets[0];
-    //                //IWorkbook workbook = Spreadsheet.Document;
-    //                Workbook book = new Workbook();
-
-    //                book.InvalidFormatException += book_InvalidFormatException;
-    //                book.LoadDocument(file);
-    //                for (int w = 0; w < book.Worksheets.Count; w++)
-    //                {
-    //                    Worksheet sheet = book.Worksheets[w]; 
-    //                    bool b = false;
-    //                    if (!array.Any(sheet.Name.ToLower().Equals))
-    //                        b = true;
-    //                    else if (file.Contains(@"Digit 14-grade-zone PF") && sheet.Name == "sheet1")
-    //                        b = true;
-    //                    //Worksheet sheet = book.Worksheets.ActiveWorksheet;
-
-    //                    if (b)
-    //                    {
-    //                        //var values = sheet.Range["C1:C" + numberOfRows].Value;
-    //                        CellRange range = GetSourceRange(file, sheet);
-    //                        //CellRange range = sheet.GetUsedRange();
-    //                        dt = sheet.CreateDataTable(range, false);
-    //                        DataTableExporter exporter = sheet.CreateDataTableExporter(range, dt, false);
-    //                        exporter.CellValueConversionError += exporter_CellValueConversionError;
-    //                        exporter.Export();
-
-    //                        for (int i = 1; i < dt.Rows.Count; i++)
-    //                        {
-    //                            DataRow dr = dt.Rows[i];
-    //                            setdata(sheet, dr, file);
-    //                        }
-    //                    }
-    //                    //for (int w = 0; w < workbook.Worksheets.Count; w++)
-    //                    //{
-    //                    //    worksheet = Spreadsheet.Document.Worksheets[w];
-    //                }
-    //            }
-    //            else
-    //                builddata(file, typearray[ii]);
-
-    //        }
-    //    }
-    //    //Context.Response.Write(JsonConvert.SerializeObject(dt)); 
-    //    Context.Response.Write("success");
-    //}
-
-    //public void builddata(string file,string type)
-    //{
-
-    //    //var excelApp = new Microsoft.Office.Interop.Excel.Application();
-    //    Workbook book = new Workbook();
-    //    book.InvalidFormatException += book_InvalidFormatException;
-    //    //if (type.Contains("PF"))
-    //    //{
-    //    //    var WFile = new Microsoft.Office.Interop.Excel.Application();
-    //    //    Workbook wbook = WFile.Workbooks.Open(file, ReadOnly: true, Password: "dcc");
-    //    //}
-    //    //if (book.IsProtected)
-    //    //    book.Unprotect("dcc");
-    //    book.LoadDocument(file);
-
-    //    Worksheet sheet = book.Worksheets[0];
-    //    string ProductGroup="";
-    //    if (type.Contains("HF"))
-    //        ProductGroup = GetProductGroup(sheet.Name);
-    //    else
-    //    {
-    //        for (int w = 0; w < book.Worksheets.Count; w++)
-    //        {
-    //            sheet = book.Worksheets[w];
-    //            if (sheet.Cells["B3"].Value.ToString().Contains("PF")){
-    //                ProductGroup = GetProductGroup(sheet.Cells["B3"].Value.ToString());
-
-    //                break;
-    //            }
-    //        }
-    //    }
-    //    CellRange range = GetSourceRange(file, sheet);
-    //    //CellRange range = sheet.GetUsedRange();
-    //    DataTable dt = sheet.CreateDataTable(range, false);
-    //    DataTableExporter exporter = sheet.CreateDataTableExporter(range, dt, false);
-    //    exporter.CellValueConversionError += exporter_CellValueConversionError;
-    //    exporter.Export();
-    //    for (int i = 8; i < dt.Rows.Count; i++)
-    //    {
-    //        DataRow dr = dt.Rows[i];
-    //        if (sheet.Name.Contains("Container")||sheet.Name.Contains("FFC")){
-    //            SqlParameter[] pContainerLid = {
-    //            new SqlParameter("@ProductGroup", ProductGroup),
-    //            new SqlParameter("@ProductType",string.Format("{0}",type.Contains(@"PF")?"PF":"HF")),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column2"])),
-
-    //            new SqlParameter("@Description", string.Format("{0}", dr["Column3"])),
-    //            new SqlParameter("@LidType", string.Format("{0}", type.Contains(@"PF")?dr["Column12"]: dr["Column13"]))};
-    //            GetLabResources("spinsertContainerLid", pContainerLid);
-    //        }else if(sheet.Name.Contains("HF") && sheet.Name.Contains("Grade"))
-    //        {
-    //            SqlParameter[] hgradezone = {
-    //            new SqlParameter("@ProductGroup", GetProductGroup(sheet.Name)),
-    //            new SqlParameter("@ProductType",string.Format("{0}",sheet.Name.Contains(@"PF")?"PF":"HF")),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column2"])),
-    //            new SqlParameter("@Description", string.Format("{0}", dr["Column3"])) };
-    //            GetLabResources("spinsertGrade", hgradezone);
-    //        }else if (sheet.Name.Contains("HF") && sheet.Name.Contains("Raw Mat"))
-    //        {
-    //            SqlParameter[] paramh = { new SqlParameter("@ProductGroup", GetProductGroup(sheet.Name)),
-    //            new SqlParameter("@ProductType", string.Format("{0}",sheet.Name.Contains(@"PF")?"PF":"HF")),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column3"])),
-    //            new SqlParameter("@Description", string.Format("{0}", dr["Column4"]))};
-    //            GetLabResources("spinsertRawMaterial", paramh);
-    //        }else if (sheet.Name.Contains("HF") && sheet.Name.Contains("Style"))
-    //        {
-    //            SqlParameter[] hProductStyle = { new SqlParameter("@ProductGroup", GetProductGroup(sheet.Name)),
-    //            new SqlParameter("@ProductType", string.Format("{0}",sheet.Name.Contains(@"PF")?"PF":"HF")),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column2"])),
-    //            new SqlParameter("@Description", string.Format("{0}", dr["Column3"])) };
-    //            GetLabResources("spinsertProductStyle", hProductStyle);
-    //        }else if (sheet.Name.Contains("HF") && sheet.Name.Contains("Customer"))
-    //        {
-    //            SqlParameter[] pCustomerBrand = {
-    //            new SqlParameter("@ProductGroup", string.Format("{0}",  GetProductGroup(sheet.Name))),
-    //            new SqlParameter("@ProductType",string.Format("{0}",sheet.Name.Contains(@"PF")?"PF":"HF")),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column2"])),
-    //            new SqlParameter("@Description", string.Format("{0}", dr["Column3"])) };
-    //            GetLabResources("spinsertCustomerBrand", pCustomerBrand);
-    //        }else if (sheet.Name.Contains("HF") && sheet.Name.Contains("Media"))
-    //        {
-    //            SqlParameter[] hMediaType = {
-    //            new SqlParameter("@ProductType", string.Format("{0}", sheet.Name.Contains(@"PF")?"PF":"HF")),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@ProductGroup", string.Format("{0}",  GetProductGroup(sheet.Name))),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column2"])),
-    //            new SqlParameter("@Description", string.Format("{0}", dr["Column3"])) };
-    //            GetLabResources("spinsertMediaType", hMediaType);
-    //        }else if (sheet.Name.Contains("HF") && sheet.Name.ToLower().Contains("size"))
-    //        {
-    //            SqlParameter[] hContainerLid = {
-    //            new SqlParameter("@ProductGroup", GetProductGroup(sheet.Name)),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column2"])),
-    //            new SqlParameter("@CanSize", string.Format("{0}", dr["Column3"])),
-    //            new SqlParameter("@PouchWidth", string.Format("{0}", "")),
-    //            new SqlParameter("@Type", string.Format("{0}", "")),
-    //            new SqlParameter("@Media", string.Format("{0}", "")),
-    //            new SqlParameter("@NW", string.Format("{0}", dr["Column14"])),
-    //            new SqlParameter("@DWeight", string.Format("{0}", dr["Column17"])),
-    //            new SqlParameter("@Packaging", string.Format("{0}", dr["Column8"])),
-    //            new SqlParameter("@ProductType",string.Format("{0}",sheet.Name.Contains(@"PF")?"PF":"HF"))};
-    //            GetLabResources("spinsertCanSize", hContainerLid);
-    //        }
-    //    }
-    //}
-    //string GetProductGroup(string name)
-    //{
-    //    string Type = name.Contains(@"PF") ? "PF" : "HF";
-    //    if (name.ToLower().Contains("non fish base"))
-    //        return string.Format("{0}-{1}", Type, "non fish base");
-    //    else
-    //        return string.Format("{0}-{1}", Type, "fish base");       
-    //}
-    //[WebMethod]
-    //public CellRange GetSourceRange(string file, Worksheet sheet)
-    //{
-    //    var numberOfRows = sheet.GetUsedRange().RowCount;
-    //    if (file.Contains(@"Digit 3-4-Raw material-HF") || file.Contains(@"Digit 5-Product  Style-HF")||
-    //        file.Contains(@"Digit 3-4-Raw material-PF"))
-    //    {
-    //        CellRange sourceRange = sheet["A2:D" + numberOfRows];
-    //        return sourceRange;
-    //    }
-    //    else if (file.Contains(@"Digit 14-Grade-HF"))
-    //        return sheet["A3:C" + numberOfRows];
-    //    else if (file.Contains(@"Digit 5-Product Style-PF"))
-    //    {
-    //        CellRange sourceRange = sheet["A2:E" + numberOfRows];
-    //        if(sheet.Name == "Fish base")
-    //            sourceRange = sheet["A3:F" + numberOfRows];
-    //        return sourceRange;
-    //    }
-    //    else if(file.Contains(@"Digit 14-grade-zone PF"))
-    //        return sheet["A2:E" + numberOfRows];
-    //    else
-    //        return sheet.GetUsedRange();
-    //}
-    //void setdata(Worksheet sheet, DataRow dr, string file)
-    //{
-    //    int[] Cols = { 3, 5, 6 }; //Columns to loop
-    //                              //C, E, F
-    //    string data = string.Empty;
-    //    if (file.Contains(@"Digit 3-4-Raw material-HF")) {
-    //        //foreach (CellRange range in sheet.GetUsedRange())
-    //        //{
-    //        //}
-    //        SqlParameter[] paramh = { new SqlParameter("@ProductGroup", sheet.Name),
-    //            new SqlParameter("@ProductType", "HF"),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column3"])),
-    //            new SqlParameter("@Description", string.Format("{0}", dr["Column4"]))};
-    //        GetLabResources("spinsertRawMaterial", paramh);
-    //    }else if (file.Contains(@"Digit 5-Product  Style-HF")) {
-
-    //        SqlParameter[] hProductStyle = { new SqlParameter("@ProductGroup", sheet.Name),
-    //            new SqlParameter("@ProductType", "HF"),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column3"])),
-    //            new SqlParameter("@Description", string.Format("{0}", dr["Column4"])) };
-    //        GetLabResources("spinsertProductStyle", hProductStyle);
-    //    }
-    //    else if (file.Contains(@"Digit 6-8 Media Type HF"))
-    //    {
-    //        SqlParameter[] hMediaType = {
-    //            new SqlParameter("@ProductType", "HF"),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@ProductGroup", string.Format("{0}", sheet.Name)),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column2"])),
-    //            new SqlParameter("@Description", string.Format("{0}", dr["Column3"])) };
-    //        GetLabResources("spinsertMediaType", hMediaType);
-    //    }
-    //    else if (file.Contains(@"Digit 9-11-Size NW DW - HF")) {
-    //        SqlParameter[] hContainerLid = {
-    //            new SqlParameter("@ProductGroup", sheet.Name),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column2"])),
-    //            new SqlParameter("@CanSize", string.Format("{0}", dr["Column3"])),
-    //            new SqlParameter("@PouchWidth", string.Format("{0}", "")),
-    //            new SqlParameter("@Type", string.Format("{0}", "")),
-    //            new SqlParameter("@Media", string.Format("{0}", "")),
-    //            new SqlParameter("@NW", string.Format("{0}", sheet.Name=="HF-Non can"? dr["Column6"]:dr["Column4"])),
-    //            new SqlParameter("@DWeight", string.Format("{0}", sheet.Name=="HF-Non can"? dr["Column7"]:dr["Column5"])),
-    //            new SqlParameter("@Packaging", string.Format("{0}", sheet.Name=="HF-Non can"? dr["Column8"]:dr["Column6"])),
-    //            new SqlParameter("@ProductType",string.Format("{0}","HF"))};
-    //        GetLabResources("spinsertCanSize", hContainerLid);
-    //    }
-    //    else if (file.Contains(@"Digit 14-Grade-HF"))
-    //    {
-    //        SqlParameter[] hgradezone = {
-    //            new SqlParameter("@ProductGroup", sheet.Name),
-    //            new SqlParameter("@ProductType","HF"),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column2"])),
-    //            new SqlParameter("@Description", string.Format("{0}", dr["Column3"])) };
-    //        GetLabResources("spinsertGrade", hgradezone);
-    //    }
-    //    else if (file.Contains(@"Digit 3-4-Raw material-PF") || file.Contains(@"Digit 5-Product Style-PF"))
-    //    {
-    //        if (sheet.Name == "Fish base" || sheet.Name == "Non Fiish Base")
-    //        {
-    //            SqlParameter[] param = { new SqlParameter("@ProductGroup", sheet.Name),
-    //            new SqlParameter("@ProductType", "PF"),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column2"])),
-    //            new SqlParameter("@Description", string.Format("{0}", dr["Column3"]))};
-    //            GetLabResources("spinsertRawMaterial", param);
-    //        }
-    //        else if (sheet.Name == "PF-Fish" || sheet.Name == "PF-Non fish")
-    //        {
-    //            SqlParameter[] pProductStyle = { new SqlParameter("@ProductGroup", sheet.Name),
-    //            new SqlParameter("@ProductType", "PF"),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column3"])),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column4"])),
-    //            new SqlParameter("@Description", string.Format("{0}", dr["Column5"])) };
-    //            GetLabResources("spinsertProductStyle", pProductStyle);
-    //        }
-    //    }
-    //    else if (file.Contains(@"Digit 15-16-Customer Brand HF&PF"))
-    //    {
-    //        SqlParameter[] pCustomerBrand = {
-    //            new SqlParameter("@ProductGroup", string.Format("{0}", sheet.Name)),
-    //            new SqlParameter("@ProductType",string.Format("{0}",sheet.Name.Contains(@"PF")?"PF":"HF")),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column2"])),
-    //            new SqlParameter("@Description", string.Format("{0}", dr["Column3"])) };
-    //            GetLabResources("spinsertCustomerBrand", pCustomerBrand);
-    //    }
-    //    else if (file.Contains(@"Digit 9-11-Size NW Media - PF"))
-    //    {
-    //        if (sheet.Name == "PF-Can")
-    //        {
-    //            SqlParameter[] pContainerLid = {
-    //            new SqlParameter("@ProductGroup", sheet.Name),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column2"])),
-    //            new SqlParameter("@CanSize", string.Format("{0}", dr["Column3"])),
-    //            new SqlParameter("@PouchWidth", string.Format("{0}", "")),
-    //            new SqlParameter("@Type", string.Format("{0}", "")),
-    //            new SqlParameter("@Media", string.Format("{0}", dr["Column4"])),
-    //            new SqlParameter("@NW", string.Format("{0}", dr["Column5"])),
-    //            new SqlParameter("@DWeight", string.Format("{0}", "")),
-    //            new SqlParameter("@Packaging", string.Format("{0}", "")),
-    //            new SqlParameter("@ProductType",string.Format("{0}","PF"))};
-    //            GetLabResources("spinsertCanSize", pContainerLid);
-    //        }
-    //        else if(sheet.Name == "PF-Non Can") { 
-    //        SqlParameter[] pContainerLidPouch = {
-    //            new SqlParameter("@ProductGroup", sheet.Name),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column2"])),
-    //            new SqlParameter("@CanSize", string.Format("{0}", dr["Column3"])),
-    //            new SqlParameter("@PouchWidth", string.Format("{0}", dr["Column4"])),
-    //            new SqlParameter("@Type", string.Format("{0}", dr["Column5"])),
-    //            new SqlParameter("@Media", string.Format("{0}", dr["Column6"])),
-    //            new SqlParameter("@NW", string.Format("{0}", dr["Column7"])),
-    //            new SqlParameter("@DWeight", string.Format("{0}", dr["Column8"])),
-    //            new SqlParameter("@Packaging", string.Format("{0}", dr["Column9"])),
-    //            new SqlParameter("@ProductType",string.Format("{0}","PF"))};
-    //            GetLabResources("spinsertCanSize", pContainerLidPouch);
-    //        }
-    //    }
-    //    else if (file.Contains(@"Digit 6-8-Media type PF"))
-    //    {
-    //            SqlParameter[] pMediaType = {
-    //            new SqlParameter("@ProductType", "PF"),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@ProductGroup", string.Format("{0}", sheet.Name)),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column4"])),
-    //            new SqlParameter("@Description", string.Format("{0}", dr["Column5"])) };
-    //            GetLabResources("spinsertMediaType", pMediaType);
-    //    }
-    //    else if (file.Contains(@"Digit 12-13-ContainerLid Type HF&PF"))
-    //    {
-    //        SqlParameter[] pContainerLid = {
-    //            new SqlParameter("@ProductGroup", sheet.Name),
-    //            new SqlParameter("@ProductType",string.Format("{0}",sheet.Name.Contains(@"PF")?"PF":"HF")),
-    //            new SqlParameter("@OldCode", string.Format("{0}", dr["Column1"])),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column2"])),
-
-    //            new SqlParameter("@Description", string.Format("{0}", dr["Column3"])),
-    //            new SqlParameter("@LidType", string.Format("{0}", dr["Column4"]))};
-    //            GetLabResources("spinsertContainerLid", pContainerLid);
-    //    }
-    //    else if(file.Contains(@"Digit 14-grade-zone PF")){
-    //        SqlParameter[] pgradezone = {
-    //            new SqlParameter("@ProductGroup", sheet.Name),
-    //            new SqlParameter("@ProductType","PF"),
-    //            new SqlParameter("@Code", string.Format("{0}", dr["Column4"])),
-    //            new SqlParameter("@Description", string.Format("{0}", dr["Column5"])) };
-    //            GetLabResources("spinsertGrade", pgradezone);
-    //    }
-    //}
+    
 
     void GetLabResources(string StoredProcedure, object[] Parameters)
     {
@@ -459,58 +73,7 @@ public  class ServiceCS : System.Web.Services.WebService
         e.Action = DataTableExporterAction.Continue;
         e.DataTableValue = null;
     }
-    //public void test()
-    //{
-    //    //RfcConfigParameters rfc = new RfcConfigParameters();
-    //    //rfc.Add(RfcConfigParameters.Name, "TEST");
-    //    //rfc.Add(RfcConfigParameters.AppServerHost, "IP");
-    //    //rfc.Add(RfcConfigParameters.Client, "400");
-    //    //rfc.Add(RfcConfigParameters.User, "USERNAME");
-    //    //rfc.Add(RfcConfigParameters.Password, "PASSWORD");
-    //    //rfc.Add(RfcConfigParameters.SystemNumber, "00");
-    //    //rfc.Add(RfcConfigParameters.Language, "TR");
-    //    //rfc.Add(RfcConfigParameters.PoolSize, "5");
-    //    //rfc.Add(RfcConfigParameters.MaxPoolSize, "10");
-    //    //rfc.Add(RfcConfigParameters.IdleTimeout, "500");
-
-    //    //RfcDestination rfcDest = RfcDestinationManager.GetDestination(rfc);
-    //    RfcDestination rfcDest = new SAPConnection().SVIPRD();
-    //    RfcRepository rfcRep = rfcDest.Repository;
-
-    //    IRfcFunction rfcFunction = rfcDest.Repository.CreateFunction("BAPI_PO_CREATE");
-    //    IRfcFunction transaction = rfcDest.Repository.CreateFunction("BAPI_TRANSACTION_COMMIT");
-    //    transaction.SetValue("WAIT", "X");
-    //    IRfcStructure header = rfcFunction["PO_HEADER"].GetStructure();
-    //    header.SetValue("DOC_TYPE", "NB");
-    //    header.SetValue("PURCH_ORG", "0001");
-    //    header.SetValue("PUR_GROUP", "001");
-    //    header.SetValue("DOC_DATE", DateTime.Now.ToString("yyyy-MM-dd"));
-    //    header.SetValue("VENDOR", "V544100170");
-
-    //    IRfcTable items = rfcFunction["PO_ITEMS"].GetTable();
-    //    IRfcStructure item = items.Metadata.LineType.CreateStructure();
-    //    item.SetValue("PO_ITEM", "1");
-    //    item.SetValue("PUR_MAT", "TEST_MAT");
-    //    item.SetValue("PLANT", "0001");
-
-    //    // this was missing as I haven't added the row to the table
-    //    items.Insert(item);
-
-    //    IRfcTable schedules = rfcFunction["PO_ITEM_SCHEDULES"].GetTable();
-    //    IRfcStructure schedule = schedules.Metadata.LineType.CreateStructure();
-    //    schedule.SetValue("PO_ITEM", "1");
-    //    schedule.SetValue("DELIV_DATE", DateTime.Now.AddDays(7).ToString("yyyy-MM-dd"));
-    //    schedule.SetValue("QUANTITY", 10);
-
-    //    // this was missing as I haven't added the row to the table
-    //    schedules.Insert(schedule);
-
-    //    rfcFunction.Invoke(rfcDest);
-    //    transaction.Invoke(rfcDest);
-
-    //    IRfcTable returns = rfcFunction["RETURN"].GetTable();
-    //    RfcSessionManager.EndContext(rfcDest);
-    //}
+    
     [WebMethod]
     public void XX(string d)
     {
@@ -564,78 +127,7 @@ public  class ServiceCS : System.Web.Services.WebService
 
         return data;
     }
-    //[WebMethod]
-    //public void sapconnect()
-    //{
-    //    SqlParameter[] param = { new SqlParameter("@Id", "") };
-    //    var table = cs.GetRelatedResources("spUpdateCode", param);
-    //    foreach (DataRow dr in table.Rows)
-    //    { 
-    //    //string data = "AUSP";
-    //    // Split string on spaces (this will separate all the words).
-    //    //string[] words = data.Split(';');
-    //    //foreach (string word in words)
-    //    //{
-    //        //  RfcDestination destination = new SAPCONNECT().SVIDEV();
-    //        RfcDestination destination = new SAPConnection().SVIPRD();
-    //        IRfcFunction function = destination.Repository.CreateFunction("RFC_READ_TABLE");
-    //        function.SetValue("ROWCOUNT", "10");//99999999
-    //        function.SetValue("DELIMITER", "|");
-
-    //        function.SetValue("QUERY_TABLE", "AUSP");
-    //        IRfcTable fieldsTable = function.GetTable("FIELDS");
-    //        fieldsTable.Append();
-    //        IRfcTable optsTable = function.GetTable("OPTIONS");
-    //        optsTable.Append();
-    //        fieldsTable.SetValue("FIELDNAME", "OBJEK");
-    //        fieldsTable.Append();
-    //        fieldsTable.SetValue("FIELDNAME", "ATWRT");
-    //        optsTable.SetValue("TEXT", "ATWRT EQ '"+ dr["xx"]+"' and");
-    //        optsTable.Append();
-    //        optsTable.SetValue("TEXT", "ATINN = '0000000815' and");
-    //        optsTable.Append();
-    //        optsTable.SetValue("TEXT", "OBJEK Like '3%00'");
-    //        //IRfcStructure struck = function.GetStructure("ORDER_OBJECTS");
-    //        //struck.SetValue(0, "X");
-    //        //struck.SetValue(1, "X");
-    //        //struck.SetValue(2, "X");
-    //        //struck.SetValue(3, "X");
-    //        //struck.SetValue(4, "X");
-    //        //struck.SetValue(5, "X");
-    //        //struck.SetValue(6, "X");
-    //        function.Invoke(destination);
-    //        IRfcTable OrderHeader = function.GetTable("DATA");
-    //        DataTable dt = new SAPConnection().GetDataTableFromRFCTable(OrderHeader);
-    //        int i = dt.Rows.Count;
-    //        if (dt.Rows.Count > 0)
-    //        {
-    //            foreach (DataRow r in dt.Rows)
-    //            {
-
-    //                string[] arr = r["wa"].ToString().Split('|');
-    //                string newS = string.Format("{0}", arr[0]);
-    //                    //string s = arr[0].ToString();
-    //                    //StringBuilder sb = new StringBuilder(s);
-    //                    //sb[0] = 'Z';
-    //                    //newS = sb.ToString();
-    //                string qry = "update TransFormulaHeader set Code=@Code where ID=@ID";
-    //                using (SqlConnection CN = new SqlConnection(strConn))
-    //                {
-    //                    SqlCommand SqlCom = new SqlCommand(qry, CN);
-    //                    //We are passing Original File Path and file byte data as sql parameters.
-    //                    SqlCom.Parameters.Add(new SqlParameter("@ID", dr["ID"].ToString()));
-    //                    SqlCom.Parameters.Add(new SqlParameter("@Code", newS.ToString().Trim()));
-    //                    CN.Open();
-    //                    SqlCom.ExecuteNonQuery();
-    //                    CN.Close();
-    //                }
-    //            }
-    //        }
-    //    }
-    //    //Context.Response.Write(dt);
-    //    //ZPKG_SEC_BRAND'
-    //    //}
-    //}
+    
     [WebMethod]
     public void FTPUpload()
     {
@@ -644,14 +136,30 @@ public  class ServiceCS : System.Web.Services.WebService
 
         using (WebClient client = new WebClient())
         {
-            client.Credentials = new NetworkCredential(@"thaiunion\fo5910155", "tuf&12345");
+            // Securely retrieve credentials
+            string ftpUsername = ConfigurationManager.AppSettings["ftpUsername"];
+            string ftpPassword = ConfigurationManager.AppSettings["ftpPassword"];
+            client.Credentials = new NetworkCredential(ftpUsername, ftpPassword);
 
             foreach (string file in files)
             {
-                client.UploadFile(@"ftp://192.168.1.6/Uploads/" + Path.GetFileName(file), file);
+                string fileName = Path.GetFileName(file);
+                string ftpUrl = "ftp://192.168.1.6/Uploads/" + fileName;
+
+                try
+                {
+                    client.UploadFile(ftpUrl, file);
+                    Console.WriteLine("File uploaded successfully: " + fileName);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error uploading file: " + fileName);
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
     }
+
     [WebMethod]
     public void jobalertemail()
     {
