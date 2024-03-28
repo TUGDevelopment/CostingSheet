@@ -49,12 +49,145 @@ public partial class MailMerge : System.Web.UI.Page
         hfusername["user_name"] = HttpContext.Current.User.Identity.Name.Replace(@"THAIUNION\", @"");
         switch (Request.QueryString["view"].ToString())
         {
-            case "1": case "2": case "3":
+            case "0":
+                DataTable dt = _selectData(id);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    if (dr["usertype"].ToString() != "0")
+                    {
+                        Spreadsheet.Visible = true;
+                        Spreadsheet.Document.LoadDocument(Server.MapPath("~/App_Data/Documents/F9MKXX03_New_Request_5_09.09.2019V3.xlsx"));
+                        Worksheet ws = Spreadsheet.Document.Worksheets["NEW SAMPLE REQUEST FORM"];
+                        ws.Cells["E4"].Value = dr["Company"].ToString();
+                        ws.Cells["AC4"].Value = dr["RequestNo"].ToString();
+                        //ws.Cells["AC6"].Value = dr["Validfrom"].ToString();
+                        //ws.Cells["AC8"].Value = dr["Validto"].ToString();
+                        ws.Cells["AC6"].Value = dr["CreateOn"].ToString();
+                        ws.Cells["AC8"].Value = dr["SampleDate"].ToString();
+                        ws.Cells["AC10"].Value = cs.GetData(dr["Requester"].ToString(), "fn");
+                        ws.Cells["I4"].Value = dr["PetFoodType"].ToString();
+                        ws.Cells["E6"].Value = dr["ProductCat"].ToString();
+                        ws.Cells["F14"].Value = dr["Customer"].ToString();
+                        ws.Cells["F16"].Value = dr["Destination"].ToString();
+                        ws.Cells["F18"].Value = dr["Country"].ToString();
+                        ws.Cells["D22"].Value = dr["Packaging"].ToString().ToUpper();
+                        ws.Cells["I22"].Value = dr["PackType"].ToString().ToUpper();
+                        ws.Cells["D24"].Value = dr["Material"].ToString().ToUpper();
+                        ws.Cells["I24"].Value = dr["PackLacquer"].ToString().ToUpper();
+                        ws.Cells["D26"].Value = dr["PackLid"].ToString().ToUpper();
+                        ws.Cells["I26"].Value = dr["PackDesign"].ToString().ToUpper();
+                        //ws.Pictures.AddPicture(GetImageCheckbox(dr["Requestfor"].ToString(), "New Sample"), ws.Cells["E8"]);
+                        string values = dr["PhysicalSample"].ToString();
+                        string[] array = values.Split('|');
+                        //result["Physical"] = array[0].ToString();
+                        ws.Cells["T14"].Value = array[1].ToString();
+                        //result["Sample"] = array[2].ToString();
+                        ws.Cells["T16"].Value = array[3].ToString();
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Requestfor"].ToString(), "New Sample"), ws.Cells["D8"]);
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Requestfor"].ToString(), "New Sample – TU Proposal"), ws.Cells["P8"]);
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Requestfor"].ToString(), "New Sample - Customer Inquiry"), ws.Cells["P10"]);
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Requestfor"].ToString(), "New sample for non-commercial"), 660, 310);
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Requestfor"].ToString(), "Adjust Current Item"), ws.Cells["D10"]);
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Requestfor"].ToString(), "Product Specification"), 660, 390);
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Requestfor"].ToString(), "Costing"), 1060, 390);
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CompliedWith"].ToString(), "Buyer's Specification"), 1365, 485);
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CompliedWith"].ToString(), "Company's Specification"), 1735, 485);
+
+                        ws.Cells["I28"].Value = dr["PackColor"].ToString().ToUpper();
+                        ws.Cells["D28"].Value = dr["Drainweight"].ToString();
+                        ws.Cells["J38"].Value = dr["PackSize"].ToString();
+
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "0"), 1080, 965);//FDA
+                        //ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "1"), ws.Cells["V12"]);//SID No. (For USA)
+                        //ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "2"), ws.Cells["V12"]);
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "3"), 1230, 965);//Kosher
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "4"), 1510, 965);//Halal
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "6"), 1730, 965);//Halal w/ Movement
+                        string PrdOther = dr["PrdRequirement"].ToString();
+                        string[] prdarray = PrdOther.Split('|');
+                        ws.Pictures.AddPicture(GetImageCheckbox(prdarray[0].ToString(), "9"), 1085, 1625); //Other Requirements
+                        ws.Cells["R36"].Value = prdarray[1];
+                        ws.Pictures.AddPicture(GetImageCheckbox(prdarray[0].ToString(), "0"), 1080, 1105);//MSC
+                        ws.Pictures.AddPicture(GetImageCheckbox(prdarray[0].ToString(), "10"), 1510, 1105);//RSPO
+
+                        ws.Pictures.AddPicture(GetImageCheckbox(prdarray[0].ToString(), "2"), 1230, 1105);//Pole & Line                        
+                        ws.Pictures.AddPicture(GetImageCheckbox(prdarray[0].ToString(), "11"), ws.Cells["Q30"]);//Vegan
+                        string[] arrInner = dr["Inner"].ToString().Split('|');
+                        if (arrInner != null || arrInner.Length > 1)
+                        {
+                            ws.Pictures.AddPicture(GetImageCheckbox(arrInner[0].ToString(), "0"), ws.Cells["C38"]);//Inner Box
+                            ws.Pictures.AddPicture(GetImageCheckbox(arrInner[0].ToString(), "1"), ws.Cells["C39"]);//Sleeve Box
+                            ws.Pictures.AddPicture(GetImageCheckbox(arrInner[0].ToString(), "2"), ws.Cells["C40"]);//Shrink
+                            ws.Pictures.AddPicture(GetImageCheckbox(arrInner[0].ToString(), "3"), ws.Cells["C41"]);//Other
+                            ws.Cells["D41"].Value = arrInner[1].ToString();
+                        }
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Outer"].ToString(), "0"), ws.Cells["G38"]);//STD Carton
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Outer"].ToString(), "1"), ws.Cells["G39"]);//Perforated Carton
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Outer"].ToString(), "2"), ws.Cells["G40"]);//Tray
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Outer"].ToString(), "3"), ws.Cells["G41"]);//Tray&Hood/U-Shape
+                        ws.Pictures.AddPicture(GetImageCheckbox(";", "X"), 2840, 70);//Require document for cert
+                        ws.Pictures.AddPicture(GetImageCheckbox(";", "X"), 2385, 1315);//Approved
+                        ws.Pictures.AddPicture(GetImageCheckbox(";", "X"), 2385, 1395);//Disapproved 
+
+                        ws.Pictures.AddPicture(GetImageCheckbox(";", "X"), 2210, 565);//Accept to make sample
+                        ws.Pictures.AddPicture(GetImageCheckbox(";", "X"), 2210, 635);// Not accept and return to Markeing with 5 days
+                        values = dr["Ingredient"].ToString();
+                        array = values.Split('|');
+                        ws.Cells["W26"].Value = array[1];
+                        ws.Pictures.AddPicture(GetImageCheckbox(array[0].ToString(), "3"), ws.Cells["Q38"]);//Dairy Free
+                        ws.Pictures.AddPicture(GetImageCheckbox(array[0].ToString(), "4"), ws.Cells["T38"]);//Gluten Free
+                        ws.Pictures.AddPicture(GetImageCheckbox(array[0].ToString(), "5"), 1680, 1105);//Other Certifications
+
+                        ws.Pictures.AddPicture(GetImageCheckbox(array[0].ToString(), "0"), 1085, 1315);//Natural
+                        ws.Pictures.AddPicture(GetImageCheckbox(array[0].ToString(), "1"), 1085, 1395);//Non_GMO
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "4"), 1085, 1475);//SID No
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "7"), 1085, 1555);//Specific Supplier
+
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "3"), ws.Cells["Q32"]);//Valid IT
+                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "1"), ws.Cells["Q34"]);//Approved Plant no. (TH/EST/FCE for USA)
+
+                        ws.Pictures.AddPicture(GetImageCheckbox(";", "X"), ws.Cells["T30"]);
+                        ws.Pictures.AddPicture(GetImageCheckbox(array[0].ToString(), "2"), ws.Cells["T32"]);//Non-China Origin
+
+                        DataTable listdt = cs.builditems(string.Format(@"select ROW_NUMBER() OVER(ORDER BY Id) AS RowID ,
+                                *,''Mark from TransProductList where RequestNo={0}", id));
+                        for (int index = 0; index < listdt.Rows.Count; index++)
+                        {
+                            string member = "", col = Convert.ToDouble(46 + index).ToString();
+                            member = listdt.Rows[index]["Name"].ToString();
+                            ws.Cells["D" + col].Value = member;
+                            ws.Cells["X" + col].Value = listdt.Rows[index]["NetWeight"].ToString();
+                            ws.Cells["AA" + col].Value = listdt.Rows[index]["DW"].ToString();
+                            ws.Cells["AB" + col].Value = listdt.Rows[index]["DWType"].ToString();
+                            ws.Cells["AC" + col].Value = listdt.Rows[index]["FixedFillWeight"].ToString();
+                            ws.Cells["AC" + col].Value = listdt.Rows[index]["FixedFillWeight"].ToString();
+                            ws.Cells["AD" + col].Value = listdt.Rows[index]["PW"].ToString();
+                            ws.Cells["AE" + col].Value = listdt.Rows[index]["TargetPrice"].ToString();
+                            ws.Cells["AF" + col].Value = listdt.Rows[index]["SaltContent"].ToString();
+                        }
+                        string[] narray = string.Format("{0}", dr["Notes"]).Split('\n');
+                        int inputrow = 59;
+                        foreach (string value in narray)
+                        {
+                            ws.Cells["C" + inputrow].Value = string.Format("{0}", value);
+                            inputrow++;
+                        }
+                    }
+                    else
+                    {
+                        string fileName = Server.MapPath("~/App_Data/Documents/F9MKXX09_0_05062015_(3).pdf");
+                        FormFillManual(fileName);
+                    }
+                }
+                break;
+            case "1":
+            case "2":
+            case "3":
                 string Id = (Request.QueryString["Id"] == null) ? "4" : Request.QueryString["Id"].ToString();
                 string strTec = ",(select bb.CustomPrice from TransTechnical bb where bb.ID=aa.RequestNo) as CustomPrice";
-                DataTable comp =  cs.builditems(@"select aa.* "+ strTec + " from TransCostingHeader aa where aa.ID='" + Id  + "'");
+                DataTable comp = cs.builditems(@"select aa.* " + strTec + " from TransCostingHeader aa where aa.ID='" + Id + "'");
                 DataRow _dr = comp.Select().FirstOrDefault();
-                    Spreadsheet.Visible = true;
+                Spreadsheet.Visible = true;
                 if (string.Format("{0}", _dr["Company"]) == "101")
                 {
                     Spreadsheet.Document.LoadDocument(Server.MapPath(@"~/App_Data/Documents/Cost sheet print out(07.06.2021).xlsx"));
@@ -119,7 +252,7 @@ public partial class MailMerge : System.Web.UI.Page
                         int totalrm = c;
 
                         DataTable dtproduct = cs.GetProductFormula(Id);
-                        string strSQl = @"select CONCAT('[',SAPMaterial,']',Description) as name,* from TranshCosting where Requestno='" 
+                        string strSQl = @"select CONCAT('[',SAPMaterial,']',Description) as name,* from TranshCosting where Requestno='"
                         + Id.ToString() + "'";
                         DataTable dth = cs.builditems(strSQl);
                         if (dth.Rows.Count > 0)
@@ -165,7 +298,7 @@ public partial class MailMerge : System.Web.UI.Page
                                 _ws.Cells["D" + c].NumberFormat = "0.##";
                                 _ws.Cells["E" + c].Value = "THB";
                             }
-                            
+
                             c++;
                             _ws.Cells["C" + c].Value = "Sub-total THB";
                             _ws.Cells["D" + c].Formula = string.Format("=SUM(D{0}:D{1})", total, c - 1);
@@ -184,7 +317,7 @@ public partial class MailMerge : System.Web.UI.Page
                                 _ws.Cells["D" + c].Formula = string.Format("={0}", _u["Amount"]);
                                 _ws.Cells["E" + c].Value = "THB";
                             }
-                            
+
 
                             c++;
                             _ws.Cells["C" + c].Value = "Sub-total THB";
@@ -266,14 +399,14 @@ public partial class MailMerge : System.Web.UI.Page
                     _ws2.Cells["A19"].Value = "MARGIN";
                     _ws2.Cells["A20"].Value = "EXCHANGE RATE : USD 1 = ";
 
-                    DataTable dtproduct2 = cs.GetProductFormula(Id); 
+                    DataTable dtproduct2 = cs.GetProductFormula(Id);
                     for (int o = 1; o <= dtproduct2.Rows.Count; o++)
                     {
                         DataRow row = dtproduct2.Rows[o - 1];
                         string _n = cs.GetExcelColumnName(o + 1);
                         _ws2.Cells[_n + "1"].Value = dtproduct2.Rows[o - 1]["CostNo"].ToString();
                         _ws2.Cells[_n + "1"].ColumnWidth = 300;
-                        _ws2.Cells[_n + "3"].Value = string.Format("{0}",dtproduct2.Rows[o - 1]["NW"]);
+                        _ws2.Cells[_n + "3"].Value = string.Format("{0}", dtproduct2.Rows[o - 1]["NW"]);
                         _ws2.Cells[_n + "1"].FillColor = System.Drawing.Color.Beige;
                         for (int o2 = 1; o2 <= 9; o2++)
                             _ws2.Cells[_n + o2].Font.Color = System.Drawing.Color.Red;
@@ -287,12 +420,12 @@ public partial class MailMerge : System.Web.UI.Page
                                 List<decimal> list = new List<decimal>();
                                 decimal _rm, _totalrm;
                                 var _Packaging = row["Packaging"].ToString();
-                                var tableloss = cs.GettableLoss(_Packaging,Convert.ToDateTime(_dr["To"]), string.Format("{0}", row["UserType"]));
+                                var tableloss = cs.GettableLoss(_Packaging, Convert.ToDateTime(_dr["To"]), string.Format("{0}", row["UserType"]));
                                 for (int i = 0; i <= valueType.Length - 1; i++)
                                 {
                                     _rm = Convert.ToDecimal(rw[valueType[i]]);
                                     var _drloss = tableloss.Select("SubType='" + SubType[i] + "'").FirstOrDefault();
-                                    
+
                                     decimal _loss = 0;
                                     decimal.TryParse(_drloss["Loss"].ToString(), out _loss);
                                     _totalrm = _rm * (Convert.ToDecimal(_loss) / 100);
@@ -320,13 +453,13 @@ public partial class MailMerge : System.Web.UI.Page
                                 _ws2.Cells[_n + "8"].Formula = string.Format("={0}", rw["LOH"]);
                                 _ws2.Cells[_n + "9"].Formula = string.Format("={0}", rw["UpCharge"]);
                                 int desiredIndex = 2;
-                                _ws2.Cells[_n + "10"].Formula = string.Format("= SUM({0}4:{0}5)*{1}%",_n, list.Count > desiredIndex && list[desiredIndex] != null ? list[0]:0);
+                                _ws2.Cells[_n + "10"].Formula = string.Format("= SUM({0}4:{0}5)*{1}%", _n, list.Count > desiredIndex && list[desiredIndex] != null ? list[0] : 0);
                                 _ws2.Cells[_n + "11"].Formula = string.Format("={0}6*{1}%", _n, list[1]);
                                 _ws2.Cells[_n + "12"].Formula = string.Format("={0}7*{1}%", _n, list[2]);
                                 _ws2.Cells[_n + "13"].Formula = string.Format("={0}14*{0}19", _n);
                                 _ws2.Cells[_n + "14"].Formula = string.Format("=SUM({0}4:{0}13)", _n);
                                 _ws2.Cells[_n + "15"].Formula = string.Format("={0}14/{0}20", _n);
-                                _ws2.Cells[_n + "16"].Formula = string.Format("={0}", rw["Rate"].ToString() != ""?list1.Sum()/ Convert.ToDecimal(rw["Rate"]): list1.Sum());
+                                _ws2.Cells[_n + "16"].Formula = string.Format("={0}", rw["Rate"].ToString() != "" ? list1.Sum() / Convert.ToDecimal(rw["Rate"]) : list1.Sum());
                                 _ws2.Cells[_n + "16"].NumberFormat = "$#,##0.00";
                                 _ws2.Cells[_n + "19"].Formula = string.Format("={0}%", rw["PerMargin"].ToString() == "" ? "0" : rw["PerMargin"]);
                                 _ws2.Cells[_n + "19"].NumberFormat = "###,##%";
@@ -359,12 +492,12 @@ public partial class MailMerge : System.Web.UI.Page
                             _wsheets.Cells["H" + rowx].Value = string.Format("{0}", _rw["Name"]);
                             _wsheets.Cells["I" + rowx].Value = string.Format("{0}", _rw["Costno"]);
                             _wsheets.Cells["J" + rowx].Value = string.Format("{0}", _rw["RefSamples"]);
-                            
+
                             string[] sourceArray = string.Format("{0}", _dr["Netweight"]).Split('|');
                             if (sourceArray.Length > 1)
                                 _wsheets.Cells["L" + rowx].Formula = string.Format("={0}", Convert.ToDouble(sourceArray[0]) / 28.35);
                             _wsheets.Cells["L" + rowx].NumberFormat = "#,##0.00";
-                            _wsheets.Cells["M" + rowx].Formula = string.Format("{0}", _rw["PackSize"].ToString()!=""? _rw["PackSize"] : _dr["PackSize"]);  
+                            _wsheets.Cells["M" + rowx].Formula = string.Format("{0}", _rw["PackSize"].ToString() != "" ? _rw["PackSize"] : _dr["PackSize"]);
                             DataTable Tablex = cs.reload(_rw);
                             DataRow rw = Tablex.Select().FirstOrDefault();
                             string[] SubType = Regex.Split("Raw Material & Ingredient;Primary Packaging;Secondary Packaging", ";");
@@ -394,8 +527,8 @@ public partial class MailMerge : System.Web.UI.Page
                             _wsheets.Cells["N" + rowx].Formula = string.Format("={0}/{1}", rw["RM"], Convert.ToDouble(_dr["ExchangeRate"]));
                             _wsheets.Cells["O" + rowx].Formula = string.Format("={0}/{1}", rw["Ing"], Convert.ToDouble(_dr["ExchangeRate"]));
                             _wsheets.Cells["P" + rowx].Formula = string.Format("={0}/{1}", rw["PrimaryPkg"], Convert.ToDouble(_dr["ExchangeRate"]));
-                            _wsheets.Cells["Q" + rowx].Formula = string.Format("=({0}/{1})+({2})", rw["SecondaryPkg"], Convert.ToDouble(_dr["ExchangeRate"]),calc_sec);
-                            _wsheets.Cells["R" + rowx].Formula = string.Format("=({0}/{1})+({2})", rw["LOH"], Convert.ToDouble(_dr["ExchangeRate"]),calc_loh);
+                            _wsheets.Cells["Q" + rowx].Formula = string.Format("=({0}/{1})+({2})", rw["SecondaryPkg"], Convert.ToDouble(_dr["ExchangeRate"]), calc_sec);
+                            _wsheets.Cells["R" + rowx].Formula = string.Format("=({0}/{1})+({2})", rw["LOH"], Convert.ToDouble(_dr["ExchangeRate"]), calc_loh);
                             _wsheets.Cells["S" + rowx].Formula = string.Format("={0}/{1}", rw["UpCharge"], Convert.ToDouble(_dr["ExchangeRate"]));
                             _wsheets.Cells["T" + rowx].Formula = string.Format("=({0}/{1})+({2})", (Convert.ToDecimal(rw["Margin"]) + Convert.ToDecimal(rw["Loss"])), Convert.ToDouble(_dr["ExchangeRate"]), calc_margin);
 
@@ -411,135 +544,7 @@ public partial class MailMerge : System.Web.UI.Page
                 //workbook.Worksheets.Add("Sheet1_Copy");
                 //workbook.Worksheets["Sheet1_Copy"].CopyFrom(workbook.Worksheets["Sheet1"]);
                 break;
-            case "0":
-                DataTable dt = _selectData(id);
-                foreach (DataRow dr in dt.Rows) { 
-                if (dr["usertype"].ToString() != "0") {
-                    Spreadsheet.Visible = true;
-                    Spreadsheet.Document.LoadDocument(Server.MapPath("~/App_Data/Documents/F9MKXX03_New_Request_5_09.09.2019V3.xlsx"));
-                        Worksheet ws = Spreadsheet.Document.Worksheets["NEW SAMPLE REQUEST FORM"];
-                        ws.Cells["E4"].Value = dr["Company"].ToString();
-                        ws.Cells["AC4"].Value = dr["RequestNo"].ToString();
-                        //ws.Cells["AC6"].Value = dr["Validfrom"].ToString();
-                        //ws.Cells["AC8"].Value = dr["Validto"].ToString();
-						ws.Cells["AC6"].Value = dr["CreateOn"].ToString();
-                        ws.Cells["AC8"].Value = dr["SampleDate"].ToString();
-                        ws.Cells["AC10"].Value = cs.GetData( dr["Requester"].ToString(),"fn");
-                        ws.Cells["I4"].Value = dr["PetFoodType"].ToString();
-                        ws.Cells["E6"].Value = dr["ProductCat"].ToString();
-                        ws.Cells["F14"].Value = dr["Customer"].ToString();
-                        ws.Cells["F16"].Value = dr["Destination"].ToString();
-                        ws.Cells["F18"].Value = dr["Country"].ToString();
-                        ws.Cells["D22"].Value = dr["Packaging"].ToString().ToUpper();
-                        ws.Cells["I22"].Value = dr["PackType"].ToString().ToUpper();
-                        ws.Cells["D24"].Value = dr["Material"].ToString().ToUpper();
-                        ws.Cells["I24"].Value = dr["PackLacquer"].ToString().ToUpper();
-                        ws.Cells["D26"].Value = dr["PackLid"].ToString().ToUpper();
-                        ws.Cells["I26"].Value = dr["PackDesign"].ToString().ToUpper();
-                        //ws.Pictures.AddPicture(GetImageCheckbox(dr["Requestfor"].ToString(), "New Sample"), ws.Cells["E8"]);
-                        string values = dr["PhysicalSample"].ToString();
-                        string[] array = values.Split('|');
-                        //result["Physical"] = array[0].ToString();
-                        ws.Cells["T14"].Value = array[1].ToString();
-                        //result["Sample"] = array[2].ToString();
-                        ws.Cells["T16"].Value = array[3].ToString();
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Requestfor"].ToString(), "New Sample"), ws.Cells["D8"]);
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Requestfor"].ToString(), "New Sample – TU Proposal"), ws.Cells["P8"]);
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Requestfor"].ToString(), "New Sample - Customer Inquiry"), ws.Cells["P10"]);
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Requestfor"].ToString(), "New sample for non-commercial"), 660,310);
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Requestfor"].ToString(), "Adjust Current Item"), ws.Cells["D10"]);
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Requestfor"].ToString(), "Product Specification"), 660, 390);
-						ws.Pictures.AddPicture(GetImageCheckbox(dr["Requestfor"].ToString(), "Costing"), 1060, 390);
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CompliedWith"].ToString(), "Buyer's Specification"), 1365, 485);
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CompliedWith"].ToString(), "Company's Specification"), 1735, 485);
 
-                        ws.Cells["I28"].Value = dr["PackColor"].ToString().ToUpper();
-                        ws.Cells["D28"].Value = dr["Drainweight"].ToString();
-                        ws.Cells["J38"].Value = dr["PackSize"].ToString();
-
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "0"), 1080, 965);//FDA
-                        //ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "1"), ws.Cells["V12"]);//SID No. (For USA)
-                        //ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "2"), ws.Cells["V12"]);
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "3"),1230, 965);//Kosher
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "4"), 1510, 965);//Halal
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "6"), 1730, 965);//Halal w/ Movement
-						string PrdOther = dr["PrdRequirement"].ToString();
-                        string[] prdarray = PrdOther.Split('|');
-                        ws.Pictures.AddPicture(GetImageCheckbox(prdarray[0].ToString(), "9"), 1085, 1625); //Other Requirements
-                        ws.Cells["R36"].Value = prdarray[1];
-                        ws.Pictures.AddPicture(GetImageCheckbox(prdarray[0].ToString(), "0"), 1080, 1105);//MSC
-                        ws.Pictures.AddPicture(GetImageCheckbox(prdarray[0].ToString(), "10"), 1510, 1105);//RSPO
-
-                        ws.Pictures.AddPicture(GetImageCheckbox(prdarray[0].ToString(), "2"), 1230, 1105);//Pole & Line                        
-						ws.Pictures.AddPicture(GetImageCheckbox(prdarray[0].ToString(), "11"), ws.Cells["Q30"]);//Vegan
-                        string[] arrInner = dr["Inner"].ToString().Split('|');
-                        if (arrInner != null || arrInner.Length > 1)
-                        {
-                        ws.Pictures.AddPicture(GetImageCheckbox(arrInner[0].ToString(), "0"), ws.Cells["C38"]);//Inner Box
-                        ws.Pictures.AddPicture(GetImageCheckbox(arrInner[0].ToString(), "1"), ws.Cells["C39"]);//Sleeve Box
-                        ws.Pictures.AddPicture(GetImageCheckbox(arrInner[0].ToString(), "2"), ws.Cells["C40"]);//Shrink
-                        ws.Pictures.AddPicture(GetImageCheckbox(arrInner[0].ToString(), "3"), ws.Cells["C41"]);//Other
-                        ws.Cells["D41"].Value = arrInner[1].ToString();
-                        }
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Outer"].ToString(), "0"), ws.Cells["G38"]);//STD Carton
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Outer"].ToString(), "1"), ws.Cells["G39"]);//Perforated Carton
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Outer"].ToString(), "2"), ws.Cells["G40"]);//Tray
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["Outer"].ToString(), "3"), ws.Cells["G41"]);//Tray&Hood/U-Shape
-                        ws.Pictures.AddPicture(GetImageCheckbox(";", "X"), 2840,70);//Require document for cert
-                        ws.Pictures.AddPicture(GetImageCheckbox(";", "X"), 2385, 1315);//Approved
-                        ws.Pictures.AddPicture(GetImageCheckbox(";", "X"), 2385, 1395);//Disapproved 
-
-                        ws.Pictures.AddPicture(GetImageCheckbox(";", "X"), 2210, 565);//Accept to make sample
-                        ws.Pictures.AddPicture(GetImageCheckbox(";", "X"), 2210, 635);// Not accept and return to Markeing with 5 days
-                        values = dr["Ingredient"].ToString();
-                        array = values.Split('|');
-                        ws.Cells["W26"].Value = array[1];
-						ws.Pictures.AddPicture(GetImageCheckbox(array[0].ToString(), "3"), ws.Cells["Q38"]);//Dairy Free
-						ws.Pictures.AddPicture(GetImageCheckbox(array[0].ToString(), "4"), ws.Cells["T38"]);//Gluten Free
-						ws.Pictures.AddPicture(GetImageCheckbox(array[0].ToString(), "5"), 1680, 1105);//Other Certifications
-
-                        ws.Pictures.AddPicture(GetImageCheckbox(array[0].ToString(), "0"), 1085, 1315);//Natural
-                        ws.Pictures.AddPicture(GetImageCheckbox(array[0].ToString(), "1"), 1085, 1395);//Non_GMO
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "4"), 1085, 1475);//SID No
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "7"), 1085, 1555);//Specific Supplier
-
-
-
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "3"), ws.Cells["Q32"]);//Valid IT
-                        ws.Pictures.AddPicture(GetImageCheckbox(dr["CustomerRequest"].ToString(), "1"), ws.Cells["Q34"]);//Approved Plant no. (TH/EST/FCE for USA)
-
-                        ws.Pictures.AddPicture(GetImageCheckbox(";", "X"), ws.Cells["T30"]);
-                        ws.Pictures.AddPicture(GetImageCheckbox(array[0].ToString(), "2"), ws.Cells["T32"]);//Non-China Origin
-
-                        DataTable listdt = cs.builditems(string.Format(@"select ROW_NUMBER() OVER(ORDER BY Id) AS RowID ,
-                                *,''Mark from TransProductList where RequestNo={0}", id));
-                        for (int index = 0; index < listdt.Rows.Count; index++)
-                        {
-                            string member = "",col = Convert.ToDouble( 46 + index).ToString();
-                            member = listdt.Rows[index]["Name"].ToString();
-                            ws.Cells["D"+ col].Value = member;
-                            ws.Cells["X" + col].Value = listdt.Rows[index]["NetWeight"].ToString();
-                            ws.Cells["AA" + col].Value = listdt.Rows[index]["DW"].ToString();
-                            ws.Cells["AB" + col].Value = listdt.Rows[index]["DWType"].ToString();
-                            ws.Cells["AC" + col].Value = listdt.Rows[index]["FixedFillWeight"].ToString();
-                            ws.Cells["AC" + col].Value = listdt.Rows[index]["FixedFillWeight"].ToString();
-                            ws.Cells["AD" + col].Value = listdt.Rows[index]["PW"].ToString();
-                            ws.Cells["AE" + col].Value = listdt.Rows[index]["TargetPrice"].ToString();
-                            ws.Cells["AF" + col].Value = listdt.Rows[index]["SaltContent"].ToString();
-                        }
-                        string[] narray = string.Format("{0}", dr["Notes"]).Split('\n');
-                        int inputrow = 59;
-                        foreach (string value in narray)
-                        {
-                            ws.Cells["C" + inputrow].Value = string.Format("{0}",value);
-                            inputrow++;
-                        }
-                    } else { 
-					string fileName = Server.MapPath("~/App_Data/Documents/F9MKXX09_0_05062015_(3).pdf");
-					FormFillManual(fileName);
-					}
-				}
-                break;
             case "4":
                 Spreadsheet.Visible = true;
                 Spreadsheet.Document.LoadDocument(Server.MapPath("~/App_Data/Documents/Quotation_template.xlsx"));
@@ -555,7 +560,7 @@ public partial class MailMerge : System.Web.UI.Page
                     if (dtstd.Rows.Count > 0)
                     {
                         worksheet.Cells["D02"].Value = "Page 1";
-                        worksheet.Cells["D22"].Value = String.Format("{0:MM/dd/yyyy HH:mm}", dtstd.Rows[0]["CurrentDate"]); 
+                        worksheet.Cells["D22"].Value = String.Format("{0:MM/dd/yyyy HH:mm}", dtstd.Rows[0]["CurrentDate"]);
                         worksheet.Cells["C01"].Value = string.Format("Offer price for {0} on {1}", dtstd.Rows[0]["Name"], DateTime.Now.ToString("dd/MM/yyyy"));
                         worksheet.Cells["C02"].Value = string.Format("Request no. {0}", dtstd.Rows[0]["RequestNo"]);
                         worksheet.Cells["D11"].Value = string.Format("{0}", cs.ReadItems("select Value from MasPaymentTerm where Code='" + dtstd.Rows[0]["PaymentTerm"] + "'"));
@@ -563,7 +568,8 @@ public partial class MailMerge : System.Web.UI.Page
                         worksheet.Cells["D15"].Value = string.Format("{0:MM/dd/yyyy} - {1:MM/dd/yyyy}", dtstd.Rows[0]["From"], dtstd.Rows[0]["To"]);
                         worksheet.Cells["D16"].Value = String.Format("{0:MM/dd/yyyy}", dtstd.Rows[0]["ValidityDate"]);
                         strText = "select top 1 b.CustomTitle from StdCustomTitle b where b.Material=TransTunaStdItems.Material";
-                        DataTable dtstditems = cs.builditems(String.Format("Select OfferPrice,({0}) as CustomTitle,Material,Name from TransTunaStdItems where RequestNo= {1}", strText, id.ToString()));
+                        DataTable dtstditems = cs.builditems(String.Format(@"Select OfferPrice,({0}) as CustomTitle,Material,Name from TransTunaStdItems where RequestNo= {1}",
+                            strText, id.ToString()));
                         int c = 4;
                         int num = 1;
                         for (int o = 0; o < dtstditems.Rows.Count; o++)
@@ -595,9 +601,10 @@ public partial class MailMerge : System.Web.UI.Page
             case "5":
                 Spreadsheet.Visible = true;
                 DataTable dtRequest = cs.builditems("select a.*,b.Company from TransRequestForm a inner join TransTechnical b on b.ID=a.RequestNo where a.ID=" + id);
-                
+
                 foreach (DataRow ro in dtRequest.Rows)
-                {   if(string.Format("{0}", ro["Company"]).Equals("1031"))
+                {
+                    if (string.Format("{0}", ro["Company"]).Equals("1031"))
                         Spreadsheet.Document.LoadDocument(Server.MapPath("~/App_Data/Documents/SS - แบบฟอร์มขอ Code ผลิตภัณฑ์.xlsx"));
                     else
                         Spreadsheet.Document.LoadDocument(Server.MapPath("~/App_Data/Documents/F3RPRD42 แบบฟอร์มขอ Code ผลิตภัณฑ์.xlsx"));
@@ -623,7 +630,8 @@ public partial class MailMerge : System.Web.UI.Page
                     {
                         var requester = cs.builditems(@"select (select concat(u.FirstName,' ',u.LastName ) from ulogin u where u.user_name = requester)'requester',customer from TransTechnical where ID=" +
                             string.Format("{0}", ro["RequestNo"]));
-                        foreach(DataRow _trow in requester.Rows) {
+                        foreach (DataRow _trow in requester.Rows)
+                        {
 
                             _wsheet.Cells["I5"].Value = string.Format("{0}", _trow["customer"]);
                             _wsheet.Cells["E5"].Value = string.Format("{0}", _trow["requester"]);
@@ -634,9 +642,9 @@ public partial class MailMerge : System.Web.UI.Page
                         var Code = string.Format("3{0}{1}{2}{3}{4}{5}{6}{7}00", ro["ProductGroup"], ro["RawMaterial"], ro["StyleofPack"], ro["MediaType"],
                             ro["NW"], ro["ContainerLid"], ro["Grade"], ro["Zone"]);
                         _wsheet.Cells["D22"].Value = string.Join("", new string[] { string.Format("{0}",ro["ProductGroup"]),
-                string.Format("{0}",ro["ContainerLid"]), string.Format("{0}",ro["Grade"]),string.Format("{0}",ro["Zone"])," ",
-                string.Format("{0}",ro["RawMaterial"]),string.Format("{0}",ro["StyleofPack"]),string.Format("{0}",ro["MediaType"]),
-                string.Format("{0}",ro["NW"])});
+                        string.Format("{0}",ro["ContainerLid"]), string.Format("{0}",ro["Grade"]),string.Format("{0}",ro["Zone"])," ",
+                        string.Format("{0}",ro["RawMaterial"]),string.Format("{0}",ro["StyleofPack"]),string.Format("{0}",ro["MediaType"]),
+                        string.Format("{0}",ro["NW"])});
                         //_wsheet.Pictures.AddPicture(GetImageCheckbox(rw["ProductGroup"].ToString(), "G"), 100, 780);
                         _wsheet.Cells["D11"].Value = string.Format("{0}", ro["Remark"]);
                         _wsheet.Cells["D6"].Value = string.Format("{0}", rw["ProductGroupName"]);
@@ -649,7 +657,7 @@ public partial class MailMerge : System.Web.UI.Page
                         _wsheet.Cells["D12"].Value = string.Format("{0}", rw["NutritionName"]);
                         _wsheet.Cells["G13"].Value = string.Format("{0}:{1}", ro["Grade"], rw["ZoneName"]);
                         _wsheet.Cells["G15"].Value = string.Format("{0}", rw["ContainerLidName"]);
-                        
+
                         _wsheet.Cells["D19"].Value = string.Format("{0}", ro["RefSamples"]);
                         _wsheet.Cells["D14"].Value = string.Format("{0}", rw["DivisionName"]);
                         _wsheet.Cells["D16"].Value = string.Format("{0}", rw["MediaTypeName"]);
@@ -710,9 +718,6 @@ public partial class MailMerge : System.Web.UI.Page
 
                 break;
             case "6":
-                Spreadsheet.Document.LoadDocument(Server.MapPath("~/App_Data/Documents/New experiment sheet 01-12-22.xlsx"));
-                Spreadsheet.Document.DocumentSettings.Calculation.Iterative = true;
-                Worksheet wsheet = Spreadsheet.Document.Worksheets[0];
                 IWorkbook wbook = Spreadsheet.Document;
                 DataTable dtcusf = cs.GetCusFormula(id.ToString());
                 SqlParameter[] paramcus = {new SqlParameter("@Id",id.ToString()),
@@ -721,36 +726,145 @@ public partial class MailMerge : System.Web.UI.Page
                 var dthd = cs.GetRelatedResources("spGetCusFormulaHeader", paramcus);
                 foreach (DataRow rows in dthd.Rows)
                 {
-                    //List<formula> stdList = new List<formula>();
-                    wsheet.Cells["B5"].Value = string.Format("{0}", rows["RequestNo"]);
-                    wsheet.Cells["B6"].Value = string.Format("{0}", rows["Customer"]);
-                    wsheet.Cells["B7"].Value = string.Format("{0}", rows["Code"]);
-                    wsheet.Cells["F7"].Value = string.Format("{0}", rows["RefSamples"]);
-                    //wsheet.Cells["F8"].Value = string.Format("{0}", rows["NetWeight"]);
-                    wsheet.Cells["F8"].Value = string.Format("{0}", rows["NetWeight"]).Split('|')[0];
-                    wsheet.Cells["B11"].Value = string.Format("{0}", rows["Revised"]);
-                }
-                int cu = 21;
-                var listComponent = (from r in dtcusf.AsEnumerable()
-                                    select r["Component"]).Distinct().ToList();
-                foreach(var name in listComponent)
-                {
-                    wsheet.Cells["B" + cu].Value = string.Format("{0}", name);
-                    cu++;
-                    DataRow[] listdr = dtcusf.Select("Component = " + string.Format("'{0}'", name));
-                    foreach (DataRow dr in listdr)
+                    if (string.Format("{0}", rows["Company"]).Contains("101"))
                     {
-                        wsheet.Rows[cu].Insert();
-                        wsheet.Rows[cu].CopyFrom(wsheet.Rows[cu + 1]);
-                        wsheet.Cells["C" + cu].Value = string.Format("{0}", dr["Description"]);
-                        wsheet.Cells["D" + cu].Value = string.Format("{0}", dr["Name"]);
-                        wsheet.Cells["E" + cu].Value = string.Format("{0}", dr["Yield"]);
-                        wsheet.Cells["F" + cu].Value = string.Format("{0}", dr["Material"]);
-                        cu++;
+                        Spreadsheet.Document.LoadDocument(Server.MapPath("~/App_Data/Documents/Food cost template sent v3.xlsx"));
+                        Spreadsheet.Document.DocumentSettings.Calculation.Iterative = true;
+                        Worksheet wsheet = Spreadsheet.Document.Worksheets[0];
+                        wsheet.Cells["C5"].Value = string.Format("{0}", rows["RequestNo"]);
+                        wsheet.Cells["C6"].Value = string.Format("{0}", rows["Code"]);
+                        wsheet.Cells["G8"].Value = string.Format("{0}", rows["Name"]);
+
                     }
-                    
+                    else
+                    {
+                        Spreadsheet.Document.LoadDocument(Server.MapPath("~/App_Data/Documents/New experiment sheet 01-12-22 v2.xlsx"));
+                        Spreadsheet.Document.DocumentSettings.Calculation.Iterative = true;
+                        Worksheet wsheet = Spreadsheet.Document.Worksheets[0];
+
+
+                        //List<formula> stdList = new List<formula>();
+                        wsheet.Cells["B5"].Value = string.Format("{0}", rows["RequestNo"]);
+                        wsheet.Cells["B6"].Value = string.Format("{0}", rows["Customer"]);
+                        wsheet.Cells["B7"].Value = string.Format("{0}", rows["Code"]);
+                        wsheet.Cells["B8"].Value = string.Format("{0}", rows["ScheduledProcess"]);
+                        wsheet.Cells["B9"].Value = string.Format("{0}", rows["Primary1pt"]);
+                        wsheet.Cells["F9"].Value = string.Format("{0}", rows["MatCode1"]);
+                        wsheet.Cells["I9"].Value = string.Format("{0}", rows["pkgSupplier1"]);
+                        wsheet.Cells["B10"].Value = string.Format("{0}", rows["Primary2pt"]);
+                        wsheet.Cells["F10"].Value = string.Format("{0}", rows["MatCode2"]);
+                        wsheet.Cells["I10"].Value = string.Format("{0}", rows["pkgSupplier2"]);
+                        wsheet.Cells["F7"].Value = string.Format("{0}", rows["RefSamples"]);
+                        wsheet.Cells["F7"].Value = string.Format("{0}", rows["RefSamples"]);
+                        wsheet.Cells["F8"].Value = string.Format("{0}", rows["NetWeight"]).Split('|')[0];
+                        wsheet.Cells["I8"].Value = string.Format("{0}", rows["FW"]);
+                        wsheet.Cells["E6"].Value = string.Format("{0}", rows["Name"]);
+                        wsheet.Cells["I7"].Value = string.Format("{0}", rows["rDate"]);
+
+                        wsheet.Name = string.Format("{0}", rows["RequestNo"]);
+
+
+                        int cu = 13;
+                        //var listComponent = (from r in dtcusf.AsEnumerable()
+                        //                    select r["Component"]).Distinct().ToList();
+                        //foreach(var name in listComponent)
+                        //{
+                        //wsheet.Cells["B" + cu].Value = string.Format("{0}", name);
+                        //cu++;
+                        string x = "";
+                        int j = 1;
+                        var groupeh = from DataRow dr in dtcusf.Rows where (int)dr["ParentID"] == 0 orderby dr["Component"] group dr by dr["Component"];
+                        foreach (var k in groupeh)
+                        {
+                            //if (j > 0)
+                            //{
+                            //cu = cu + 3;
+                            Worksheet wsheet2 = Spreadsheet.Document.Worksheets[1];
+                            wsheet.Range[string.Format("A{0}:J{0}", cu)].Insert();
+                            wsheet.Range[string.Format("A{0}:J{0}", cu)].CopyFrom(wsheet2.Range["A13:J13"]);
+                            wsheet.Range[string.Format("A{0}:J{0}", cu)].Style = wsheet2.Range["A13:J13"].Style;
+                            wsheet.Cells["A" + cu].Value = string.Format("{0} {1}",j, k.Key);
+                            //}
+                            j++;
+                            cu++;
+                            //x = (string)(k.ElementAt(0)["Component"]) + Environment.NewLine;
+                            DataRow[] listportion = dtcusf.Select("ParentID = 0 and Component = '" + k.Key + "'");
+                            foreach (DataRow dr in listportion)
+                            {
+
+                                wsheet.Rows[cu].Insert();
+                                wsheet.Rows[cu].CopyFrom(wsheet2.Rows["14"]);
+                                wsheet.Range[string.Format("A{0}:J{0}", cu)].Style = wsheet2.Range["A14:J14"].Style;
+                                wsheet.Cells["A" + cu].Value = string.Format("{0}", dr["Description"]);
+                                wsheet.Cells["F" + cu].Formula = string.Format("{0:N2}", dr["Result"]);//string.Format("{0}", dr["Result"]);
+                                wsheet.Cells["C" + cu].Formula = string.Format("{0:N2}%", dr["Yield"]);
+                                wsheet.Cells["D" + cu].Value = string.Format("{0}", dr["Material"]);
+                                wsheet.Cells["B" + cu].Value = string.Format("{0}", dr["Note"]);
+                                wsheet.Cells["E" + cu].Value = string.Format("{0}", dr["IDNumber"]);
+                                cu++;
+                            }
+                            cu++;
+                            //wsheet.Range[string.Format("A{0}:J{0}",cu)].Insert();
+                            //wsheet.Range[string.Format("A{0}:J{0}", cu)].CopyFrom(wsheet2.Range["A15:J15"]);
+                            //wsheet.Range[string.Format("A{0}:J{0}", cu)].Style = wsheet2.Range["A15:J15"].Style;
+
+                            //wsheet.Cells[string.Format("E{0}", cu + 1)].Value = cu + 1;
+                            //wsheet.Cells[string.Format("F{0}", cu + 1)].Formula = string.Format("=SUM(F14:F{0})", cu);
+                            //cu = cu + 3;
+                        }
+                            //DataRow[] listdr = dtcusf.Select("(Component like '%Solution%' or Component like '%Topping%') and ParentID = 0");
+                        //foreach (DataRow dr in listdr)
+                        //{
+                        //    wsheet.Rows[cu].Insert();
+                        //    wsheet.Rows[cu].CopyFrom(wsheet.Rows[cu - 1]);
+                        //    wsheet.Cells["A" + cu].Value = string.Format("{0}", dr["Description"]);
+                        //    wsheet.Cells["B" + cu].Value = string.Format("{0}", dr["Note"]);
+                        //    wsheet.Cells["E" + cu].Value = string.Format("{0}", dr["IDNumber"]);
+                        //    wsheet.Cells["F" + cu].Formula = string.Format("{0:N2}", dr["Result"]);
+                        //    wsheet.Cells["C" + cu].Formula = string.Format("{0:N2}%", dr["Yield"]);
+                        //    wsheet.Cells["D" + cu].Value = string.Format("{0}", dr["Material"]);
+                        //    cu++;
+                        //}
+
+                        //cu = cu + 3;
+                        //var tParentID = dtcusf.AsEnumerable().GroupBy(r => r.Field<int>("ParentID")).Select(g => g.First()).CopyToDataTable();
+                        //var grouped = from DataRow dr in dtcusf.Rows where (int)dr["ParentID"] > 0 orderby dr["ParentID"] group dr by dr["ParentID"];
+                        
+                        //foreach (var k in grouped)
+                        //{
+                        //    x = (int)(k.ElementAt(0)["ParentID"]) + Environment.NewLine;
+                        //    //if (j > 0)
+                        //    //{
+                        //        cu = cu + 3;
+                        //        Worksheet wsheet2 = Spreadsheet.Document.Worksheets[1];
+                        //        wsheet.Range[string.Format("A{0}:J{1}", cu, cu + 4)].Insert();
+                        //        wsheet.Range[string.Format("A{0}:J{1}", cu, cu + 4)].CopyFrom(wsheet2.Range["A20:J23"]);
+                        //    //}
+
+                        //    //j++;
+                        //    //wsheet.Cells["A" + cu].Value = string.Format("{0}", x);
+                        //    cu = cu + 1;
+                        //    DataRow[] tParentID = dtcusf.Select("ParentID > 0 and ParentID = " + string.Format("{0}", x));
+                        //    var hdr = dtcusf.Select("ID = " + string.Format("{0}", x)).FirstOrDefault();
+                        //    wsheet.Cells[string.Format("A{0}", cu - 1)].Value = string.Format("{0}", hdr["Description"]);
+                        //    foreach (DataRow dr in tParentID)
+                        //    {
+                        //        wsheet.Rows[cu].Insert();
+                        //        wsheet.Rows[cu].CopyFrom(wsheet.Rows[cu - 1]);
+                        //        wsheet.Cells["A" + cu].Value = string.Format("{0}", dr["Description"]);
+                        //        wsheet.Cells["B" + cu].Value = string.Format("{0}", dr["Note"]);
+                        //        wsheet.Cells["H" + cu].Formula = string.Format("{0:N2}", dr["Portion"]);
+                        //        //wsheet.Cells["F" + cu].Formula = string.Format("{0:N2}", dr["Result"]);
+                        //        wsheet.Cells["C" + cu].Formula = string.Format("{0:N2}%", dr["Yield"]);
+                        //        wsheet.Cells["D" + cu].Value = string.Format("{0}", dr["Material"]);
+                        //        cu++;
+                        //    }
+                        //}
+                        ////}
+                        wbook.Worksheets.RemoveAt(2);
+                        wbook.Worksheets.RemoveAt(1);
+                    }
                 }
-                
                 break;
         }
     }

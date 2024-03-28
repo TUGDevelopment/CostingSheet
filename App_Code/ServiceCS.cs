@@ -511,16 +511,16 @@ public  class ServiceCS : System.Web.Services.WebService
     //    IRfcTable returns = rfcFunction["RETURN"].GetTable();
     //    RfcSessionManager.EndContext(rfcDest);
     //}
-    [WebMethod]
-    public void XX(string d)
-    {
-        foreach (int i in cs.Integers())
-        {
-            Context.Response.Write(i.ToString());
-        }
-        string ii =  "10_";
-        Context.Response.Write(ii + d);
-    }
+    //[WebMethod]
+    //public void XX(string d)
+    //{
+    //    foreach (int i in cs.Integers())
+    //    {
+    //        Context.Response.Write(i.ToString());
+    //    }
+    //    string ii =  "10_";
+    //    Context.Response.Write(ii + d);
+    //}
     [WebMethod]
     public void GetData()
     {
@@ -799,9 +799,9 @@ public  class ServiceCS : System.Web.Services.WebService
         }
     }
     [WebMethod]
-    public void GetUnblockSO()
+    public void GetUnblockSO(string Data)
     {
-        DataTable dtsale = builditems(@"select VBAP_VBELN from TransSalesDeliveryBlock group by VBAP_VBELN");
+        DataTable dtsale = builditems(@"select VBAP_VBELN from TransSalesDeliveryBlock where isnull(VBAP_VBELN,'')<>'' group by VBAP_VBELN");
         DataTable dt = new DataTable();
         dt.Columns.AddRange(new DataColumn[] { new DataColumn(@"Sales Document VBAK-VBELN"),
             new DataColumn(@"Delivery Block (Document Header)") }
@@ -810,7 +810,8 @@ public  class ServiceCS : System.Web.Services.WebService
         {
             dt.Rows.Add(string.Format("{0}", rw["VBAP_VBELN"]),"Z4");
         }
-        string file = HttpContext.Current.Server.MapPath("~/ExcelFiles/VA02_UBLKSO_" + DateTime.Now.ToString("yyyyMMddhhmm") + ".csv");
+        string file = @"D:\SAPInterfaces\Outbound\VA02_UBLKSO_" + DateTime.Now.ToString("yyyyMMddhhmm") + ".csv";
+        //HttpContext.Current.Server.MapPath("~/ExcelFiles/VA02_UBLKSO_" 
         MyToDataTable.ToCSV(dt, file);
     }
     [WebMethod]
@@ -945,7 +946,8 @@ public  class ServiceCS : System.Web.Services.WebService
                         dtclone.Columns.Remove(@"Customer number KOMG-KUNNR");
                         dtclone.Columns.Remove(@"Terms of payment key KOMG-ZTERM(01)");
                     }
-                    string file = HttpContext.Current.Server.MapPath("~/ExcelFiles/VK11_"  + ColName + "_" + DateTime.Now.ToString("yyyyMMddhhmm") + ".csv");
+                    string file = @"D:\SAPInterfaces\Outbound\VK11_" + ColName + "_" + DateTime.Now.ToString("yyyyMMddhhmm") + ".csv";
+                    //HttpContext.Current.Server.MapPath("~/ExcelFiles/VK11_" ;
                     MyToDataTable.ToCSV(dtclone, file);
                 }
             }
@@ -1150,10 +1152,11 @@ public  class ServiceCS : System.Web.Services.WebService
         workbook.SaveAs(@"\\192.168.1.212\Data\VK11_table.xlsx");
     }
     [WebMethod]
-    public void GetUpdateTOCSV(string data)
+    public void GetUpdateTOSQL(string data)
     {
-        var dir = HttpContext.Current.Server.MapPath("~/ExcelFiles");//D:\SAPInterfaces\Inbound
-        var filePaths = Directory.GetFiles(dir, "*_result*.csv");
+        var dir = @"D:\SAPInterfaces\Inbound";
+        //HttpContext.Current.Server.MapPath("~/ExcelFiles");
+        var filePaths = Directory.GetFiles(dir, "VK11*_result*.csv");
         foreach (string s in filePaths)
         {
             using (var reader = new StreamReader(s))
@@ -1171,7 +1174,7 @@ public  class ServiceCS : System.Web.Services.WebService
                     var AppID = csv["AppID"];
                     // By header name
 
-                    var Condition = csv["Condition TypeRV13A-KSCHL"];
+                    var Condition = "";// csv["Condition TypeRV13A-KSCHL"];
                     if (csv["Result"] == "Condition records saved")
                     {
                         using (SqlConnection con = new SqlConnection(strConn))
@@ -1201,8 +1204,33 @@ public  class ServiceCS : System.Web.Services.WebService
                 //}
             }
             try
-            { 
-                File.Move(s, HttpContext.Current.Server.MapPath("~/ExcelFiles/Processed/" + Path.GetFileName(s)));
+            {
+                //File.Move(s, @"D:\SAPInterfaces\Inbound\Processed\" + Path.GetFileName(s));
+                //HttpContext.Current.Server.MapPath("~/ExcelFiles/Processed/" + Path.GetFileName(s)));
+                // Copy the file and overwrite if it exists
+                File.Copy(s, @"D:\SAPInterfaces\Inbound\Processed\" + Path.GetFileName(s), true);
+
+                // Delete the source file
+                File.Delete(s);
+            }
+            catch (IOException iox)
+            {
+                Console.WriteLine(iox.Message);
+            }
+        }
+        // Move UnblockSO
+        filePaths = Directory.GetFiles(dir, "VA02*_result*.csv");
+        foreach (string s in filePaths)
+        {
+            try
+            {
+                //File.Move(s, @"D:\SAPInterfaces\Inbound\Processed\" + Path.GetFileName(s));
+                //HttpContext.Current.Server.MapPath("~/ExcelFiles/Processed/" + Path.GetFileName(s)));
+                // Copy the file and overwrite if it exists
+                File.Copy(s, @"D:\SAPInterfaces\Inbound\Processed\" + Path.GetFileName(s), true);
+
+                // Delete the source file
+                File.Delete(s);
             }
             catch (IOException iox)
             {

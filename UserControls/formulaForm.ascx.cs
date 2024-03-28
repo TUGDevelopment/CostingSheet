@@ -23,14 +23,16 @@ using System.Collections.Specialized;
 public partial class UserControls_test : MasterUserControl
 {
     MyDataModule cs = new MyDataModule();
+    ServiceCS myservice = new ServiceCS();
     string strConn = ConfigurationManager.ConnectionStrings["CostingConnectionString"].ConnectionString;
     string user_name = HttpContext.Current.User.Identity.Name.Replace(@"THAIUNION\", @"");
     private List<formula> table
     {
-        get {
+        get
+        {
             var obj = this.Session["Customtb"];
             if (obj == null) { obj = this.Session["Customtb"] = new List<formula>(); }
-            return   (List<formula>)obj; 
+            return (List<formula>)obj;
         }
         set { this.Session["Customtb"] = value; }
     }
@@ -75,7 +77,7 @@ public partial class UserControls_test : MasterUserControl
         usertp["usertype"] = cs.GetData(user_name, "usertype").ToString();
 
     }
-        Hashtable copiedValues = null;
+    Hashtable copiedValues = null;
     string[] copiedFields = new string[] { "FirstName", "Title", "Notes", "LastName", "BirthDate", "HireDate" };
     protected void grid_CustomButtonCallback(object sender, ASPxGridViewCustomButtonCallbackEventArgs e)
     {
@@ -131,15 +133,16 @@ public partial class UserControls_test : MasterUserControl
             var list = new List<dynamic>();
             List<object> fieldValues = g.GetSelectedFieldValues(new string[] { "ID" });
         }
-            if (args[0] == "delete" && args.Length > 1)
+        if (args[0] == "delete" && args.Length > 1)
         {
             Delete(string.Format("{0}", args[1]));
         }
-        if (args[0]== "Revised")
+        if (args[0] == "Revised")
         {
-                Revised(args[1]);
+            Revised(args[1]);
         }
-        if (args[0] == "post") {
+        if (args[0] == "post")
+        {
 
             using (SqlConnection con = new SqlConnection(strConn))
             {
@@ -153,13 +156,13 @@ public partial class UserControls_test : MasterUserControl
                 cmd.Parameters.AddWithValue("@RefSamples", string.Format("{0}", tbReference.Text));
                 cmd.Parameters.AddWithValue("@Formula", string.Format("{0}", 1));
                 cmd.Parameters.AddWithValue("@IsActive", string.Format("{0}", 0));
-                cmd.Parameters.AddWithValue("@CostNo", string.Format("{0}", tbRequestNo.Text.Equals("###########")?"": tbRequestNo.Text));
+                cmd.Parameters.AddWithValue("@CostNo", string.Format("{0}", tbRequestNo.Text.Equals("###########") ? "" : tbRequestNo.Text));
                 cmd.Parameters.AddWithValue("@Costper", string.Format("{0}", usertp["usertype"]));
                 cmd.Parameters.AddWithValue("@FW", string.Format("{0}", tbFW.Text));
                 cmd.Parameters.AddWithValue("@MinPrice", string.Format("{0}", 0));
                 cmd.Parameters.AddWithValue("@UniqueColumn", string.Format("{0}", hfgetvalue["NewID"]));
-                cmd.Parameters.AddWithValue("@NetWeight", string.Format("{0}|{1}", tbNetweight.Text,CmbUnit.Text));
-                //cmd.Parameters.AddWithValue("@Packaging", string.Format("{0}", 0));
+                cmd.Parameters.AddWithValue("@NetWeight", string.Format("{0}|{1}", tbNetweight.Text, CmbUnit.Text));
+                cmd.Parameters.AddWithValue("@RequestDate", string.Format("{0}", deto.Value));
                 cmd.Parameters.AddWithValue("@ScheduledProcess", string.Format("{0}", tbScheduledProcess.Text));
 
                 cmd.Parameters.AddWithValue("@Primary1pt", string.Format("{0}", tb1ptPrimary.Text));
@@ -183,7 +186,7 @@ public partial class UserControls_test : MasterUserControl
                 }
             }
 
-            
+
         }
         if (args[0] == "Search")
         {
@@ -307,10 +310,10 @@ public partial class UserControls_test : MasterUserControl
                         //new SqlParameter("@param",args[1].ToString()),
                         new SqlParameter("@username",user_name.ToString())};
             dt = cs.GetRelatedResources("spGetCusFormulaHeader", param);
-            foreach(DataRow rows in dt.Rows)
+            foreach (DataRow rows in dt.Rows)
             {
                 result["ID"] = string.Format("{0}", rows["ID"]);
-                result["editor"] = string.Format("{0}",rows["editor"]);
+                result["editor"] = string.Format("{0}", rows["editor"]);
                 result["RequestNo"] = string.Format("{0}", rows["RequestNo"]);
                 result["Company"] = string.Format("{0}", rows["Company"]);
                 result["Code"] = string.Format("{0}", rows["Code"]);
@@ -318,16 +321,25 @@ public partial class UserControls_test : MasterUserControl
                 result["RefSamples"] = string.Format("{0}", rows["RefSamples"]);
                 result["Customer"] = string.Format("{0}", rows["Customer"]);
                 result["ProductStyle"] = string.Format("{0}", rows["ProductStyle"]);
-                result["Packaging"] = string.Format("{0}",rows["Packaging"]);
+                result["Packaging"] = string.Format("{0}", rows["Packaging"]);
                 result["StatusApp"] = string.Format("{0}", rows["StatusApp"]);
                 result["Revised"] = string.Format("{0}", rows["Revised"]);
                 result["FW"] = string.Format("{0}", rows["FW"]);
                 result["ScheduledProcess"] = string.Format("{0}", rows["ScheduledProcess"]);
                 result["Destination"] = string.Format("{0}", rows["Name"]);
                 result["NewID"] = string.Format("{0}", rows["UniqueColumn"]);
+                result["Primary1pt"] = string.Format("{0}", rows["Primary1pt"]);
+                result["MatCode1"] = string.Format("{0}", rows["MatCode1"]);
+                result["pkgSupplier1"] = string.Format("{0}", rows["pkgSupplier1"]);
+                result["Primary2pt"] = string.Format("{0}", rows["Primary2pt"]);
+                result["MatCode2"] = string.Format("{0}", rows["MatCode2"]);
+                result["pkgSupplier2"] = string.Format("{0}", rows["pkgSupplier2"]);
+                result["RequestDate"] = string.Format("{0}", rows["RequestDate"]);
+
                 string values = rows["NetWeight"].ToString();
                 string[] array = values.Split('|');
-                if (array.Length > 1) { 
+                if (array.Length > 1)
+                {
                     result["NetWeight"] = array[0];
                     result["Unit"] = array[1];
                 }
@@ -427,7 +439,7 @@ public partial class UserControls_test : MasterUserControl
     //        return table;
     //    }
     //}
-    void updateitem(string keys,string ParentID, User c)
+    void updateitem(string keys, string ParentID, User c)
     {
         using (SqlConnection con = new SqlConnection(strConn))
         {
@@ -510,15 +522,15 @@ public partial class UserControls_test : MasterUserControl
                 cmd.Parameters.AddWithValue("@Batch", string.Format("{0}", c.Batch));
                 cmd.Parameters.AddWithValue("@ByPercent", string.Format("{0}", c.ByPercent));
                 cmd.Parameters.AddWithValue("@Portion", string.Format("{0}", c.Portion));
-                cmd.Parameters.AddWithValue("@Note", string.Format("{0}", c.Note)); 
+                cmd.Parameters.AddWithValue("@Note", string.Format("{0}", c.Note));
                 cmd.Parameters.AddWithValue("@SubID", string.Format("{0}", keys));
 
                 cmd.Connection = con;
                 con.Open();
                 var getValue = cmd.ExecuteScalar();
-                foreach(var u in c.User)
+                foreach (var u in c.User)
                 {
-                    updateitem(keys,string.Format("{0}", getValue), u);
+                    updateitem(keys, string.Format("{0}", getValue), u);
                 }
                 //cmd.ExecuteNonQuery();
                 con.Close();
@@ -613,7 +625,7 @@ public partial class UserControls_test : MasterUserControl
     {
         if (e.IsGroupSummary)
         {
-            e.TotalValue = string.Format("Total = {0}",0);
+            e.TotalValue = string.Format("Total = {0}", 0);
         }
         ASPxGridView g = sender as ASPxGridView;
         ASPxSummaryItem totalSummary = new ASPxSummaryItem();
@@ -631,7 +643,8 @@ public partial class UserControls_test : MasterUserControl
         if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Finalize)
             if (value.IndexOf(((ASPxSummaryItem)e.Item).FieldName) != -1)
             {
-                e.TotalValue = String.Format("Total = {0}<br />", totalCount.ToString("F4"));}
+                e.TotalValue = String.Format("Total = {0}<br />", totalCount.ToString("F4"));
+            }
     }
     void Revised(string keyValue)
     {
@@ -679,6 +692,24 @@ public partial class UserControls_test : MasterUserControl
             con.Close();
         }
     }
+    void del_ParentID(string id)
+    {
+        //using (SqlConnection con = new SqlConnection(strConn))
+        //{
+        //    SqlCommand cmd = new SqlCommand();
+        //    cmd = new SqlCommand();
+        //    cmd.CommandText = "DELETE TranscusFormula WHERE ParentID = @Id";
+        //    cmd.Parameters.AddWithValue("@Id", string.Format("{0}", id));
+        //    cmd.Connection = con;
+        //    con.Open();
+        //    cmd.ExecuteNonQuery();
+        //    con.Close();
+        //}
+        SqlCommand sqlComm = new SqlCommand();
+        sqlComm.CommandText = @"DELETE FROM TranscusFormula WHERE ParentID = @Id";
+        sqlComm.Parameters.AddWithValue("@Id", string.Format("{0}", id));
+        DataTable _dtx = myservice.GetData(sqlComm);
+    }
     protected void grid_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
     {
         ASPxGridView g = sender as ASPxGridView;
@@ -687,27 +718,43 @@ public partial class UserControls_test : MasterUserControl
         if (!long.TryParse(args[1], out id))
             return;
         //DataTable dt = new DataTable();
-         
+
         switch (args[0])
         {
             //case "delete":
             //    Delete(string.Format("{0}", id));
             //    break;
             case "Remove":
-            var rw = table.FirstOrDefault(x => x.Id == Convert.ToInt32(id));
+                var rw = table.FirstOrDefault(x => x.Id == Convert.ToInt32(id));
                 table.Remove(rw);
-                //
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd = new SqlCommand();
+                    cmd.CommandText = "DELETE TranscusFormula WHERE Id = @Id";
+                    cmd.Parameters.AddWithValue("@Id", string.Format("{0}", id));
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                //foreach (var u in found.User)
+                //rw.User.RemoveAll((x) => x.ParentID == "");
+                rw.User.RemoveAll((x) => x.ParentID == Convert.ToInt32(id));
+                del_ParentID(string.Format("{0}", id));
                 break;
             case "changed":
-                foreach (var c in table){
+                foreach (var c in table)
+                {
                     _found(c);
-                }  
+                }
                 break;
             case "New":
                 // add detail
                 var obj = table.FirstOrDefault(x => x.Id == Convert.ToInt32(id));
                 User u = new User();
                 int iMax = cs.FindMaxValue(obj.User, x => x.Id);
+                //int iMax = cs.FindMaxValue(table, x => x.Id);
                 iMax++;
                 u.Id = iMax;
                 u.ParentID = Convert.ToInt32(id);
@@ -718,40 +765,43 @@ public partial class UserControls_test : MasterUserControl
 
                 break;
             case "reload":
-  
+
                 DataTable dt = cs.GetCusFormula(id.ToString());
+                DataRow[] list = dt.Select("ParentID = 0");
                 //List<formula> stdList = new List<formula>();
-                table = (from DataRow dr in dt.Rows
-                           select new formula()
-                           {
-                               Id = Convert.ToInt32(dr["Id"]),
-                               Material = dr["Material"].ToString(),
-                               SubType = string.Format("{0}", dr["SubType"]),
-                               Component = string.Format("{0}", dr["Component"]),
-                               Description = string.Format("{0}", dr["Description"]),
-                               Result = Convert.ToDecimal(dr["Result"]),
-                               NW = Convert.ToDecimal(dr["NW"]),
-                               Batch = Convert.ToDecimal(dr["Batch"]),
-                               ByPercent = Convert.ToDecimal(dr["ByPercent"]),
-                               Portion = Convert.ToDecimal(dr["Portion"]),
-                               Yield = string.Format("{0}", dr["Yield"]),
-                               RawMaterial = string.Format("{0}", dr["RawMaterial"]),
-                               Name = string.Format("{0}", dr["Name"]),
-                               PriceOfUnit = string.Format("{0}", dr["PriceOfUnit"]),
-                               AdjustPrice = string.Format("{0}", dr["AdjustPrice"]),
-                               Currency = string.Format("{0}", dr["Currency"]),
-                               Unit = string.Format("{0}", dr["Unit"]),
-                               ExchangeRate = string.Format("{0}", dr["ExchangeRate"]),
-                               BaseUnit = string.Format("{0}", dr["BaseUnit"]),
-                               PriceOfCarton = string.Format("{0}", dr["PriceOfCarton"]),
-                               Formula = 0,
-                               IsActive = string.Format("{0}", dr["IsActive"]),
-                               Remark = string.Format("{0}", dr["Remark"]),
-                               LBOh = string.Format("{0}", dr["LBOh"]),
-                               LBRate = string.Format("{0}", dr["LBRate"]),
-                               RequestNo = string.Format("{0}", dr["RequestNo"]),
-                               User = GetUser(string.Format("{0}", dr["RequestNo"]), Convert.ToString(dr["Id"])),
-                           }).ToList();
+                table = (from DataRow dr in list
+                         select new formula()
+                         {
+                             Id = Convert.ToInt32(dr["Id"]),
+                             Material = dr["Material"].ToString(),
+                             SubType = string.Format("{0}", dr["SubType"]),
+                             Component = string.Format("{0}", dr["Component"]),
+                             Description = string.Format("{0}", dr["Description"]),
+                             Result = Convert.ToDecimal(dr["Result"]),
+                             NW = Convert.ToDecimal(dr["NW"]),
+                             Note = string.Format("{0}", dr["Note"]),
+                             IDNumber = string.Format("{0}", dr["IDNumber"]),
+                             Batch = Convert.ToDecimal(dr["Batch"]),
+                             ByPercent = Convert.ToDecimal(dr["ByPercent"]),
+                             Portion = Convert.ToDecimal(dr["Portion"]),
+                             Yield = string.Format("{0}", dr["Yield"]),
+                             RawMaterial = string.Format("{0}", dr["RawMaterial"]),
+                             Name = string.Format("{0}", dr["Name"]),
+                             PriceOfUnit = string.Format("{0}", dr["PriceOfUnit"]),
+                             AdjustPrice = string.Format("{0}", dr["AdjustPrice"]),
+                             Currency = string.Format("{0}", dr["Currency"]),
+                             Unit = string.Format("{0}", dr["Unit"]),
+                             ExchangeRate = string.Format("{0}", dr["ExchangeRate"]),
+                             BaseUnit = string.Format("{0}", dr["BaseUnit"]),
+                             PriceOfCarton = string.Format("{0}", dr["PriceOfCarton"]),
+                             Formula = 0,
+                             IsActive = string.Format("{0}", dr["IsActive"]),
+                             Remark = string.Format("{0}", dr["Remark"]),
+                             LBOh = string.Format("{0}", dr["LBOh"]),
+                             LBRate = string.Format("{0}", dr["LBRate"]),
+                             RequestNo = string.Format("{0}", dr["RequestNo"]),
+                             User = GetUser(string.Format("{0}", dr["RequestNo"]), Convert.ToString(dr["Id"])),
+                         }).ToList();
 
                 //table.PrimaryKey = new DataColumn[] { table.Columns["Id"] };
                 //g.TotalSummary.Clear();
@@ -768,7 +818,7 @@ public partial class UserControls_test : MasterUserControl
                         var Key = g.GetRowValues(i, g.KeyFieldName).ToString();
                     }
                 }
-                    break;
+                break;
         }
         g.DataBind();
     }
@@ -776,7 +826,7 @@ public partial class UserControls_test : MasterUserControl
     protected void grid_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
     {
         ASPxGridView g = sender as ASPxGridView;
-        var values = new[] {  "Name"};
+        var values = new[] { "Name" };
         if (values.Any(e.Column.FieldName.Contains))
             e.Editor.ReadOnly = true;
         if (e.Column.FieldName == "SubType")
@@ -795,7 +845,7 @@ public partial class UserControls_test : MasterUserControl
                         ls.Add(string.Format("{0}", name));
                     }
                     //var sortedTable = ValuetoReturn.Distinct().OrderBy(q => q.ToString());
-                    combo.DataSource = ls; 
+                    combo.DataSource = ls;
                     combo.DataBindItems();
                 }
                 // var myResult = dataTable.AsEnumerable()
@@ -929,7 +979,7 @@ public partial class UserControls_test : MasterUserControl
         //editor.DataSource = dsMaterial;
         //editor.DataBind();
     }
- 
+
     //protected void grid_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
     //{
     //    //table = LoadGrid;
@@ -992,13 +1042,14 @@ public partial class UserControls_test : MasterUserControl
             return;
         var result = new Dictionary<string, string>();
         var args = e.Parameters.Split('|');
-        if (args[0] == "Matformu" || args[0] == "1MatCode" || args[0] == "2MatCode")
+        if (args[0] == "Matformu" || args[0] == "1MatCode" || args[0] == "2MatCode" || args[0] == "MatKeyDown")
         {
-            var _table = cs.builditems(string.Format("SELECT * from MasPriceStd where ID='{0}'", args[1]));
-            foreach(DataRow _rw in _table.Rows)
+            var _table = cs.builditems(string.Format("SELECT top 1 * from MasPriceStd where convert(nvarchar(max),id)='{0}' or Material='{0}'", args[1]));
+            foreach (DataRow _rw in _table.Rows)
             {
                 result["Code"] = _rw["Material"].ToString();
                 result["Name"] = string.Format("{0}", _rw["Description"]);
+                result["PriceOfUnit"] = string.Format("{0}", _rw["PriceStd1"]);
             }
             e.Result = result;
         }
@@ -1035,7 +1086,7 @@ public partial class UserControls_test : MasterUserControl
 
         foreach (var args in e.InsertValues)
         {
-            formula row =  new formula();
+            formula row = new formula();
             int NextRowID = cs.FindMaxValue(table, x => x.Id); ;
             NextRowID++;
             row.Id = NextRowID;
@@ -1043,9 +1094,11 @@ public partial class UserControls_test : MasterUserControl
             row.Formula = 1;
             row.Batch = 0;
             row.Portion = 0;
+            
             row.NW = 0;
+
             row.Yield = string.Format("{0}", 1);
-            row.ByPercent = 1;
+            row.ByPercent = 0;
             row.Result = 0;
             table.Add(row);
 
@@ -1057,11 +1110,13 @@ public partial class UserControls_test : MasterUserControl
             int Id = Convert.ToInt32(args.Keys["Id"]);
             var dr1 = table.FirstOrDefault(x => x.Id == Id);
             dr1.Component = string.Format("{0}", args.NewValues["Component"]);
+            
             dr1.Description = string.Format("{0}", args.NewValues["Description"]);
             dr1.Yield = string.Format("{0}", args.NewValues["Yield"]);
             dr1.Name = string.Format("{0}", args.NewValues["Name"]);
-            dr1.ByPercent = Convert.ToDecimal(args.NewValues["ByPercent"]);
-            //dr1.Result = string.Format("{0}", args.NewValues["Result"]);
+            dr1.PriceOfUnit = string.Format("{0}", args.NewValues["PriceOfUnit"]);
+            dr1.AdjustPrice = string.Format("{0}", args.NewValues["AdjustPrice"]);
+            dr1.IsCalcu = string.Format("{0}", args.NewValues["IsCalcu"]);
             if ((string.Format("{0}", args.NewValues["SubType"]) != ""))
             {
 
@@ -1077,10 +1132,19 @@ public partial class UserControls_test : MasterUserControl
                 }
             }
             decimal sumObject = 0;
+            
             if (CmbCompany.Value.ToString().Contains("1031"))
             {
+                if (string.Format("{0}", args.NewValues["Portion"]) == "0")
+                {
+                    var sumObjectPortion = table.//Where(s => string.Format("{0}",s.Component).Equals(string.Format("{0}", args.NewValues["Component"])))
+                        Select(s => Convert.ToDecimal(s.Portion)).Sum();
+                    if (sumObjectPortion > 0)
+                        dr1.Portion = Decimal.Parse(Convert.ToDecimal(100 - (sumObjectPortion)).ToString("f3"));
+
+                }
                 dr1.NW = Convert.ToDecimal(args.NewValues["NW"]);
-                if (string.Format("{0}", args.NewValues["NW"]) != "")
+                if (string.Format("{0}", args.NewValues["NW"]) != "0")
                 {
 
                     //=(F20/100)*I$12
@@ -1101,10 +1165,19 @@ public partial class UserControls_test : MasterUserControl
                     }
 
                 }
-            }else
+                else
+                {
+                    var sumObjectNW = table.//Where(s => string.Format("{0}",s.Component).Equals(string.Format("{0}", args.NewValues["Component"])))
+                        Select(s => Convert.ToDecimal(s.NW)).Sum();
+                    if (sumObjectNW > 0)
+                        dr1.NW = Decimal.Parse(Convert.ToDecimal(100 - (sumObjectNW)).ToString("f3"));
+
+                }
+            }
+            else
             {
                 dr1.Result = Convert.ToDecimal(args.NewValues["Result"]);
-                if (string.Format("{0}", dr1.Result) != "")
+                if (string.Format("{0}", dr1.Result) != "0")
                 {
                     decimal _Result = 0;
                     decimal.TryParse(args.NewValues["Result"].ToString(), out _Result);
@@ -1114,10 +1187,24 @@ public partial class UserControls_test : MasterUserControl
 
                     foreach (var c in table)
                     {
-                        sumObject = table.Where(s => s.Component.Equals(c.Component)).Select(s => Convert.ToDecimal(s.NW)).Sum();
+                        sumObject = table.Where(s => string.Format("{0}", s.Component).Equals(string.Format("{0}", c.Component))).Select(s => Convert.ToDecimal(s.NW)).Sum();
                         if (sumObject > 0)
                             c.Portion = Decimal.Parse(Convert.ToDecimal((c.NW / sumObject) * 100).ToString("f3"));
                     }
+                }
+                else {
+                    var sumObjectResult = table.//Where(s => string.Format("{0}", s.Component).Equals(string.Format("{0}", args.NewValues["Component"]))).
+                        Select(s => Convert.ToDecimal(s.Result)).Sum();
+                    if (sumObjectResult > 0)
+                        dr1.Result = Decimal.Parse(Convert.ToDecimal(Convert.ToDecimal(tbFW.Text) - (sumObjectResult)).ToString("f"));
+                }
+
+                if (CmbCompany.Value.ToString().Contains("101"))
+                {
+                    //=(H17*E17)/$E$27/F17
+                    var sumObjectPortion = table.Where(s => string.Format("{0}", s.Component).Equals(string.Format("{0}", args.NewValues["Component"]))).
+                        Select(s => Convert.ToDecimal(s.Portion)).Sum();
+                    dr1.PriceOfCarton = string.Format("{0}", (dr1.NW * dr1.Portion)/ Convert.ToDecimal(sumObjectPortion) / Convert.ToDecimal(dr1.Yield));
                 }
             }
             _found(dr1);
@@ -1125,21 +1212,33 @@ public partial class UserControls_test : MasterUserControl
             dr1.Material = string.Format("{0}", args.NewValues["Material"]);
             dr1.Formula = 1;
             dr1.Note = string.Format("{0}", args.NewValues["Note"]);
-            dr1.IDNumber = string.Format("{0}", args.NewValues["IDNumber"]); 
-            
+            dr1.IDNumber = string.Format("{0}", args.NewValues["IDNumber"]);
+            if (string.Format("{0}", args.NewValues["ByPercent"]) == "0")
+            {
+                var tbypercent = table.Where(s => s.Component.Equals(string.Format("{0}", args.NewValues["Component"]))).OrderBy(o => o.Id).FirstOrDefault();
+                if (tbypercent != null)
+                {
+                    dr1.ByPercent = Convert.ToDecimal(tbypercent.ByPercent);
+                }
+            }
+            else
+            {
+                dr1.ByPercent = Convert.ToDecimal(args.NewValues["ByPercent"]);
+            }
+
             //dr1.Portion = Convert.ToDecimal(args.NewValues["Portion"]);
             //dr1.Batch = string.Format("{0}", args.NewValues["Batch"]);
             dr1.SubType = string.Format("{0}", args.NewValues["SubType"]);
         }
 
-            e.Handled = true;
+        e.Handled = true;
     }
 
     protected void cpUpdateFiles_Callback(object sender, CallbackEventArgsBase e)
     {
 
     }
-    List<User> GetUser(string Id,string ParentID)
+    List<User> GetUser(string Id, string ParentID)
     {
         SqlParameter[] param = {new SqlParameter("@Id",Id.ToString()),
                         new SqlParameter("@ParentID",ParentID.ToString()),
@@ -1157,6 +1256,7 @@ public partial class UserControls_test : MasterUserControl
                        Description = string.Format("{0}", dr["Description"]),
                        Result = Convert.ToDecimal(dr["Result"]),
                        NW = Convert.ToDecimal(dr["NW"]),
+                       Note = string.Format("{0}", dr["Note"]),
                        Batch = Convert.ToDecimal(dr["Batch"]),
                        ByPercent = Convert.ToDecimal(dr["ByPercent"]),
                        Portion = Convert.ToDecimal(dr["Portion"]),
@@ -1178,7 +1278,7 @@ public partial class UserControls_test : MasterUserControl
                        RequestNo = string.Format("{0}", dr["RequestNo"]),
                    }).ToList();
         return stdList;
-    }  
+    }
     protected void grid_DetailRowGetButtonVisibility(object sender, ASPxGridViewDetailRowButtonEventArgs e)
     {
         formula currentUser = table.Find(u => u.Id == (int)grid.GetRowValues(e.VisibleIndex, "Id"));
@@ -1252,7 +1352,7 @@ public partial class UserControls_test : MasterUserControl
             {
                 decimal _Result = 0;
                 decimal.TryParse(found.Result.ToString(), out _Result);
-                
+
                 found.Batch = Convert.ToDecimal(Convert.ToDecimal(found.Result) * (Convert.ToDecimal(found.ByPercent)));
                 if (Convert.ToDecimal(found.Batch) > 0)
                     found.NW = Convert.ToDecimal((_Result / (Convert.ToDecimal(tbFW.Text)) * 100));
@@ -1260,7 +1360,7 @@ public partial class UserControls_test : MasterUserControl
 
                 foreach (var c in table)
                 {
-                    sumObject = table.Where(s => s.Component.Equals(c.Component)).Select(s => Convert.ToDecimal(s.NW)).Sum();
+                    sumObject = table.Where(s => string.Format("{0}",s.Component).Equals(string.Format("{0}",c.Component))).Select(s => Convert.ToDecimal(s.NW)).Sum();
                     if (sumObject > 0)
                         c.Portion = Decimal.Parse(Convert.ToDecimal((c.NW / sumObject) * 100).ToString("f3"));
                 }
@@ -1270,24 +1370,26 @@ public partial class UserControls_test : MasterUserControl
         decimal NWObject = 0;
         if (found.User.Count > 0)
         {
-            foreach(var u in found.User)
+            foreach (var u in found.User)
             {
                 if (string.Format("{0}", u.Portion) != "")
                 {
                     var Object = table.Where(s => s.Id == u.ParentID).FirstOrDefault();//=(H30*$F$14)/100
-                    if (CmbCompany.Value.ToString().Contains("1031")) { 
-                    
-                    sumObject = Convert.ToDecimal(Object.Result);
-                    if (sumObject > 0)
-                        u.Result = Decimal.Parse(Convert.ToDecimal((u.Portion * sumObject) / 100).ToString("f3"));
-                    NWObject = Convert.ToDecimal(Object.NW);//=(H30*$G$14)/100
-                    if (NWObject > 0)
-                        u.NW = Decimal.Parse(Convert.ToDecimal((u.Portion * NWObject) / 100).ToString("f3"));
+                    if (CmbCompany.Value.ToString().Contains("1031"))
+                    {
 
-                    u.Batch = (Convert.ToDecimal(u.Result) * (Convert.ToDecimal(u.ByPercent)));
+                        sumObject = Convert.ToDecimal(Object.Result);
+                        if (sumObject > 0)
+                            u.Result = Decimal.Parse(Convert.ToDecimal((u.Portion * sumObject) / 100).ToString("f3"));
+                        NWObject = Convert.ToDecimal(Object.NW);//=(H30*$G$14)/100
+                        if (NWObject > 0)
+                            u.NW = Decimal.Parse(Convert.ToDecimal((u.Portion * NWObject) / 100).ToString("f3"));
+
+                        u.Batch = (Convert.ToDecimal(u.Result) * (Convert.ToDecimal(u.ByPercent)));
                         //u.Batch = (Convert.ToDecimal(u.Result) / (Convert.ToDecimal(Object.Yield) / 100)) * Convert.ToDecimal(tbRevised.Text);
                         //u.Batch = Decimal.Parse(Convert.ToDecimal(u.Portion * 20).ToString("f3"));
-                    } else
+                    }
+                    else
                     {
                         sumObject = Convert.ToDecimal(Object.Result);
                         u.Batch = Convert.ToDecimal(Convert.ToDecimal(Object.Result) * (Convert.ToDecimal(u.ByPercent) / 100));
@@ -1313,7 +1415,8 @@ public partial class UserControls_test : MasterUserControl
         //else
         //    Update(keys, newValues, nwd2);
         var dr1 = table.FirstOrDefault(x => x.Id == Convert.ToInt32(newValues["ParentID"]));
-        if (dr1!=null){
+        if (dr1 != null)
+        {
             User u = new User();
             u = dr1.User.Where(x => x.Id == Convert.ToInt32(keys[0])).FirstOrDefault();
             u.Yield = Convert.ToString(newValues["Yield"]);
@@ -1325,23 +1428,55 @@ public partial class UserControls_test : MasterUserControl
             u.IDNumber = string.Format("{0}", newValues["IDNumber"]);
             u.SubType = string.Format("{0}", newValues["SubType"]);
             u.Portion = Convert.ToDecimal(newValues["Portion"]);
-            u.ByPercent = Convert.ToDecimal(newValues["ByPercent"]);
-            if (string.Format("{0}", newValues["Portion"]) != "")
-            {   
-                var Object = table.Where(s => s.Id == u.ParentID).FirstOrDefault();//=(H30*$F$14)/100
-                decimal sumObject =  Convert.ToDecimal(Object.Result);
-                if (sumObject > 0)
-                    u.Result = Decimal.Parse(Convert.ToDecimal((u.Portion * sumObject) / 100).ToString("f3"));
-                
-                decimal NWObject = Convert.ToDecimal(Object.NW);//=(H30*$G$14)/100
-                if (NWObject > 0)
-                    u.NW = Decimal.Parse(Convert.ToDecimal((u.Portion * NWObject) / 100).ToString("f3"));
+            u.Result = Convert.ToDecimal(newValues["Result"]);
+            u.PriceOfUnit = string.Format("{0}", newValues["PriceOfUnit"]);
+            u.AdjustPrice = string.Format("{0}", newValues["AdjustPrice"]);
 
-                //u.Batch = (Convert.ToDecimal(u.Result) / (Convert.ToDecimal(Object.Yield) / 100)) * Convert.ToDecimal(tbRevised.Text);
-                //Decimal.Parse(Convert.ToDecimal(u.Portion * 20) .ToString("f3"));
-                u.Batch = (Convert.ToDecimal(u.Result) * (Convert.ToDecimal(u.ByPercent)));
+            if (string.Format("{0}", newValues["ByPercent"]) == "0")
+            {
+                var tbypercent = table.Where(s => string.Format("{0}",s.Component).Equals(string.Format("{0}", newValues["Component"]))).OrderBy(o => o.Id).FirstOrDefault();
+                if (tbypercent != null)
+                {
+                    u.ByPercent = Convert.ToDecimal(tbypercent.ByPercent);
+                }
             }
-            foreach (var item in newValues.Keys) {
+            else
+            {
+                u.ByPercent = Convert.ToDecimal(newValues["ByPercent"]);
+            }
+            if (string.Format("{0}", newValues["Portion"]) != "")
+            {
+                var Object = table.Where(s => s.Id == u.ParentID).FirstOrDefault();//=(H30*$F$14)/100
+                if (CmbCompany.Value.ToString().Contains("1031"))
+                {
+
+           
+                    decimal sumObject = Convert.ToDecimal(Object.Result);
+                    if (sumObject > 0)
+                        u.Result = Decimal.Parse(Convert.ToDecimal((u.Portion * sumObject) / 100).ToString("f3"));
+
+                    decimal NWObject = Convert.ToDecimal(Object.NW);//=(H30*$G$14)/100
+                    if (NWObject > 0)
+                        u.NW = Decimal.Parse(Convert.ToDecimal((u.Portion * NWObject) / 100).ToString("f3"));
+
+                    //u.Batch = (Convert.ToDecimal(u.Result) / (Convert.ToDecimal(Object.Yield) / 100)) * Convert.ToDecimal(tbRevised.Text);
+                    //Decimal.Parse(Convert.ToDecimal(u.Portion * 20) .ToString("f3"));
+                    u.Batch = (Convert.ToDecimal(u.Result) * (Convert.ToDecimal(u.ByPercent)));
+                }
+                else
+                {
+                    var sumObject = Convert.ToDecimal(Object.Result);
+                    u.Batch = Convert.ToDecimal(Convert.ToDecimal(u.Result) * (Convert.ToDecimal(u.ByPercent) / 100));
+                    u.NW = Convert.ToDecimal(u.Result / (Convert.ToDecimal(tbFW.Text))) * 100;
+
+                    decimal NWObject = table.Where(s => s.Id == u.ParentID).Select(s => Convert.ToDecimal(s.NW)).Sum();
+                    if (NWObject > 0)
+                        u.Portion = Decimal.Parse(Convert.ToDecimal((u.NW / NWObject) * 100).ToString("f3"));
+
+                }
+            }
+            foreach (var item in newValues.Keys)
+            {
                 //var dr2 = dr1.User.Select(x => x.Id == Convert.ToInt32(newValues[item]));
             }
         }
@@ -1379,13 +1514,14 @@ public partial class UserControls_test : MasterUserControl
             return;
         var result = new Dictionary<string, string>();
         var args = e.Parameters.Split('|');
-        if (args[0] == "Matdetail")
+        if (args[0] == "Matdetail" || args[0] == "MatKeyDown")
         {
-            var _table = cs.builditems(string.Format("SELECT * from MasPriceStd where ID='{0}'", args[1]));
+            var _table = cs.builditems(string.Format("SELECT top 1 * from MasPriceStd where convert(nvarchar(max),id)='{0}' or Material='{0}'", args[1]));
             foreach (DataRow _rw in _table.Rows)
             {
                 result["Code"] = _rw["Material"].ToString();
                 result["Name"] = string.Format("{0}", _rw["Description"]);
+                result["PriceOfUnit"] = string.Format("{0}", _rw["PriceStd1"]);
             }
             e.Result = result;
         }
@@ -1412,9 +1548,89 @@ public partial class UserControls_test : MasterUserControl
         {
             object keyValue = g.GetRowValues(e.VisibleIndex, g.KeyFieldName);
             var rw = table.FirstOrDefault(x => x.Id == Convert.ToInt32(ParentID));
-             
-            table.Remove(rw);
+            SqlCommand sqlComm = new SqlCommand();
+            sqlComm.CommandText = @"DELETE FROM TranscusFormula WHERE ID=@ID";
+            sqlComm.Parameters.AddWithValue("@ID", string.Format("{0}", keyValue));
+            DataTable _dtx = myservice.GetData(sqlComm);
+            rw.User.RemoveAll((x) => x.Id.Equals(Convert.ToInt32(keyValue)) && x.ParentID.Equals(Convert.ToInt32(ParentID)));
         }
+        g.DataBind();
+    }
+
+    protected void detail_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+    {
+        ASPxGridView g = sender as ASPxGridView;
+        var values = new[] { "Name" };
+        if (values.Any(e.Column.FieldName.Contains))
+            e.Editor.ReadOnly = true;
+        if (e.Column.FieldName == "SubType")
+        {
+            if (table != null)
+            {
+                ASPxComboBox combo = (ASPxComboBox)e.Editor;
+                var ValuetoReturn = (from Rows in table.AsEnumerable()
+                                     select string.Format("{0}", Rows.Component)).Distinct().ToList();
+                if (ValuetoReturn.Count > 0)
+                {
+                    List<string> ls = new List<string>();
+                    ValuetoReturn.Add(string.Empty);
+                    foreach (var name in ValuetoReturn)
+                    {
+                        ls.Add(string.Format("{0}", name));
+                    }
+                    //var sortedTable = ValuetoReturn.Distinct().OrderBy(q => q.ToString());
+                    combo.DataSource = ls;
+                    combo.DataBindItems();
+                }
+                // var myResult = dataTable.AsEnumerable()
+                //.Select(s => new
+                //{
+                //    id = s.Field<string>(e.Column.FieldName),
+                //})
+                //.Distinct().ToList();
+                //List<string> ls = new List<string>();
+                //var ValuetoReturn = (from Rows in table.AsEnumerable()
+                //                     select Rows[e.Column.FieldName]).Distinct().ToList();
+                //foreach (var name in ValuetoReturn) {
+                //    ls.Add(string.Format("{0}",name));
+                //    Console.WriteLine(name); }
+                //ValuetoReturn.Add(string.Empty);
+                //ValuetoReturn.Add("Raw Material");
+                //ASPxComboBox cb = (ASPxComboBox)e.Editor;
+                //cb.DataSource = ls;
+                ////cb.DataSource = ValuetoReturn.Distinct().OrderBy(q => q);
+                //cb.DataBindItems();
+                ////cb.DataBind();
+            }
+        }
+        ASPxGridView grid = (ASPxGridView)sender;
+        //if (e.Column.FieldName == "SubType")
+        //{
+        //    //        ASPxComboBox cmb = (ASPxComboBox)e.Editor;
+        //    //        var Id = grid.GetRowValues(e.VisibleIndex, "RowID");
+        //    //        cmb.Columns.Add(new ListBoxColumn("RawMaterial"));
+        //    //        cmb.Columns.Add(new ListBoxColumn("Description"));
+        //    //        cmb.Columns.Add(new ListBoxColumn("Yield"));
+        //    //        cmb.Columns.Add(new ListBoxColumn("Material"));
+        //    //        cmb.Columns.Add(new ListBoxColumn("Name"));
+        //    //        cmb.EnableCallbackMode = true;
+        //    //        cmb.CallbackPageSize = 10;
+        //    //        cmb.DataSource = dsYield;
+        //    //        cmb.DataBindItems();
+
+        //    GridViewDataComboBoxColumn Compo = new GridViewDataComboBoxColumn();
+        //    if (table != null)
+        //    {
+        //        var ValuetoReturn = (from Rows in table.AsEnumerable()
+        //                             select Rows.Component).Distinct().ToList();
+        //        ValuetoReturn.Add(string.Empty);
+        //        //ValuetoReturn.Add("Raw Material");
+
+        //        var sortedTable = ValuetoReturn.Distinct().OrderBy(q => q.ToString());
+        //        Compo.PropertiesComboBox.DataSource = sortedTable;
+
+        //    }
+        //}
     }
 }
 public class formula
@@ -1447,6 +1663,7 @@ public class formula
     public decimal Batch { get; set; }
     public decimal ByPercent { get; set; }
     public string RequestNo { get; set; }
+    public string IsCalcu { get; set; }
     public List<User> User { get; set; }
 
     public bool HasProjects()
@@ -1491,6 +1708,7 @@ public class User
     public decimal Batch { get; set; }
     public decimal ByPercent { get; set; }
     public string RequestNo { get; set; }
+    public string IsCalcu { get; set; }
     public int ParentID { get; set; }
     public List<Componentlevel> complevel { get; set; }
     //public string FirstName { get; set; }
@@ -1544,6 +1762,7 @@ public class Componentlevel
     public decimal Batch { get; set; }
     public decimal ByPercent { get; set; }
     public string RequestNo { get; set; }
+    public string IsCalcu { get; set; }
     public int ParentID { get; set; }
     public int userId { get; set; }
     //public string FirstName { get; set; }

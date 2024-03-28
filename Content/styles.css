@@ -18,6 +18,10 @@ body {
     overflow-y: hidden;
     width: 100%;
 }
+.myGrid * {
+    height: 100% !important;
+}  
+
 .someClass {
     display: none;
 }

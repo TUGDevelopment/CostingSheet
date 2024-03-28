@@ -32,7 +32,7 @@ public partial class _Default : MasterDetailPage{
         //string a = MyToDataTable.Increment("X");
         //string uName = MyDataModule.GetUserEmail(User.Identity.Name);
         if (!IsPostBack){
-            //myclass.GetReadExcelupdateJob("dd");
+            //myclass.GetUpdateTOCSV("dd");
             //if (Request.QueryString["viewMode"] == null)
             //    Response.Redirect(Page.ResolveClientUrl(url));
             //Session["viewMode"] = "adminform";//Request.QueryString["viewMode"] ;// cs.user();

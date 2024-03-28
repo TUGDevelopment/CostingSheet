@@ -1040,7 +1040,7 @@
             <PropertiesComboBox DataSourceID="dsulogin" TextField="fn" ValueField="user_name" />
         </dx:GridViewDataComboBoxColumn>
         <dx:GridViewDataTextColumn FieldName="NetWeight" Caption="Net weight" />
-        <dx:GridViewDataDateColumn FieldName="CreateOn" Caption="CreateOn"> 
+        <dx:GridViewDataDateColumn FieldName="CreateOn" Caption="CreateOn" SortOrder="Descending"> 
             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy">
             </PropertiesDateEdit>
         </dx:GridViewDataDateColumn>
@@ -1749,11 +1749,7 @@
                                                 <%--<dx:ASPxTextBox runat="server" ID="tbSecSellingUnit" ClientInstanceName="tbSecSellingUnit">
                                                 </dx:ASPxTextBox>--%>
                                                 <dx:ASPxComboBox ID="CmbSecSellingUnit" runat="server"  ClientInstanceName="CmbSecSellingUnit" Width="170px"
-                                                TextFormatString="{0}">
-                                                <Items>
-                                                    <dx:ListEditItem Text="THB" />
-                                                    <dx:ListEditItem Text="USD" />
-                                                </Items>
+                                                 DataSourceID="dsUpChargeCurrency" ValueField="value" TextField="value">
                                             </dx:ASPxComboBox>
                                         </dx:LayoutItemNestedControlContainer>
                                     </LayoutItemNestedControlCollection>
@@ -1842,11 +1838,11 @@
                                     <LayoutItemNestedControlCollection>
                                         <dx:LayoutItemNestedControlContainer>
                                             <dx:ASPxComboBox ID="CmbUpChargeCurrency" runat="server"  ClientInstanceName="CmbUpChargeCurrency" Width="170px"
-                                                TextFormatString="{0}">
-                                                <Items>
+                                                DataSourceID="dsUpChargeCurrency" ValueField="value" TextField="value">
+                                               <%-- <Items>
                                                     <dx:ListEditItem Text="THB" />
                                                     <dx:ListEditItem Text="USD" />
-                                                </Items>
+                                                </Items>--%>
                                             </dx:ASPxComboBox>
                                     </dx:LayoutItemNestedControlContainer>
                                 </LayoutItemNestedControlCollection>
@@ -2766,6 +2762,8 @@
              <asp:ControlParameter ControlID="usertp" Name="usertype" PropertyName="['usertype']"/>
         </SelectParameters>
     </asp:SqlDataSource>--%>
+    <asp:SqlDataSource ID="dsUpChargeCurrency" runat="server" ConnectionString="<%$ ConnectionStrings:CostingConnectionString %>"
+        SelectCommand="select value from dbo.FNC_SPLIT('THB;USD',';') order by value"/>
     <asp:SqlDataSource ID="dsCountry" runat="server" ConnectionString="<%$ ConnectionStrings:LabConnectionString %>"
        SelectCommand="select distinct Code, Description as Name from [transGrade] where ProductType='PF'">
     </asp:SqlDataSource>
