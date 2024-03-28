@@ -734,7 +734,27 @@ public partial class MailMerge : System.Web.UI.Page
                         wsheet.Cells["C5"].Value = string.Format("{0}", rows["RequestNo"]);
                         wsheet.Cells["C6"].Value = string.Format("{0}", rows["Code"]);
                         wsheet.Cells["G8"].Value = string.Format("{0}", rows["Name"]);
-
+                        wsheet.Cells["C7"].Value = string.Format("{0}", rows["ProductStyle"]);
+                        wsheet.Cells["C8"].Value = string.Format("{0}", rows["Customer"]);
+                        
+                        wsheet.Cells["C9"].Value = string.Format("{0}", rows["RefSamples"]);
+                        DataRow[] listhd = dtcusf.Select("ParentID = 0");
+                        int cu = 16;
+                        foreach (DataRow dr in listhd)
+                        {
+                            wsheet.Rows[cu].Insert();
+                            wsheet.Rows[cu].CopyFrom(wsheet.Rows[cu]);
+                            wsheet.Cells["B" + cu].Value = string.Format("{0}", dr["Material"]);
+                            DataRow[] listportion = dtcusf.Select("ParentID > 0 and ParentID = '" + dr["ID"] + "'");
+                            foreach(DataRow rw in listportion)
+                            {
+                                cu++;
+                                wsheet.Rows[cu].Insert();
+                                wsheet.Rows[cu].CopyFrom(wsheet.Rows[cu]);
+                                wsheet.Cells["C" + cu].Value = string.Format("{0}", dr["Description"]);
+                            }
+                            cu++;
+                        }
                     }
                     else
                     {
@@ -755,7 +775,7 @@ public partial class MailMerge : System.Web.UI.Page
                         wsheet.Cells["F10"].Value = string.Format("{0}", rows["MatCode2"]);
                         wsheet.Cells["I10"].Value = string.Format("{0}", rows["pkgSupplier2"]);
                         wsheet.Cells["F7"].Value = string.Format("{0}", rows["RefSamples"]);
-                        wsheet.Cells["F7"].Value = string.Format("{0}", rows["RefSamples"]);
+                        
                         wsheet.Cells["F8"].Value = string.Format("{0}", rows["NetWeight"]).Split('|')[0];
                         wsheet.Cells["I8"].Value = string.Format("{0}", rows["FW"]);
                         wsheet.Cells["E6"].Value = string.Format("{0}", rows["Name"]);

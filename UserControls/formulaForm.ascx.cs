@@ -1115,7 +1115,11 @@ public partial class UserControls_test : MasterUserControl
             dr1.Yield = string.Format("{0}", args.NewValues["Yield"]);
             dr1.Name = string.Format("{0}", args.NewValues["Name"]);
             dr1.PriceOfUnit = string.Format("{0}", args.NewValues["PriceOfUnit"]);
-            dr1.AdjustPrice = string.Format("{0}", args.NewValues["AdjustPrice"]);
+            if(string.Format("{0}", args.NewValues["AdjustPrice"]) == "" || string.Format("{0}", args.NewValues["AdjustPrice"]) == "0")
+                dr1.AdjustPrice = string.Format("{0}", args.NewValues["PriceOfUnit"]);
+            else
+                dr1.AdjustPrice = string.Format("{0}", args.NewValues["AdjustPrice"]);
+
             dr1.IsCalcu = string.Format("{0}", args.NewValues["IsCalcu"]);
             if ((string.Format("{0}", args.NewValues["SubType"]) != ""))
             {
@@ -1430,7 +1434,10 @@ public partial class UserControls_test : MasterUserControl
             u.Portion = Convert.ToDecimal(newValues["Portion"]);
             u.Result = Convert.ToDecimal(newValues["Result"]);
             u.PriceOfUnit = string.Format("{0}", newValues["PriceOfUnit"]);
-            u.AdjustPrice = string.Format("{0}", newValues["AdjustPrice"]);
+            if (string.Format("{0}", newValues["AdjustPrice"]) == "" || string.Format("{0}", newValues["AdjustPrice"]) == "0")
+                u.AdjustPrice = string.Format("{0}", newValues["PriceOfUnit"]);
+            else
+                u.AdjustPrice = string.Format("{0}", newValues["AdjustPrice"]);
 
             if (string.Format("{0}", newValues["ByPercent"]) == "0")
             {
