@@ -439,32 +439,6 @@ public class ServiceCS : System.Web.Services.WebService
         var worksheet = workbook.Worksheets.Add("VK11_20180604_095920_");
         foreach (DataRow row in Results.Rows)
         {
-            //if (!row["Currency"].ToString().Contains("USD") && row["PriceUpload"].ToString() == "0")
-            //{
-            //    double _ExchangeRate = 0, _OfferPrice = 0, _MinPrice = 0;
-            //    _OfferPrice = (Convert.ToDouble(row["OfferPrice"]) * Convert.ToDouble(row["Rate"]));
-            //    _MinPrice = (Convert.ToDouble(row["MinPrice"]) * Convert.ToDouble(row["Rate"]));
-            //    double.TryParse(string.Format("{0}", row["ExchangeRate"].ToString()), out _ExchangeRate);
-            //    if (_ExchangeRate != 0)
-            //    {
-            //        row["OfferPriceExch"] = Convert.ToDouble(_OfferPrice / _ExchangeRate).ToString("F2");
-            //        row["MinPriceExch"] = Convert.ToDouble(_MinPrice / _ExchangeRate).ToString("F2");
-            //    }
-            //    if (row["Currency"].ToString().Contains("JPY"))
-            //    {
-            //        NumberFormatInfo nfi = new CultureInfo("ja-JP", false).NumberFormat;
-            //        row["OfferPriceExch"] = Convert.ToInt64(Math.Floor(Convert.ToDouble(row["OfferPriceExch"])));
-            //        row["MinPriceExch"] = Convert.ToInt64(Math.Floor(Convert.ToDouble(row["MinPriceExch"])));
-            //    }
-            //    //dr["ExchangeRate"] = seExchangeRate.Value;
-            //}
-            //else
-            //{
-            //    row["OfferPriceExch"] = row["OfferPrice"];
-            //    row["MinPriceExch"] = row["MinPrice"];
-            //}
-            //if (row["Incoterm"].ToString() == "FOB" && row["MinPrice"].ToString()== ".00")
-            //    row["MinPrice"] = cs.GetMinPrice(row["Formula"].ToString(), row["RequestNo"].ToString());
             if (row["ShipTo"].ToString() != "" && row["Incoterm"].ToString() != "" && row["PaymentTerm"].ToString() != "")
             {
                 i++;
@@ -630,7 +604,7 @@ public class ServiceCS : System.Web.Services.WebService
     public void GetUpdateTOCSV(string data)
     {
         var dir = HttpContext.Current.Server.MapPath("~/ExcelFiles");//D:\SAPInterfaces\Inbound
-        var filePaths = Directory.GetFiles(dir, "*_result*.csv");
+        var filePaths = Directory.GetFiles(dir, "*_result.csv");
         foreach (string s in filePaths)
         {
             using (var reader = new StreamReader(s))
@@ -1932,7 +1906,11 @@ public class ServiceCS : System.Web.Services.WebService
             Context.Response.Write(JsonConvert.SerializeObject(dt)); 
         }
     }
-  [WebMethod()]
+    /// <summary>
+    /// Saves a document to the database.
+    /// </summary>
+    /// <param name="data">The name of the document to be saved.</param>
+    [WebMethod()]
     public void savedocument(string data)
     {
         string datapath = "~/Content/" + data + ".json";
@@ -1950,7 +1928,7 @@ public class ServiceCS : System.Web.Services.WebService
                     {
                         DataTable dt = new DataTable();
                         cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@Id", ro[0].ID);
+                        cmd.Parameters.AddWithValue("@Id", ro[0].ID);
                         cmd.Parameters.AddWithValue("@ncptype", ro[0].ncptype);
                         cmd.Parameters.AddWithValue("@ncpid", ro[0].ncpid);
                         cmd.Parameters.AddWithValue("@Problem", ro[0].Problem);
@@ -1959,7 +1937,7 @@ public class ServiceCS : System.Web.Services.WebService
                         cmd.Parameters.AddWithValue("@KeyDate", ro[0].KeyDate);
                         cmd.Parameters.AddWithValue("@Location", ro[0].Location);
                         cmd.Parameters.AddWithValue("@Plant", ro[0].Plant);
-						cmd.Parameters.AddWithValue("@MaterialType", ro[0].MaterialType);
+                        cmd.Parameters.AddWithValue("@MaterialType", ro[0].MaterialType);
                         cmd.Parameters.AddWithValue("@BatchCode", ro[0].BatchCode);
                         cmd.Parameters.AddWithValue("@Product", ro[0].Product);
                         cmd.Parameters.AddWithValue("@Batchsap", ro[0].Batchsap);
@@ -1973,28 +1951,34 @@ public class ServiceCS : System.Web.Services.WebService
                         cmd.Parameters.AddWithValue("@Remark", ro[0].Remark);
                         cmd.Parameters.AddWithValue("@Approve", ro[0].Approve);
                         cmd.Parameters.AddWithValue("@Approvefinal", ro[0].Approvefinal);
-						cmd.Parameters.AddWithValue("@user", ro[0].user);
+                        cmd.Parameters.AddWithValue("@user", ro[0].user);
                         cmd.Parameters.AddWithValue("@LinesNo", ro[0].LinesNo);
-						cmd.Parameters.AddWithValue("@ShiftOption", ro[0].ShiftOption);
+                        cmd.Parameters.AddWithValue("@ShiftOption", ro[0].ShiftOption);
                         cmd.Parameters.AddWithValue("@Times", ro[0].Times);
                         cmd.Parameters.AddWithValue("@ResultDecision", ro[0].ResultDecision);
                         cmd.Connection = con;
                         sda.SelectCommand = cmd;
                         sda.Fill(dt);
-						//System.IO.File.Delete(Server.MapPath(datapath));
-						//string Path = Server.MapPath(datapath);
-						//	if (File.Exists(Path))
-						//	{
-						//		File.Delete(Path);
-						//	}
+                        //System.IO.File.Delete(Server.MapPath(datapath));
+                        //string Path = Server.MapPath(datapath);
+                        //	if (File.Exists(Path))
+                        //	{
+                        //		File.Delete(Path);
+                        //	}
                         Context.Response.Write(JsonConvert.SerializeObject(dt));
                     }
                 }
             }
         }
-	}
+    }
+    /// <summary>
+    /// Retrieves personal information based on the provided name, condition, and current status.
+    /// </summary>
+    /// <param name="sName">The name of the person.</param>
+    /// <param name="sCondition">The condition to filter the personal information.</param>
+    /// <param name="sCurrent">The current status of the person.</param>
     [WebMethod]
-    public void Getpersonal(string sName,string sCondition,string sCurrent)
+    public void Getpersonal(string sName, string sCondition, string sCurrent)
     {
         using (SqlConnection con = new SqlConnection(strConn))
         {
@@ -2002,8 +1986,8 @@ public class ServiceCS : System.Web.Services.WebService
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "spGetpersonal";
             cmd.Parameters.AddWithValue("@name", sName);
-			cmd.Parameters.AddWithValue("@current", sCurrent);
-			cmd.Parameters.AddWithValue("@condition", sCondition);
+            cmd.Parameters.AddWithValue("@current", sCurrent);
+            cmd.Parameters.AddWithValue("@condition", sCondition);
             cmd.Connection = con;
             con.Open();
             DataTable dt = new DataTable();
@@ -2013,7 +1997,12 @@ public class ServiceCS : System.Web.Services.WebService
             Context.Response.Write(JsonConvert.SerializeObject(dt));
         }
     }
-      [WebMethod()]
+    /// <summary>
+    /// Saves the created root document.
+    /// </summary>
+    /// <param name="data">The data.</param>
+    /// <returns>The stored procedure name.</returns>
+    [WebMethod()]
     public string saveCreateroot(string data)
     {
         string sp = "spCreateDocument";
@@ -2051,10 +2040,14 @@ public class ServiceCS : System.Web.Services.WebService
         }
         return sp;
     }
+    /// <summary>
+    /// Saves the change result to the database.
+    /// </summary>
+    /// <param name="data">The name of the JSON file containing the data.</param>
     [WebMethod]
     public void savechangeresult(string data)
     {
-		string datapath = "~/Content/" + data + ".json";
+        string datapath = "~/Content/" + data + ".json";
         using (StreamReader sr = new StreamReader(Server.MapPath(datapath)))
         {
             string json = sr.ReadToEnd();
@@ -2090,7 +2083,7 @@ public class ServiceCS : System.Web.Services.WebService
 //}
 
 
-public class Objattachment
+class Objattachment
 {
     public int MatDoc { get; set; }
     public string Name { get; set; }
@@ -2099,9 +2092,9 @@ public class Objattachment
     public string ActiveBy { get; set; }
 }
  
-public class RootObject
+class RootObject
 {
-	public string ID { get; set; }
+    public string ID { get; set; }
     public string ncptype { get; set; }
     public string ncpid { get; set; }
     public string Problem { get; set; }
@@ -2115,7 +2108,7 @@ public class RootObject
     public string Batchsap { get; set; }
     public string Active { get; set; }
     public string Material { get; set; }
-	public string MaterialType {get; set;}
+    public string MaterialType { get; set; }
     public string ProductionDate { get; set; }
     public string Quantity { get; set; }
     public string Shift { get; set; }
@@ -2124,9 +2117,9 @@ public class RootObject
     public string Remark { get; set; }
     public string Approve { get; set; }
     public string Approvefinal { get; set; }
-	public string user { get; set; }
+    public string user { get; set; }
     public string LinesNo { get; set; }
-	public string ShiftOption { get; set; }
+    public string ShiftOption { get; set; }
     public string Times { get; set; }
     public string ResultDecision { get; set; }
 }
