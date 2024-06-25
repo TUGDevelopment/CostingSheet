@@ -177,7 +177,8 @@ public partial class UserControls_CostingEditForm : MasterUserControl
         dt.Columns.Add("Name");
         dt.Columns.Add("Marks");
         dt.Rows.Add(new object[] { "ID;Component;SubType;Description;SAPMaterial;GUnit;Yield;RawMaterial;Name;PriceOfUnit;Currency;Unit;ExchangeRate;BaseUnit;PriceOfCarton;Remark;LBOh;LBRate;Formula", "0" });
-        dt.Rows.Add(new object[] { "ID;SubType;Code;Name;Quantity;PriceUnit;Amount;Per;Currency;Loss;Formula", "1;2;3;4;5;6;7;8;10" });
+        dt.Rows.Add(new object[] { "ID;SubType;Code;Name;Quantity;PriceUnit;Amount;Per;ExchangeRate;Currency;Loss;Formula", "1;2;3;4;5;6;7;8" });
+        dt.Rows.Add(new object[] { "ID;SubType;Code;Name;Quantity;PriceUnit;Amount;Per;Currency;Loss;Formula", "10" });
         dt.Rows.Add(new object[] { "ID;Code;Name;RefSamples;NetWeight;Packaging;FixedFillWeight;PackSize;Formula;RequestForm", "9" });
         return dt;
     }
@@ -2106,6 +2107,15 @@ public partial class UserControls_CostingEditForm : MasterUserControl
                     double d;
                     Double.TryParse((getloss(CmbPackaging.Text, isNumeric == true ? 2 : 3, "")), out d);
                     DataRow _ravi = testdt.NewRow();
+                    string unit = "THB";
+                    //if (new[] { "primary", "secondary" }.Any(name.StartsWith))
+                    //{
+                    //    unit = CmbSellingUnit.Text;
+                    //}
+                    //else if (name.StartsWith("upcharge"))
+                    //{
+                    //    unit = CmbUpChargeCurrency.Text;
+                    //}
                     testdt.Rows.Add(NextRowID++,
                         (isNumeric == true ? "Primary Packaging" : "Secondary Packaging"),
                         table.Rows[i][3].ToString(),
@@ -2113,7 +2123,9 @@ public partial class UserControls_CostingEditForm : MasterUserControl
                         table.Rows[i][2].ToString(),
                         dPrice,
                         dAmount, "",
-                        "THB",
+                        "1",
+                        unit
+                        ,
                         (dAmount * (d / 100)), 1, "X");
                 }
                 else if (table.Rows[i][0].ToString().Equals("LOH"))
@@ -2133,6 +2145,7 @@ public partial class UserControls_CostingEditForm : MasterUserControl
                             _strcol.ToString(),
                             Convert.ToDouble(_strcol) * Convert.ToDouble(string.Format("{0}", table.Rows[i][2])),
                             "",
+                            "1",
                             "THB",
                             0, formu, "X");
                         }
@@ -2158,6 +2171,7 @@ public partial class UserControls_CostingEditForm : MasterUserControl
                             0,
                             _strcol.ToString(),
                             "",
+                            "",
                             0, formu, "X");
                         }
                         formu++;
@@ -2180,6 +2194,7 @@ public partial class UserControls_CostingEditForm : MasterUserControl
                         //table.Rows[i][5].ToString(), name.StartsWith("margin")? table.Rows[i][4].ToString() : "",
                         dAmount,
                         Per,
+                        "",
                         "THB",
                         0, 1, "X");
                 }
@@ -2630,6 +2645,7 @@ public partial class UserControls_CostingEditForm : MasterUserControl
                             tbQuantity.Text,
                             tbPriceRate.Text,
                             tbAmount.Text, "",
+                            CmbSellingUnit.Text.Equals("THB")?"1":seExchangeRate.Text,
                             CmbSellingUnit.Text,
                             (Convert.ToDouble(tbAmount.Text) * (d / 100)), i, "X");
                 }
@@ -2645,41 +2661,46 @@ public partial class UserControls_CostingEditForm : MasterUserControl
                         tbSecQuantity.Text,
                         tbSecPriceRate.Text,
                         tbSecAmount.Text, "",
+                        CmbSecSellingUnit.Text.Equals("THB")?"1": seExchangeRate.Text,
                         CmbSecSellingUnit.Text,
                         (Convert.ToDouble(tbSecAmount.Text) * (d / 100)), i, "X");
                 }
                 break;
             case "3":
                 dt.Rows.Add(NextRowID++, "Margin", CmbMargin.Text, tbMarginName.Text, 1, 0,
-                    0, tbMarginRate.Text, "", 0, i, "X");
+                    0, tbMarginRate.Text, "","", 0, i, "X");
                 break;
             case "4":
                 double Quantity;
                 if (Double.TryParse(tbUpChargeQuantity.Text, out Quantity))
+                {
+                    double _amount = 0;
+                    _amount = Convert.ToDouble(Quantity * Convert.ToDouble(tbUpChargePrice.Text) * (CmbUpChargeCurrency.Text.Equals("THB") ? 1 : Convert.ToDouble(seExchangeRate.Text)));
                     dt.Rows.Add(NextRowID++, "Upcharge", "", tbUpCharge.Text, tbUpChargeQuantity.Text, tbUpChargePrice.Text,
-                Quantity * Convert.ToDouble(tbUpChargePrice.Text), "", CmbUpChargeCurrency.Text, 0, i, "X");
+                _amount, "", CmbUpChargeCurrency.Text.Equals("THB")?"1": seExchangeRate.Text, CmbUpChargeCurrency.Text, 0, i, "X");
+                }
                 break;
             case "5":
                 dt.Rows.Add(NextRowID++, "Labor&Overhead", "", cmbLaborOverhead.Text, tbResultLOH.Text, 0,
-                    0, "", cmbLOHType.Value, 0, i, "X");
+                    0, "","", cmbLOHType.Value, 0, i, "X");
                 break;
             case "6":
                 double LaborQuantity;
                 if (Double.TryParse(tbLaborQuantity.Text, out LaborQuantity))
                     dt.Rows.Add(NextRowID++, "DL", "", cmbLabor.Text, tbLaborQuantity.Text, tbLaborRate.Text,
-                    LaborQuantity * Convert.ToDouble(tbLaborRate.Text), "", cmbLaborType.Value, 0, i, "X");
+                    LaborQuantity * Convert.ToDouble(tbLaborRate.Text), "","", cmbLaborType.Value, 0, i, "X");
                 break;
             case "7":
                 double OHQuantity;
                 if (Double.TryParse(tbOHQuantity.Text, out OHQuantity))
                     dt.Rows.Add(NextRowID++, "OH", "", cmbOHRate.Text, tbOHQuantity.Text, tbOHRate.Text,
-                    OHQuantity * Convert.ToDouble(tbOHRate.Text), "", cmbOHType.Value, 0, i, "X");
+                    OHQuantity * Convert.ToDouble(tbOHRate.Text), "","", cmbOHType.Value, 0, i, "X");
                 break;
             case "8":
                 double SGAQuantity;
                 if (Double.TryParse(tbSGAQuantity.Text, out SGAQuantity))
                     dt.Rows.Add(NextRowID++, "SGA", "", cmbSGA.Text, tbSGAQuantity.Text, tbSGARate.Text,
-                    SGAQuantity * Convert.ToDouble(tbSGARate.Text), "", cmbSGAType.Value, 0, i, "X");
+                    SGAQuantity * Convert.ToDouble(tbSGARate.Text), "","", cmbSGAType.Value, 0, i, "X");
                 break;
             case "10":
                 int MaxRowID = cs.FindMaxValue(listItems, t => t.ID);
@@ -3016,6 +3037,8 @@ public partial class UserControls_CostingEditForm : MasterUserControl
                 cmd.Parameters.AddWithValue("@Quantity", row["Quantity"]);
                 cmd.Parameters.AddWithValue("@PriceUnit", row["PriceUnit"]);
                 cmd.Parameters.AddWithValue("@Amount", row["Amount"]);
+                cmd.Parameters.AddWithValue("@ExchangeRate", row["ExchangeRate"]);
+                
                 cmd.Parameters.AddWithValue("@Per", row["Per"]);
                 cmd.Parameters.AddWithValue("@SellingUnit", row["Currency"]);
                 cmd.Parameters.AddWithValue("@Loss", row["Loss"]);
@@ -4831,14 +4854,14 @@ public partial class UserControls_CostingEditForm : MasterUserControl
     void SetItemCount()
     {
         int itemCount = 0;
-        try
-        {
-            itemCount = (int)gridData.GetTotalSummaryValue(gridData.TotalSummary["RequestNo"]);
-        }
-        catch(Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
+        //try
+        //{
+        //    itemCount = (int)gridData.GetTotalSummaryValue(gridData.TotalSummary["RequestNo"]);
+        //}
+        //catch(Exception e)
+        //{
+        //    Console.WriteLine(e.Message);
+        //}
         gridData.SettingsPager.Summary.Text = "Page {0} of {1} (" + itemCount.ToString() + " items)";
     }
     object GetDataSource(int count)

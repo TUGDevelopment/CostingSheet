@@ -2349,13 +2349,44 @@ formulaPageModule = CreateClass(PageModuleBase, {
     GetPopupControl: function () {
         return ASPxPopupClientControl;
     },
-    ShowformulaForm: function (command, key) {
-        Demo.HideForm();
+    ClearForm: function () {
+        tb1ptPrimary.SetText("");
+        cmb1MatCode.SetText("");
+        tb1pkgSupplier.SetText("");
+        tb2ptPrimary.SetText("");
+        cmb2MatCode.SetText("");
+        tb2pkgSupplier.SetText("");
+
         ClientCompany.SetValue("");
         ClientCustomer.SetText("");
         //ClientBrand.SetText("");
         ClientProductStyle.SetText("");
         ClientReference.SetText("");
+        //CmbPackaging.SetText("");
+        //ClientRevised.SetText("");
+        ClientRevised.SetValue("");
+        ClientReference.SetText("");
+        CmbPackaging.SetText("");
+        ClientRequestNo.SetText("");
+        ClientProduct.SetText("");
+        //ClientPackSize.PerformCallback("AddRow|" + values["PackSize"]);
+        ClientProductStyle.SetText("");
+        ClientFW.SetText("");
+        ClientDestination.SetText("");
+        ClientNetweight.SetText("");
+        ClientUnit.SetText("");
+        ClientScheduledProcess.SetText("");
+    },
+    ShowformulaForm: function (command, key) {
+        Demo.HideForm();
+        Demo.ClearForm();
+        ClientCompany.SetValue("");
+        ClientCustomer.SetText("");
+        //ClientBrand.SetText("");
+        ClientProductStyle.SetText("");
+        ClientReference.SetText("");
+        var today = new Date();
+        ClientValidto.SetText(today);
         //CmbPackaging.SetText("");
         //ClientRevised.SetText("");
         formulaFormPanel.SetVisible(["read", "Reply", "EditDraft","New"].indexOf(command));
@@ -2397,6 +2428,14 @@ formulaPageModule = CreateClass(PageModuleBase, {
                     editor.Set("Name", values["editor"]);
                     ClientRevised.SetText(values["Revised"]);
                     ClientProduct.SetText(values["Code"]);
+                    tb1ptPrimary.SetText(values["Primary1pt"]);
+                    cmb1MatCode.SetText(values["MatCode1"]);
+                    tb1pkgSupplier.SetText(values["pkgSupplier1"]);
+                    tb2ptPrimary.SetText(values["Primary2pt"]);
+                    cmb2MatCode.SetText(values["MatCode2"]);
+                    tb2pkgSupplier.SetText(values["pkgSupplier2"]);
+                    ClientValidto.SetText(values["RequestDate"]);
+                    ClientScheduledProcess.SetText(values["ScheduledProcess"]);
                     //ClientPackSize.PerformCallback("AddRow|" + values["PackSize"]);
                     ClientProductStyle.SetText(values["ProductStyle"]);
                     ClientFW.SetText(values["FW"]);

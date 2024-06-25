@@ -153,7 +153,7 @@ public partial class popupControls_selmaster : System.Web.UI.Page
                 var Results = new DataTable();
                 using (SqlConnection conn = new SqlConnection(labConn))
                 {
-                    using (SqlCommand cmd = new SqlCommand("select Code,Description from dbo.transGrade where dbo.fnc_checktype( productgroup, @group)>0 and ProductType='PF' union select '-1',''", conn))
+                    using (SqlCommand cmd = new SqlCommand("select Code,Description from dbo.transGrade where dbo.fnc_checktype( productgroup, @group)>0 and ProductType='PF' and isactive in ('0','1') union select '-1',''", conn))
                     {
                         conn.Open();
                         cmd.Connection = conn;
@@ -174,7 +174,7 @@ public partial class popupControls_selmaster : System.Web.UI.Page
                 var res2 = new DataTable();
                 using (SqlConnection conn = new SqlConnection(labConn))
                 {
-                    using (SqlCommand cmd = new SqlCommand("declare @n nvarchar(max)=(select name from dbo.tblProductGroup where ProductGroup=@group and GroupType='F');select Code,CanSize,Type,Media,NW,NutritionType  from  dbo.transCanSize  where dbo.fnc_checktype( productgroup, @group)>0 and Packaging = (case when @n like  '%non can%' then 'Non Can' else 'Can'end ) and ProductType='PF'", conn))
+                    using (SqlCommand cmd = new SqlCommand("declare @n nvarchar(max)=(select name from dbo.tblProductGroup where ProductGroup=@group and GroupType='F');select Code,CanSize,Type,Media,NW,NutritionType  from  dbo.transCanSize  where dbo.fnc_checktype( productgroup, @group)>0 and Packaging = (case when @n like  '%non can%' then 'Non Can' else 'Can'end ) and isactive in ('0','1') and ProductType='PF'", conn))
                     {
                         conn.Open();
                         cmd.Connection = conn;
@@ -195,7 +195,7 @@ public partial class popupControls_selmaster : System.Web.UI.Page
                 var res3 = new DataTable();
                 using (SqlConnection conn = new SqlConnection(labConn))
                 {
-                    using (SqlCommand cmd = new SqlCommand("select Code, ContainerType, LidType from  dbo.transContainerLid  where dbo.fnc_checktype( productgroup, @group)>0 and ProductType='PF'", conn))
+                    using (SqlCommand cmd = new SqlCommand("select Code, ContainerType, LidType from  dbo.transContainerLid  where dbo.fnc_checktype( productgroup, @group)>0 and isactive in ('0','1') and ProductType='PF'", conn))
                     {
                         conn.Open();
                         cmd.Connection = conn;
@@ -216,7 +216,7 @@ public partial class popupControls_selmaster : System.Web.UI.Page
                 var res4 = new DataTable();
                 using (SqlConnection conn = new SqlConnection(labConn))
                 {
-                    using (SqlCommand cmd = new SqlCommand("select Code, Description, REPLACE(REPLACE( MediaType,'Topping and Special Requirement',''),'Topping & Special Requirement','') as MediaType from  dbo.transMediaType where dbo.fnc_checktype( productgroup, @group)>0 and ProductType='PF'", conn))
+                    using (SqlCommand cmd = new SqlCommand("select Code, Description, REPLACE(REPLACE( MediaType,'Topping and Special Requirement',''),'Topping & Special Requirement','') as MediaType from  dbo.transMediaType where dbo.fnc_checktype( productgroup, @group)>0 and isactive in ('0','1') and ProductType='PF'", conn))
                     {
                         conn.Open();
                         cmd.Connection = conn;

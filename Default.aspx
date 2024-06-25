@@ -41,6 +41,7 @@
          var name = s.GetSelectedNode().name;
          if (name == '') return;
          document.cookie = s.GetSelectedNode().GetText();
+         //window.location = '/Default.aspx?viewMode=' + name;
          window.location = '/webapi/Default.aspx?viewMode=' + name;
          if (CallbackPanel.InCallback())
              postponedCallbackRequired = true;
@@ -69,6 +70,7 @@
          var name = e.item.name;
          if (name == '') return;
          
+         //window.location = '/Default.aspx?viewMode=' + name;
          window.location = '/webapi/Default.aspx?viewMode=' + name;
          if (CallbackPanel.InCallback())
              postponedCallbackRequired = true;
